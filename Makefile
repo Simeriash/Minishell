@@ -3,7 +3,7 @@ NAME := minishell
 CC := cc
 CFLAGS := -Wall -Wextra -Werror -g # -fsanitize=address
 
-HEADER :=
+HEADER := minishell.h
 
 LIBFT := src/Libft/libft.a
 
