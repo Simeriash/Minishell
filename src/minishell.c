@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/14 13:43:26 by julauren          #+#    #+#             */
-/*   Updated: 2026/02/18 14:16:52 by julauren         ###   ########.fr       */
+/*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
+/*   Updated: 2026/02/18 14:17:02 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "../minishell.h"
 
-# include "src/libft/libft.h"
-# include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+int	main()
+{
+	char	*cmd;
 
-#endif
+	cmd = readline("Minishell\\>: ");
+	printf("%s\n", cmd);
+	free(cmd);
+	rl_clear_history();
+}
