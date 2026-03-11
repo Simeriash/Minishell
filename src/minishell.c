@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/09 12:02:10 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/11 17:46:02 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,4 @@ int	main()
 	cmd = readline("Ghost\\>: ");
 	printf("%s\n", cmd);
 	free(cmd);
-	printf("%s\n", cmd);
 }
