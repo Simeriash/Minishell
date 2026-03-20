@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/03/20 15:29:48 by dlanehar         ###   ########.fr       */
+/*   Created: 2026/03/20 15:29:23 by dlanehar          #+#    #+#             */
+/*   Updated: 2026/03/20 15:29:39 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
-int	ft_cd()
-{
+# include "../src/libft/libft.h"
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdlib.h>
 
-}
-
-int	main(int argc, char **argv)
-{
-	(void)argc;
-	if (argv[1] && !ft_strncmp(argv[1], "-n", 2))
-		ft_echo(argv+2, 0);
-	else
-		ft_echo(argv+1, 1);
-}
+#endif

@@ -1,20 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/03/20 15:29:48 by dlanehar         ###   ########.fr       */
+/*   Created: 2026/03/20 15:27:58 by dlanehar          #+#    #+#             */
+/*   Updated: 2026/03/20 15:34:06 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	ft_cd()
+int	ft_echo(char **argv, int print_nl)
 {
+	int	i;
 
+	i = 0;
+	while (argv[i])
+	{
+		printf("%s", argv[i]);
+		if (argv[i + 1])
+			printf(" ");
+		i++;
+	}
+	if (print_nl)
+		printf("\n");
+	return (0);
 }
 
 int	main(int argc, char **argv)
