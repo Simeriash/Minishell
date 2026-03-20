@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:21:25 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/20 14:55:13 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/20 15:42:11 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,14 @@ typedef enum e_type
 {
 	WORD,
 	PIPE,
-	REDIR_IN,
-	REDIR_OUT,
+	IN,
+	OUT,
 	HEREDOC,
-	APPEND
+	APPEND,
+	AND,
+	OR,
+	LEFT_PARENTHESIS,
+	RIGHT_PARENTHESIS
 }	t_type;
 
 typedef struct s_token
@@ -34,9 +38,9 @@ typedef struct s_token
 
 typedef enum e_state
 {
-	STATE_GENERAL,
-	STATE_DQUOTE,
-	STATE_SQUOTE
+	GENERAL,
+	DOUBLE_QUOTE,
+	SIMPLE_QUOTE
 }	t_state;
 
 /*====================linked_list====================*/
