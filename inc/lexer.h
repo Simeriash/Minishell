@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:21:25 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/20 11:50:58 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/20 14:55:13 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ typedef enum e_state
 	STATE_SQUOTE
 }	t_state;
 
+/*====================linked_list====================*/
+
 t_token	*init_token_list(void);
+int		add_after(t_token *token, t_type type, char *value);
+void	free_token(t_token *token_list);
 
 #endif
