@@ -6,18 +6,21 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:21:25 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/20 15:42:11 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/21 15:24:58 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
+# include "../src/libft/libft.h"
+
 # include <stdlib.h>
 
 typedef enum e_type
 {
 	WORD,
+	EXPAND,
 	PIPE,
 	IN,
 	OUT,
@@ -48,5 +51,10 @@ typedef enum e_state
 t_token	*init_token_list(void);
 int		add_after(t_token *token, t_type type, char *value);
 void	free_token(t_token *token_list);
+
+/*===================token_creation===================*/
+
+int		create_token_meta(char *str, t_token *token_list, int *i, int *nb_token);
+int		create_token_word(char *str, t_token *token_list, int *i, int *nb_token);
 
 #endif
