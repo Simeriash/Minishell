@@ -1,57 +1,61 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_token_word.c                                :+:      :+:    :+:   */
+/*   quote_token.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/21 14:44:43 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/22 09:46:59 by julauren         ###   ########.fr       */
+/*   Created: 2026/03/22 09:30:19 by julauren          #+#    #+#             */
+/*   Updated: 2026/03/22 10:17:16 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/lexer.h"
 
-static int	end_condition(char c)
+static int	quote_condition(char c, t_state state)
 {
-	if (c == '\0' || c == ' ' || c == '<' || c == '>' || c == '|' || c == '&'
-		|| c == '(' || c == ')')
+	if ((c == '\'' && state == SIMPLE_QUOTE)
+		|| (c == '"' && state == DOUBLE_QUOTE))
 		return (1);
 	return (0);
 }
 
-static int	strlen(char *str)
+static int	strlen(char *str, t_state state)
 {
 	int	len;
 
 	len = 0;
-	while (!end_condition(str[len]))
+	while (str[len] && !quote_condition(str[len], state))
 		len++;
+	if ((state == SIMPLE_QUOTE && str[len] != '\'')
+		|| (state == DOUBLE_QUOTE && str[len] != '"'))
+		len = -1;
 	return (len);
 }
 
-int	create_token_word(char *str, t_token *token_list, int *i, int *nb_token)
+int	quote_token(char *str, t_token *token_list, int *i, t_state state)
 {
 	int		len;
 	int		j;
 	char	*value;
+	t_type	type;
 
-	len = strlen(&str[*i]);
+	(*i)++;
+	len = strlen(&str[*i], state);
+	if (len == -1)
+		return (1);
 	value = malloc(sizeof(*value) * (len + 1));
 	if (!value)
-	{
-		*nb_token = -1;
 		return (1);
-	}
 	j = 0;
-	while (!end_condition(str[*i]))
+	while (!quote_condition(str[*i], state))
 		value[j++] = str[(*i)++];
 	value[j] = '\0';
-	if (add_after(token_list, WORD, value))
-	{
-		*nb_token = -1;
+	if (state == SIMPLE_QUOTE)
+		type = WORD;
+	else
+		type = EXPAND;
+	if (add_after(token_list, type, value))
 		return (1);
-	}
-	(*nb_token)++;
 	return (0);
 }

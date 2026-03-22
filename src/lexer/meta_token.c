@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_token_meta.c                                :+:      :+:    :+:   */
+/*   meta_token.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -37,7 +37,7 @@ static void	search_type(char *str, int *i, t_type *type)
 	}
 }
 
-int	create_token_meta(char *str, t_token *token_list, int *i, int *nb_token)
+int	meta_token(char *str, t_token *token_list, int *i, int *nb_token)
 {
 	t_type	type;
 
