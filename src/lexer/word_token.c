@@ -30,7 +30,7 @@ static int	strlen(char *str)
 	return (len);
 }
 
-int	word_token(char *str, t_token *token_list, int *i, int *nb_token)
+int	word_token(char *str, t_token *token_list, int *i)
 {
 	int		len;
 	int		j;
@@ -39,19 +39,12 @@ int	word_token(char *str, t_token *token_list, int *i, int *nb_token)
 	len = strlen(&str[*i]);
 	value = malloc(sizeof(*value) * (len + 1));
 	if (!value)
-	{
-		*nb_token = -1;
 		return (1);
-	}
 	j = 0;
 	while (!end_condition(str[*i]))
 		value[j++] = str[(*i)++];
 	value[j] = '\0';
 	if (add_after(token_list, WORD, value))
-	{
-		*nb_token = -1;
 		return (1);
-	}
-	(*nb_token)++;
 	return (0);
 }

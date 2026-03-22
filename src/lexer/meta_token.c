@@ -37,7 +37,7 @@ static void	search_type(char *str, int *i, t_type *type)
 	}
 }
 
-int	meta_token(char *str, t_token *token_list, int *i, int *nb_token)
+int	meta_token(char *str, t_token *token_list, int *i)
 {
 	t_type	type;
 
@@ -48,18 +48,14 @@ int	meta_token(char *str, t_token *token_list, int *i, int *nb_token)
 		if (str[*i + 1] == '&')
 			type = AND;
 		else
-			*nb_token = -1;
+			return (1);
 	}
 	else if (str[*i] == '(')
 		type = LEFT_PARENTHESIS;
-	else if (str[*i] == ')')
+	else
 		type = RIGHT_PARENTHESIS;
-	if (*nb_token == -1 || add_after(token_list, type, NULL))
-	{
-		*nb_token = -1;
+	if (add_after(token_list, type, NULL))
 		return (1);
-	}
-	(*nb_token)++;
 	(*i)++;
 	if (type == HEREDOC || type == APPEND || type == OR || type == AND)
 		(*i)++;
