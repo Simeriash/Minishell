@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:21:25 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/21 15:24:58 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/22 10:39:50 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ typedef struct s_token
 
 typedef enum e_state
 {
-	GENERAL,
-	DOUBLE_QUOTE,
-	SIMPLE_QUOTE
+	NORMAL,
+	SIMPLE_QUOTE,
+	DOUBLE_QUOTE
 }	t_state;
 
 /*====================linked_list====================*/
@@ -54,7 +54,9 @@ void	free_token(t_token *token_list);
 
 /*===================token_creation===================*/
 
-int		create_token_meta(char *str, t_token *token_list, int *i, int *nb_token);
-int		create_token_word(char *str, t_token *token_list, int *i, int *nb_token);
+int		meta_token(char *str, t_token *token_list, int *i, int *nb_token);
+int		word_token(char *str, t_token *token_list, int *i, int *nb_token);
+int		quote_token(char *str, t_token *token_list, int *i, t_state state);
 
+t_token	*lexer(char *str);		//	/!\	A ENLEVER
 #endif

@@ -6,13 +6,14 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:19:55 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/21 15:25:28 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/22 10:55:46 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/lexer.h"
+#include <stdlib.h>
 
-void	lexer(char *str)
+t_token	*lexer(char *str)
 {
 	int		i;
 	int		nb_token;
@@ -24,49 +25,57 @@ void	lexer(char *str)
 		exit(EXIT_FAILURE);		//		/!\ A CHANGER !!
 	i = 0;
 	nb_token = 0;
-	state = GENERAL;
+	state = NORMAL;
 	while (str[i] != '\0')
 	{
 		while (ft_isspace(str[i]))
 			i++;
 		if (str[i] == '\0')
 			break ;
-		if (str[i] == '\'' && state == GENERAL)
+		if (str[i] == '\'' && state == NORMAL)
 			state = SIMPLE_QUOTE;
 		else if (str[i] == '\'' && state == SIMPLE_QUOTE)
-			state = GENERAL;
-		else if (str[i] == '"' && state == GENERAL)
+			state = NORMAL;
+		else if (str[i] == '"' && state == NORMAL)
 			state = DOUBLE_QUOTE;
 		else if (str[i] == '"' && state == DOUBLE_QUOTE)
-			state = GENERAL;
-		if (state == GENERAL)
+			state = NORMAL;
+		if (state == NORMAL)
 		{
+			if (str[i] == '\'' || str[i] == '"')
+			{	i++;
+				if (str[i] == '\0')
+					break ;
+				continue ;
+			}
 			if (str[i] == '<' || str[i] == '>' || str[i] == '|'
 				|| str[i] == '&' || str[i] == '(' || str[i] == ')')
 			{
-				if (create_token_meta(str, token_list, &i, &nb_token))
+				if (meta_token(str, token_list, &i, &nb_token))
 					break ;
 			}
 			else
 			{
-				if (create_token_word(str, token_list, &i, &nb_token))
+				if (word_token(str, token_list, &i, &nb_token))
 					break ;
 			}
 		}
 		else if (state == SIMPLE_QUOTE)
 		{
-			i++;
-			//create_token_quote(token_list, &i, SIMPLE_QUOTE);
+			if (quote_token(str, token_list, &i, SIMPLE_QUOTE))
+				break ;
 		}
 		else if (state == DOUBLE_QUOTE)
 		{
-			i++;
-			//create_token_quote(token_list, &i, DOUBLE_QUOTE);
+			if (quote_token(str, token_list, &i, DOUBLE_QUOTE))
+				break ;
 		}
-		// i++;
 	}
-	if (state != GENERAL || nb_token == -1)
+	if (state != NORMAL || nb_token == -1)
 	{
-		/*error open quote*/;
+		/*error open quote || malloc*/;
+		free_token(token_list);
+		exit(EXIT_FAILURE);
 	}
+	return (token_list);
 }
