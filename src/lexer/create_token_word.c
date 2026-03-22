@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 14:44:43 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/22 07:57:29 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/22 09:46:59 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,13 @@ static int	end_condition(char c)
 	return (0);
 }
 
-static int	strlen(char *str, int i)
+static int	strlen(char *str)
 {
 	int	len;
 
 	len = 0;
-	while (!end_condition(str[i]))
-	{
+	while (!end_condition(str[len]))
 		len++;
-		i++;
-	}
 	return (len);
 }
 
@@ -39,7 +36,7 @@ int	create_token_word(char *str, t_token *token_list, int *i, int *nb_token)
 	int		j;
 	char	*value;
 
-	len = strlen(str, *i);
+	len = strlen(&str[*i]);
 	value = malloc(sizeof(*value) * (len + 1));
 	if (!value)
 	{
