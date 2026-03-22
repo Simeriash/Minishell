@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 16:06:07 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/20 14:31:29 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/22 09:18:46 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ int	add_after(t_token *token, t_type type, char *value)
 	new_token->type = type;
 	new_token->value = value;
 	new_token->next = NULL;
-	tmp = token->next;
-	while (tmp != NULL)
+	tmp = token;
+	while (tmp->next != NULL)
 		tmp = tmp->next;
-	token->next = new_token;
+	tmp->next = new_token;
 	return (0);
 }
 
@@ -52,6 +52,8 @@ void	free_token(t_token *token_list)
 	while (token != NULL)
 	{
 		tmp = token->next;
+		if (token->value)
+			free(token->value);
 		free(token);
 		token = tmp;
 	}
