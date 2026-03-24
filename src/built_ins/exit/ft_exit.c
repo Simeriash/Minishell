@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/14 13:43:26 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/24 11:01:38 by dlanehar         ###   ########.fr       */
+/*   Created: 2026/03/20 15:50:55 by dlanehar          #+#    #+#             */
+/*   Updated: 2026/03/24 13:37:50 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "builtins.h"
 
-# include "../src/libft/libft.h"
-# include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <stdlib.h>
+int	ft_exit(int exit_val)
+{
+	exit(exit_val);
+}
 
-#endif
+// int	main(int argc, char **argv)
+// {
+// 	int ctrl;
+// 	int i = ft_atoi(argv[1], &ctrl);
+// 	ft_exit(i);
+// }

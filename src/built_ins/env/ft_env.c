@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/14 13:43:26 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/24 11:01:38 by dlanehar         ###   ########.fr       */
+/*   Created: 2026/03/24 15:10:38 by dlanehar          #+#    #+#             */
+/*   Updated: 2026/03/24 15:14:40 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "builtins.h"
 
-# include "../src/libft/libft.h"
-# include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <stdlib.h>
+int	ft_env(char **envpcpy)
+{
+	int	i;
 
-#endif
+	i = 0;
+	while (envpcpy[i])
+		printf("%s\n", envpcpy[i++]);
+	return (0);
+}
