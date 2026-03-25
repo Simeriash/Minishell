@@ -1,0 +1,61 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   linked_list.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/19 16:06:07 by julauren          #+#    #+#             */
+/*   Updated: 2026/03/22 13:12:56 by julauren         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../inc/lexer.h"
+
+t_token	*init_token_list(char *str)
+{
+	t_token	*token;
+
+	token = malloc(sizeof(*token));
+	if (!token)
+		exit_lexer(str, NULL);
+	token->type = WORD;
+	token->value = NULL;
+	token->next = NULL;
+	return (token);
+}
+
+int	add_after(t_token *token, t_type type, char *value)
+{
+	t_token	*new_token;
+	t_token	*tmp;
+
+	new_token = malloc(sizeof(*new_token));
+	if (!new_token)
+		return (1);
+	new_token->type = type;
+	new_token->value = value;
+	new_token->next = NULL;
+	tmp = token;
+	while (tmp->next != NULL)
+		tmp = tmp->next;
+	tmp->next = new_token;
+	return (0);
+}
+
+void	free_token(t_token *token_list)
+{
+	t_token	*token;
+	t_token	*tmp;
+
+	token = token_list->next;
+	while (token != NULL)
+	{
+		tmp = token->next;
+		if (token->value)
+			free(token->value);
+		free(token);
+		token = tmp;
+	}
+	free(token_list);
+}
