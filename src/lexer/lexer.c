@@ -6,19 +6,11 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:19:55 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/22 13:21:27 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/25 18:19:59 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/lexer.h"
-
-void	exit_lexer(char *str, t_token *token_list)
-{
-	free(str);
-	if (token_list)
-		free_token(token_list);
-	exit(EXIT_FAILURE);
-}
 
 static int	state_condition(char *str, int *i, t_state *state)
 {
@@ -37,50 +29,85 @@ static int	state_condition(char *str, int *i, t_state *state)
 	return (0);
 }
 
-static void	normal_state(char *str, t_token *token_list, int *i)
+static int	normal_state(char *str, t_token *token_list, int *i)
 {
+	t_error	error;
+
 	if (str[*i] == '<' || str[*i] == '>' || str[*i] == '|' || str[*i] == '&'
 		|| str[*i] == '(' || str[*i] == ')')
 	{
-		if (meta_token(str, token_list, i))
-			exit_lexer(str, token_list);
+		error = meta_token(str, token_list, i);
+		if (error)
+		{
+			exit_lexer(token_list, error);
+			return (1);
+		}
 	}
-	else if (word_token(str, token_list, i))
-		exit_lexer(str, token_list);
+	else
+	{
+		error = word_token(str, token_list, i);
+		if (error)
+		{
+			exit_lexer(token_list, error);
+			return (1);
+		}
+	}
+	return (0);
 }
 
-static void	quote_state(char *str, t_token *token_list, int *i, t_state state)
+static int	quote_state(char *str, t_token *token_list, int *i, t_state state)
 {
-	if ((state == SIMPLE_QUOTE || state == DOUBLE_QUOTE)
-		&& quote_token(str, token_list, i, state))
-		exit_lexer(str, token_list);
+	t_error	error;
+
+	if (state == SIMPLE_QUOTE || state == DOUBLE_QUOTE)
+	{
+		error = quote_token(str, token_list, i, state);
+		if (error)
+		{
+			exit_lexer(token_list, error);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+static t_ret	lex_next(char *str, t_token *token_list, int *i, t_state *state)
+{
+	if (state_condition(str, i, state))
+		return (BREAK);
+	if (*state == NORMAL)
+	{
+		if (str[*i] == '\'' || str[*i] == '"')
+		{
+			if (str[++(*i)] == '\0')
+				return (BREAK);
+			return (0);
+		}
+		if (normal_state(str, token_list, i))
+			return (NUL);
+	}
+	else if (quote_state(str, token_list, i, *state))
+		return (NUL);
+	return (0);
 }
 
 t_token	*lexer(char *str)
 {
 	int		i;
+	t_ret	ret;
 	t_state	state;
 	t_token	*token_list;
 
-	token_list = init_token_list(str);
+	token_list = init_token_list();
 	i = 0;
 	state = NORMAL;
 	while (str[i] != '\0')
 	{
-		if (state_condition(str, &i, &state))
+		ret = lex_next(str, token_list, &i, &state);
+		if (ret == BREAK)
 			break ;
-		if (state == NORMAL)
-		{
-			if (str[i] == '\'' || str[i] == '"')
-			{
-				if (str[++i] == '\0')
-					break ;
-				continue ;
-			}
-			normal_state(str, token_list, &i);
-		}
-		else
-			quote_state(str, token_list, &i, state);
+		if (ret == NUL)
+			return (NULL);
 	}
 	return (token_list);
 }

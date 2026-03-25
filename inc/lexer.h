@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:21:25 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/22 13:11:57 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/25 18:03:38 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,33 @@ typedef enum e_state
 	DOUBLE_QUOTE
 }	t_state;
 
+typedef enum e_ret
+{
+	CONTINUE,
+	BREAK,
+	NUL
+}	t_ret;
+
+typedef enum e_error
+{
+	OK,
+	MALLOC,
+	OPEN_QUOTE,
+	AMPERSAND
+}	t_error;
+
 /*====================linked_list====================*/
 
-t_token	*init_token_list(char *str);
+t_token	*init_token_list(void);
 int		add_after(t_token *token, t_type type, char *value);
 void	free_token(t_token *token_list);
 
 /*===================token_creation===================*/
 
-int		meta_token(char *str, t_token *token_list, int *i);
-int		word_token(char *str, t_token *token_list, int *i);
-int		quote_token(char *str, t_token *token_list, int *i, t_state state);
-void	exit_lexer(char *str, t_token *token_list);
+t_error	meta_token(char *str, t_token *token_list, int *i);
+t_error	word_token(char *str, t_token *token_list, int *i);
+t_error	quote_token(char *str, t_token *token_list, int *i, t_state state);
+void	exit_lexer(t_token *token_list, t_error error);
 
 t_token	*lexer(char *str);		//	/!\	A ENLEVER
 #endif

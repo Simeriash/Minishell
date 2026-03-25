@@ -30,7 +30,7 @@ static int	strlen(char *str)
 	return (len);
 }
 
-int	word_token(char *str, t_token *token_list, int *i)
+t_error	word_token(char *str, t_token *token_list, int *i)
 {
 	int		len;
 	int		j;
@@ -39,12 +39,12 @@ int	word_token(char *str, t_token *token_list, int *i)
 	len = strlen(&str[*i]);
 	value = malloc(sizeof(*value) * (len + 1));
 	if (!value)
-		return (1);
+		return (MALLOC);
 	j = 0;
 	while (!end_condition(str[*i]))
 		value[j++] = str[(*i)++];
 	value[j] = '\0';
 	if (add_after(token_list, WORD, value))
-		return (1);
+		return (MALLOC);
 	return (0);
 }
