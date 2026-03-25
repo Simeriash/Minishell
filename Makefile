@@ -20,6 +20,9 @@ SRCS = $(SRC_DIR)/minishell.c \
        $(BUILTINS_DIR)/exit/ft_exit.c \
 	   $(BUILTINS_DIR)/pwd/ft_pwd.c \
 	   $(BUILTINS_DIR)/env/ft_env.c \
+	   $(BUILTINS_DIR)/utils/builtin_utils.c \
+	   $(BUILTINS_DIR)/utils/builtin_utils2.c \
+
 
 # Object files in obj/ folder
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))

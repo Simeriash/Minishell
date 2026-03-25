@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:29:23 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/03/24 15:11:26 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/03/25 14:31:10 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,25 @@
 # include <stdlib.h>
 # include <errno.h>
 
-int	ft_echo(char **ch_ar, int print_nl);
-int	ft_cd(char **envpcpy, char *path);
-int	ft_exit(int exit_val);
-int	ft_pwd(char **envpcpy);
-int	ft_env(char **envpcpy);
+typedef	struct s_envpcpy
+{
+	char *key;
+	char *value;
+	struct s_envpcpy *next;
+}	t_envpcpy;
 
+int		ft_echo(char **ch_ar, int print_nl);
+int		ft_cd(char *path ,t_envpcpy **envpcpy);
+int		ft_exit(int exit_val);
+int		ft_pwd(t_envpcpy **envpcpy);
+int		ft_env(t_envpcpy **envpcpy);
+
+t_envpcpy	*ft_lstnew(char *newkey, char *newvalue);
+void		ft_lstaddback(t_envpcpy **lst, t_envpcpy *new);
+t_envpcpy	*ft_lstlast(t_envpcpy *lst);
+int			ft_lstsize(t_envpcpy *lst);
+
+char *find_env_var(char *key, t_envpcpy **envpcpy);
+t_envpcpy	*find_env_var_pos(char *key, t_envpcpy **envpcpy);
 
 #endif
