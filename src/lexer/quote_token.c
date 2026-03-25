@@ -42,6 +42,8 @@ int	quote_token(char *str, t_token *token_list, int *i, t_state state)
 
 	(*i)++;
 	len = strlen(&str[*i], state);
+	if (len == 0)
+		return (0);
 	if (len == -1)
 		return (1);
 	value = malloc(sizeof(*value) * (len + 1));

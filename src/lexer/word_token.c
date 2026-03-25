@@ -15,7 +15,7 @@
 static int	end_condition(char c)
 {
 	if (c == '\0' || c == ' ' || c == '<' || c == '>' || c == '|' || c == '&'
-		|| c == '(' || c == ')')
+		|| c == '(' || c == ')' || c == '\'' || c == '"')
 		return (1);
 	return (0);
 }
