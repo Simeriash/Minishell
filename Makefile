@@ -22,6 +22,8 @@ SRCS = $(SRC_DIR)/minishell.c \
 	   $(BUILTINS_DIR)/env/ft_env.c \
 	   $(BUILTINS_DIR)/utils/builtin_utils.c \
 	   $(BUILTINS_DIR)/utils/builtin_utils2.c \
+	   $(BUILTINS_DIR)/unset/ft_unset.c \
+	   $(BUILTINS_DIR)/export/ft_export.c \
 
 
 # Object files in obj/ folder

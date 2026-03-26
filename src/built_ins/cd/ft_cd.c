@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/03/25 14:30:01 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/03/26 15:18:34 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_cd(char *path ,t_envpcpy **envpcpy)
 	int	i;
 	int	ret_val;
 
-	if (!path)
+	if (!path || (path[0] == '~' && path[1] == '\0'))
 	{
 		new = find_env_var("HOME", envpcpy);
 		if (!new){
@@ -47,6 +47,23 @@ int	ft_cd(char *path ,t_envpcpy **envpcpy)
 		free(buf);
 		i = change_env_var("PWD", new, envpcpy);
 		ret_val = chdir(new);
+		return (ret_val);
+	}
+	if (path[0] == '-' && path[1] == '\0')
+	{
+		char *tmp = ft_strdup(find_env_var("OLDPWD", envpcpy));
+		buf = getcwd(NULL, 0); //store this in OLDPWD
+		i = change_env_var("OLDPWD", buf, envpcpy);
+		if (i < 0)
+			return (-1);
+		free(buf);
+		ret_val = chdir(tmp); //change directory
+		new = getcwd(NULL, 0); //store the now-current directory
+		i = change_env_var("PWD", new, envpcpy);
+		if (i < 0)
+			return (-1);
+		free(new);
+		free(tmp);
 		return (ret_val);
 	}
 	buf = getcwd(NULL, 0); //store this in OLDPWD

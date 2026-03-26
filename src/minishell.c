@@ -6,12 +6,13 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/25 14:18:35 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/03/26 15:32:20 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 #include "builtins.h"
+#include <string.h>
 
 int	check_for_space(char *cmd, t_envpcpy **envpcpy)
 {
@@ -29,6 +30,43 @@ int	check_for_space(char *cmd, t_envpcpy **envpcpy)
 		if (cmd[i] == ' ')
 			break ;
 		i++;
+	}
+	if (!ft_strncmp(cmd, "unset", i))
+	{
+		ch_ar = ft_split(cmd, ' ');
+		ret_val = ft_unset(*(ch_ar + 1), envpcpy);
+		i = 0;
+		while (ch_ar[i])
+			free(ch_ar[i++]);
+		free(ch_ar);
+		return (ret_val);
+	}
+	if (!ft_strncmp(cmd, "export", i))
+	{
+		ch_ar = ft_split(cmd, ' ');
+		int j = 0;
+		while (ch_ar[1][j] && ch_ar[1][j] != '=')
+			j++;
+		char *key = malloc(j + 1);
+		key[j] = '\0';
+		strncpy(key, ch_ar[1], j);
+		//printf("%s\n", key);
+		int f = 0;
+		while (ch_ar[1][f] && ch_ar[1][f] != '=')
+			f++;
+		//printf("%c\n", ch_ar[1][f]);
+		char *value = malloc(strlen(ch_ar[1]) - f + 1);
+		value[strlen(ch_ar[1]) - f] = '\0';
+		strncpy(value, ch_ar[1] + f + 1, strlen(ch_ar[1]) - f);
+		//printf("%s\n", value);
+		ret_val = ft_export(key, value, envpcpy);
+		i = 0;
+		while (ch_ar[i])
+			free(ch_ar[i++]);
+		free(ch_ar);
+		free(key);
+		free(value);
+		return (ret_val);
 	}
 	if (!ft_strncmp(cmd, "cd", i))
 	{
@@ -54,8 +92,14 @@ int	check_for_space(char *cmd, t_envpcpy **envpcpy)
 	{
 		ch_ar = ft_split(cmd, ' ');
 		if (!ch_ar + 1)
-			ft_exit(0);
-		ret_val = ft_exit(ft_atoi(*(ch_ar + 1), ptr));
+		{
+			i = 0;
+			while (ch_ar[i])
+				free(ch_ar[i++]);
+			free(ch_ar);
+			ft_exit(0, *envpcpy);
+		}
+		ret_val = ft_exit(ft_atoi(*(ch_ar + 1), ptr), *envpcpy);
 		return (ret_val);
 	}
 	if (!ft_strncmp(cmd, "env", i))
