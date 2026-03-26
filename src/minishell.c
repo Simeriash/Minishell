@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/26 15:32:20 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/03/26 15:45:21 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,9 @@ int	check_for_space(char *cmd, t_envpcpy **envpcpy)
 			while (ch_ar[i])
 				free(ch_ar[i++]);
 			free(ch_ar);
-			ft_exit(0, *envpcpy);
+			ft_exit(0, envpcpy);
 		}
-		ret_val = ft_exit(ft_atoi(*(ch_ar + 1), ptr), *envpcpy);
+		ret_val = ft_exit(ft_atoi(*(ch_ar + 1), ptr), envpcpy);
 		return (ret_val);
 	}
 	if (!ft_strncmp(cmd, "env", i))

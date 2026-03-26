@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/03/26 15:18:34 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/03/26 15:51:13 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	ft_cd(char *path ,t_envpcpy **envpcpy)
 			return (-1);
 		free(new);
 		free(tmp);
+		ft_pwd(envpcpy);
 		return (ret_val);
 	}
 	buf = getcwd(NULL, 0); //store this in OLDPWD
