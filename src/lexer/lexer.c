@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:19:55 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/25 18:19:59 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/26 11:55:57 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	state_condition(char *str, int *i, t_state *state)
 {
-	while (ft_isspace(str[*i]))
+	while (shell_space(str[*i]))
 		(*i)++;
 	if (str[*i] == '\0')
 		return (1);
@@ -34,7 +34,7 @@ static int	normal_state(char *str, t_token *token_list, int *i)
 	t_error	error;
 
 	if (str[*i] == '<' || str[*i] == '>' || str[*i] == '|' || str[*i] == '&'
-		|| str[*i] == '(' || str[*i] == ')')
+		|| str[*i] == '(' || str[*i] == ')' || str[*i] == '\n')
 	{
 		error = meta_token(str, token_list, i);
 		if (error)

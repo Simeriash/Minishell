@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:21:25 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/25 18:03:38 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/26 11:54:46 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ typedef enum e_type
 	AND,
 	OR,
 	LEFT_PARENTHESIS,
-	RIGHT_PARENTHESIS
+	RIGHT_PARENTHESIS,
+	RET
 }	t_type;
 
 typedef struct s_token
@@ -60,6 +61,8 @@ typedef enum e_error
 	OPEN_QUOTE,
 	AMPERSAND
 }	t_error;
+
+int		shell_space(int c);
 
 /*====================linked_list====================*/
 

@@ -52,8 +52,10 @@ t_error	meta_token(char *str, t_token *token_list, int *i)
 	}
 	else if (str[*i] == '(')
 		type = LEFT_PARENTHESIS;
-	else
+	else if (str[*i] == ')')
 		type = RIGHT_PARENTHESIS;
+	else
+		type = RET;
 	if (add_after(token_list, type, NULL))
 		return (MALLOC);
 	(*i)++;
