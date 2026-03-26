@@ -6,19 +6,19 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 16:06:07 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/22 13:12:56 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/25 17:31:14 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/lexer.h"
 
-t_token	*init_token_list(char *str)
+t_token	*init_token_list(void)
 {
 	t_token	*token;
 
 	token = malloc(sizeof(*token));
 	if (!token)
-		exit_lexer(str, NULL);
+		exit_lexer(NULL, MALLOC);
 	token->type = WORD;
 	token->value = NULL;
 	token->next = NULL;

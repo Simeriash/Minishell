@@ -33,7 +33,7 @@ static int	strlen(char *str, t_state state)
 	return (len);
 }
 
-int	quote_token(char *str, t_token *token_list, int *i, t_state state)
+t_error	quote_token(char *str, t_token *token_list, int *i, t_state state)
 {
 	int		len;
 	int		j;
@@ -45,10 +45,10 @@ int	quote_token(char *str, t_token *token_list, int *i, t_state state)
 	if (len == 0)
 		return (0);
 	if (len == -1)
-		return (1);
+		return (OPEN_QUOTE);
 	value = malloc(sizeof(*value) * (len + 1));
 	if (!value)
-		return (1);
+		return (MALLOC);
 	j = 0;
 	while (!quote_condition(str[*i], state))
 		value[j++] = str[(*i)++];
@@ -58,6 +58,6 @@ int	quote_token(char *str, t_token *token_list, int *i, t_state state)
 	else
 		type = EXPAND;
 	if (add_after(token_list, type, value))
-		return (1);
+		return (MALLOC);
 	return (0);
 }
