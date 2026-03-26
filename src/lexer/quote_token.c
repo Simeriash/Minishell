@@ -33,6 +33,31 @@ static int	strlen(char *str, t_state state)
 	return (len);
 }
 
+static void	type_condition(char *value, t_type *type, t_state state)
+{
+	int	i;
+
+	i = 0;
+	if (state == SIMPLE_QUOTE)
+	{
+		*type = WORD;
+		return ;
+	}
+	else
+	{
+		while (value[i] != '\0')
+		{
+			if (value[i] == '$')
+			{
+				*type = EXPAND;
+				return ;
+			}
+			i++;
+		}
+		*type = WORD;
+	}
+}
+
 t_error	quote_token(char *str, t_token *token_list, int *i, t_state state)
 {
 	int		len;
@@ -53,10 +78,7 @@ t_error	quote_token(char *str, t_token *token_list, int *i, t_state state)
 	while (!quote_condition(str[*i], state))
 		value[j++] = str[(*i)++];
 	value[j] = '\0';
-	if (state == SIMPLE_QUOTE)
-		type = WORD;
-	else
-		type = EXPAND;
+	type_condition(value, &type, state);
 	if (add_after(token_list, type, value))
 		return (MALLOC);
 	return (0);
