@@ -30,11 +30,29 @@ static int	strlen(char *str)
 	return (len);
 }
 
+static void	type_condition(char *value, t_type *type)
+{
+	int	i;
+
+	i = 0;
+	while (value[i] != '\0')
+	{
+		if (value[i] == '$')
+		{
+			*type = EXPAND;
+			return ;
+		}
+		i++;
+	}
+	*type = WORD;
+}
+
 t_error	word_token(char *str, t_token *token_list, int *i)
 {
 	int		len;
 	int		j;
 	char	*value;
+	t_type	type;
 
 	len = strlen(&str[*i]);
 	value = malloc(sizeof(*value) * (len + 1));
@@ -44,7 +62,8 @@ t_error	word_token(char *str, t_token *token_list, int *i)
 	while (!end_condition(str[*i]))
 		value[j++] = str[(*i)++];
 	value[j] = '\0';
-	if (add_after(token_list, WORD, value))
+	type_condition(value, &type);
+	if (add_after(token_list, type, value))
 		return (MALLOC);
 	return (0);
 }
