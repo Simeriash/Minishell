@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:21:25 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/26 11:54:46 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/28 12:43:38 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 typedef enum e_type
 {
+	NONE,
 	WORD,
 	EXPAND,
 	PIPE,
@@ -63,6 +64,7 @@ typedef enum e_error
 }	t_error;
 
 int		shell_space(int c);
+void	error_lexer(t_error error);
 
 /*====================linked_list====================*/
 
@@ -72,10 +74,9 @@ void	free_token(t_token *token_list);
 
 /*===================token_creation===================*/
 
-t_error	meta_token(char *str, t_token *token_list, int *i);
-t_error	word_token(char *str, t_token *token_list, int *i);
-t_error	quote_token(char *str, t_token *token_list, int *i, t_state state);
-void	exit_lexer(t_token *token_list, t_error error);
+t_error	meta_token(char *str, t_token *token, int *i);
+t_error	word_token(char *str, t_token *token, int *i);
+t_error	quote_token(char *str, t_token *token, int *i, t_state state);
 
 t_token	*lexer(char *str);		//	/!\	A ENLEVER
 #endif

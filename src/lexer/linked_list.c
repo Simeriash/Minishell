@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 16:06:07 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/25 17:31:14 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/28 12:43:47 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ t_token	*init_token_list(void)
 
 	token = malloc(sizeof(*token));
 	if (!token)
-		exit_lexer(NULL, MALLOC);
-	token->type = WORD;
+		error_lexer(MALLOC);
+	token->type = NONE;
 	token->value = NULL;
 	token->next = NULL;
 	return (token);
@@ -28,18 +28,14 @@ t_token	*init_token_list(void)
 int	add_after(t_token *token, t_type type, char *value)
 {
 	t_token	*new_token;
-	t_token	*tmp;
 
 	new_token = malloc(sizeof(*new_token));
 	if (!new_token)
 		return (1);
 	new_token->type = type;
 	new_token->value = value;
-	new_token->next = NULL;
-	tmp = token;
-	while (tmp->next != NULL)
-		tmp = tmp->next;
-	tmp->next = new_token;
+	new_token->next = token->next;
+	token->next = new_token;
 	return (0);
 }
 

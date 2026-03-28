@@ -58,7 +58,7 @@ static void	type_condition(char *value, t_type *type, t_state state)
 	}
 }
 
-t_error	quote_token(char *str, t_token *token_list, int *i, t_state state)
+t_error	quote_token(char *str, t_token *token, int *i, t_state state)
 {
 	int		len;
 	int		j;
@@ -79,7 +79,7 @@ t_error	quote_token(char *str, t_token *token_list, int *i, t_state state)
 		value[j++] = str[(*i)++];
 	value[j] = '\0';
 	type_condition(value, &type, state);
-	if (add_after(token_list, type, value))
+	if (add_after(token, type, value))
 		return (MALLOC);
 	return (0);
 }
