@@ -37,7 +37,7 @@ static void	search_type(char *str, int *i, t_type *type)
 	}
 }
 
-t_error	meta_token(char *str, t_token *token_list, int *i)
+t_error	meta_token(char *str, t_token *token, int *i)
 {
 	t_type	type;
 
@@ -56,7 +56,7 @@ t_error	meta_token(char *str, t_token *token_list, int *i)
 		type = RIGHT_PARENTHESIS;
 	else
 		type = RET;
-	if (add_after(token_list, type, NULL))
+	if (add_after(token, type, NULL))
 		return (MALLOC);
 	(*i)++;
 	if (type == HEREDOC || type == APPEND || type == OR || type == AND)

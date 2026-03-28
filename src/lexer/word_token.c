@@ -47,7 +47,7 @@ static void	type_condition(char *value, t_type *type)
 	*type = WORD;
 }
 
-t_error	word_token(char *str, t_token *token_list, int *i)
+t_error	word_token(char *str, t_token *token, int *i)
 {
 	int		len;
 	int		j;
@@ -63,7 +63,7 @@ t_error	word_token(char *str, t_token *token_list, int *i)
 		value[j++] = str[(*i)++];
 	value[j] = '\0';
 	type_condition(value, &type);
-	if (add_after(token_list, type, value))
+	if (add_after(token, type, value))
 		return (MALLOC);
 	return (0);
 }

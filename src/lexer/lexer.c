@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:19:55 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/26 11:55:57 by julauren         ###   ########.fr       */
+/*   Updated: 2026/03/28 12:28:23 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,42 +29,42 @@ static int	state_condition(char *str, int *i, t_state *state)
 	return (0);
 }
 
-static int	normal_state(char *str, t_token *token_list, int *i)
+static int	normal_state(char *str, t_token **token, int *i)
 {
 	t_error	error;
 
 	if (str[*i] == '<' || str[*i] == '>' || str[*i] == '|' || str[*i] == '&'
 		|| str[*i] == '(' || str[*i] == ')' || str[*i] == '\n')
 	{
-		error = meta_token(str, token_list, i);
+		error = meta_token(str, *token, i);
 		if (error)
 		{
-			exit_lexer(token_list, error);
+			error_lexer(error);
 			return (1);
 		}
 	}
 	else
 	{
-		error = word_token(str, token_list, i);
+		error = word_token(str, *token, i);
 		if (error)
 		{
-			exit_lexer(token_list, error);
+			error_lexer(error);
 			return (1);
 		}
 	}
 	return (0);
 }
 
-static int	quote_state(char *str, t_token *token_list, int *i, t_state state)
+static int	quote_state(char *str, t_token **token, int *i, t_state state)
 {
 	t_error	error;
 
 	if (state == SIMPLE_QUOTE || state == DOUBLE_QUOTE)
 	{
-		error = quote_token(str, token_list, i, state);
+		error = quote_token(str, *token, i, state);
 		if (error)
 		{
-			exit_lexer(token_list, error);
+			error_lexer(error);
 			return (1);
 		}
 	}
@@ -73,6 +73,10 @@ static int	quote_state(char *str, t_token *token_list, int *i, t_state state)
 
 static t_ret	lex_next(char *str, t_token *token_list, int *i, t_state *state)
 {
+	static t_token	*last;
+
+	if (!last || (*i == 0 && last))
+		last = token_list;
 	if (state_condition(str, i, state))
 		return (BREAK);
 	if (*state == NORMAL)
@@ -83,11 +87,12 @@ static t_ret	lex_next(char *str, t_token *token_list, int *i, t_state *state)
 				return (BREAK);
 			return (0);
 		}
-		if (normal_state(str, token_list, i))
+		if (normal_state(str, &last, i))
 			return (NUL);
 	}
-	else if (quote_state(str, token_list, i, *state))
+	else if (quote_state(str, &last, i, *state))
 		return (NUL);
+	last = last->next;
 	return (0);
 }
 
@@ -107,7 +112,10 @@ t_token	*lexer(char *str)
 		if (ret == BREAK)
 			break ;
 		if (ret == NUL)
+		{
+			free_token(token_list);
 			return (NULL);
+		}
 	}
 	return (token_list);
 }
