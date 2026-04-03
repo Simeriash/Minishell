@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/02 17:52:20 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/03 11:14:40 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ static int	change_value(t_token *token, char *new_value, int start, int end)
 	int		tmp;
 
 	tmp = ft_strlen(new_value);
-	len = ft_strlen(token->value) - (end - start) + tmp;
+	len = ft_strlen(token->value) - (end - start + 1) + tmp;
 	str = malloc(sizeof(*str) * (len + 1));
 	if (!str)
 	{
 		free(new_value);
 		return (1);
 	}
-	ft_strlcpy(str, token->value, start + 1);
+	ft_strlcpy(str, token->value, start);
 	ft_strlcat(str, new_value, len + 1);
 	ft_strlcat(str, &token->value[end], len + 1);
 	free(new_value);
@@ -72,31 +72,31 @@ static t_error	expander(t_token *token, t_env *envc)
 		new_value = NULL;
 		if (token->value[i] == '$')
 		{
-			if (token->value[i + 1] == '\0')
+			i++;
+			if (token->value[i] == '\0')
 				return (0);
-			if (ft_isspace(token->value[i + 1]))
+			if (ft_isspace(token->value[i]))
 				continue ;
-			j = i + 2;
-			if (token->value[i + 1] == '?')
+			j = i + 1;
+			if (token->value[i] == '?')
 			{
 				// new_value = retour du status de la dernière cmd;
 			}
-			else if (ft_isdigit(token->value[i + 1])
-				|| (token->value[i + 1] == '_' && (ft_isspace(token->value[j])
+			else if ((token->value[i] == '_' && (ft_isspace(token->value[j])
 						|| token->value[j] == '\0'))
-				|| !ft_isalpha(token->value[i + 1]))
+				|| (!ft_isalpha(token->value[i]) && token->value[i] != '_'))
 			{
 				new_value = malloc(sizeof(*new_value));
 				if (!new_value)
 					return (MALLOC);
 				new_value = "";
 			}
-			else if (ft_isalpha(token->value[i + 1])
-				|| token->value[i + 1] == '_')
+			else if (ft_isalpha(token->value[i])
+				|| token->value[i] == '_')
 			{
 				while (ft_isalnum(token->value[j]) || token->value[j] == '_')
 					j++;
-				key = ft_substr(token->value, i + 1, j - i - 1);
+				key = ft_substr(token->value, i, j - i);
 				if (!key)
 					return (MALLOC);
 				new_value = check_key(key, envc);
