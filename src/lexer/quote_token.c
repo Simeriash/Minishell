@@ -24,12 +24,13 @@ static int	strlen(char *str, t_state state)
 {
 	int	len;
 
-	len = 0;
+	len = 1;
 	while (str[len] && !quote_condition(str[len], state))
 		len++;
 	if ((state == SIMPLE_QUOTE && str[len] != '\'')
 		|| (state == DOUBLE_QUOTE && str[len] != '"'))
-		len = -1;
+		return (-1);
+	len++;
 	return (len);
 }
 
@@ -65,7 +66,6 @@ t_error	quote_token(char *str, t_token *token, int *i, t_state state)
 	char	*value;
 	t_type	type;
 
-	(*i)++;
 	len = strlen(&str[*i], state);
 	if (len == 0)
 		return (0);
@@ -75,8 +75,10 @@ t_error	quote_token(char *str, t_token *token, int *i, t_state state)
 	if (!value)
 		return (MALLOC);
 	j = 0;
+	value[j++] = str[(*i)++];
 	while (!quote_condition(str[*i], state))
 		value[j++] = str[(*i)++];
+	value[j++] = str[(*i)];
 	value[j] = '\0';
 	type_condition(value, &type, state);
 	if (add_after(token, type, value))
