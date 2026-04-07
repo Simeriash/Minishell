@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:19:55 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/28 12:28:23 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/07 11:46:30 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,11 @@ static int	quote_state(char *str, t_token **token, int *i, t_state state)
 {
 	t_error	error;
 
-	if (state == SIMPLE_QUOTE || state == DOUBLE_QUOTE)
+	error = quote_token(str, *token, i, state);
+	if (error)
 	{
-		error = quote_token(str, *token, i, state);
-		if (error)
-		{
-			error_lexer(error);
-			return (1);
-		}
+		error_lexer(error);
+		return (1);
 	}
 	return (0);
 }
