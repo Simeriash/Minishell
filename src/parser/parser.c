@@ -6,13 +6,13 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 13:01:42 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/07 16:37:10 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/08 16:26:14 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
 
-static int	parenthesis_control(t_token *token_list, t_env *envc)
+static int	check_parenthesis(t_token *token_list, t_env *envc)
 {
 	t_token	*tmp;
 	int		l_p;
@@ -37,8 +37,17 @@ static int	parenthesis_control(t_token *token_list, t_env *envc)
 	return (0);
 }
 
-void	parser(t_token *token_list, t_env *envc)
+t_ast	*parser(t_token *token_list, t_env *envc)
 {
-	if (parenthesis_control(token_list, envc) && expand(token_list, envc))
-		return ;
+	t_ast	*ast;
+
+	if (check_parenthesis(token_list, envc) && expand(token_list, envc))
+		return (NULL);
+	ast = ast_creation(token_list);
+	if (ast)
+	{
+		error_parser(token_list, envc, MALLOC);
+		return (NULL);
+	}
+	return (ast);
 }

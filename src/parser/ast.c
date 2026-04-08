@@ -1,24 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/26 15:40:12 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/08 13:10:50 by julauren         ###   ########.fr       */
+/*   Created: 2026/04/08 14:51:01 by julauren          #+#    #+#             */
+/*   Updated: 2026/04/08 16:44:30 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
-#include <unistd.h>
 
-void	error_parser(t_token *token_list, t_env *envc, t_error error)
+static t_ast	*ini_ast(t_node_type type, t_cmd cmd, t_ast *left, t_ast *right)
 {
-	(void)error;
-	(void)envc;
-	free_token(token_list);
-	// free_env(envc);
-	ft_putendl_fd("Error parser", 2);
-	//	/!\		A REFAIRE
+	t_ast	*ast;
+
+	ast = malloc(sizeof(*ast));
+	if (!ast)
+		return (NULL);
+	ast->type = type;
+	if (type == NODE_CMD)
+		ast->cmd = cmd;
+	else
+	{
+		ast->cmd.args = NULL;
+		ast->cmd.redir = NULL;
+	}
+	ast->left = left;
+	ast->right = right;
+	return (ast);
+}
+
+t_ast	*ast_creation(t_token *token_list)
+{
+	t_ast	*ast;
+
+	return (ast);
 }
