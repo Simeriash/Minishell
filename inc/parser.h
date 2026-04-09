@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/09 12:13:11 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/09 14:40:18 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef enum e_redir_type
 
 typedef struct s_redir
 {
-	t_redir_type	type;
+	t_type			type;
 	char			*file;
 	struct s_redir	*next;
 }	t_redir;
@@ -57,8 +57,8 @@ typedef enum e_node_type
 
 typedef struct s_ast
 {
-	t_node_type		type;
-	t_cmd			cmd;
+	t_type			type;
+	t_cmd			*cmd;
 	struct s_ast	*left;
 	struct s_ast	*right;
 }	t_ast;
@@ -72,6 +72,6 @@ char	*check_env(t_token *token, t_env *envc, int *i, int *j);
 
 /*=======================ast=======================*/
 
-t_ast	*ast_creation(t_token *token_list);
+t_ast	*ast_creation(t_token *token_list, t_token *stop);
 
 #endif
