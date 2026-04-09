@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:39:08 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/04/09 13:41:57 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/04/09 13:44:15 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int execute_tree(t_tree *node);
 
-int	pipething(t_tree *node)
+int	pipething(t_tree *node) //put the lower code of the if statement into here
 {
 	int		fd[2];
 	char	buf[100];
