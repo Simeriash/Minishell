@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/08 16:24:54 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/09 12:13:11 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,7 @@ void	error_parser(t_token *token_list, t_env *envc, t_error error);
 /*====================expander====================*/
 
 int		expand(t_token *token_list, t_env *envc);
-t_error	expander(t_token *token, t_env *envc);
-char	*check_key(char *key, t_env *envc);
-int		change_value(t_token *token, char *new_value, int start, int end);
+char	*check_env(t_token *token, t_env *envc, int *i, int *j);
 
 /*=======================ast=======================*/
 

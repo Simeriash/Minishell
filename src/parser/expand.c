@@ -6,37 +6,13 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/07 16:48:41 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/09 16:32:11 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
 
-char	*check_key(char *key, t_env *envc)
-{
-	t_env	*tmp;
-	char	*str;
-
-	tmp = envc->next;
-	while (tmp != NULL)
-	{
-		if (ft_strncmp(key, tmp->key, ft_strlen(key)) == 0)
-		{
-			str = ft_strdup(tmp->value);
-			if (!str)
-				return (NULL);
-			return (str);
-		}
-		tmp = tmp->next;
-	}
-	str = malloc(sizeof(*str));
-	if (!str)
-		return (NULL);
-	str = "";
-	return (str);
-}
-
-int	change_value(t_token *token, char *new_value, int start, int end)
+static int	change_value(t_token *token, char *new_value, int start, int end)
 {
 	char	*str;
 	int		len;
@@ -56,6 +32,58 @@ int	change_value(t_token *token, char *new_value, int start, int end)
 	free(new_value);
 	free(token->value);
 	token->value = str;
+	return (0);
+}
+
+static char	*check_new_value(t_token *token, t_env *envc, int *i, int *j)
+{
+	char	*new_value;
+
+	if (token->value[*i] == '?')
+	{
+		// new_value = retour du status de la dernière cmd;
+	}
+	else if ((token->value[*i] == '_' && (ft_isspace(token->value[*j])
+				|| token->value[*j] == '\0'))
+		|| (!ft_isalpha(token->value[*i]) && token->value[*i] != '_'))
+	{
+		new_value = malloc(sizeof(*new_value));
+		if (!new_value)
+			return (NULL);
+		new_value = "";
+	}
+	else if (ft_isalpha(token->value[*i]) || token->value[*i] == '_')
+	{
+		new_value = check_env(token, envc, i, j);
+		if (!new_value)
+			return (NULL);
+	}
+	return (new_value);
+}
+
+static t_error	expander(t_token *token, t_env *envc)
+{
+	int		i;
+	int		j;
+	char	*new_value;
+
+	i = 0;
+	while (token->value[i] != '\0')
+	{
+		if (token->value[i] == '$')
+		{
+			i++;
+			if (token->value[i] == '\0')
+				return (0);
+			if (ft_isspace(token->value[i]))
+				continue ;
+			j = i + 1;
+			new_value = check_new_value(token, envc, &i, &j);
+			if (!new_value && change_value(token, new_value, i, j))
+				return (MALLOC);
+		}
+		i++;
+	}
 	return (0);
 }
 
