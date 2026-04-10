@@ -6,27 +6,11 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/03/26 15:51:13 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/03/27 15:17:57 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-
-static	int	change_env_var(char *key, char *value, t_envpcpy **envpcpy)
-{
-	t_envpcpy *tmp;
-
-	if (!value || !envpcpy || !*envpcpy)
-		return (0);
-	tmp = find_env_var_pos(key, envpcpy);
-	if (!tmp)
-		return (0);
-	free(tmp->key);
-	free(tmp->value);
-	tmp->key = ft_strdup(key);
-	tmp->value = ft_strdup(value);
-	return (0);
-}
 
 int	ft_cd(char *path ,t_envpcpy **envpcpy)
 {

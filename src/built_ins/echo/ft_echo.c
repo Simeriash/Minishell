@@ -1,32 +1,66 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:27:58 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/03/24 09:56:40 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/04/03 18:01:44 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	ft_echo(char **ch_ar, int print_nl)
+int	check_for_nl(char *args)
+{
+	int i;
+	int	print_nl;
+
+	i = 0;
+	print_nl = 1;
+	if (args[i] == '-')
+	{
+		i++;
+		while (args[i])
+		{
+			if (args[i] == 'n')
+				print_nl = 0;
+			else
+			{
+				print_nl = 1;
+				break ;
+			}
+			i++;
+		}
+	}
+	return (print_nl);
+}
+
+int	ft_echo(char *path, char **args, t_envpcpy **envpcpy)
 {
 	int	i;
 	int	ret_val;
+	int	print_nl;
 
+	(void)path;
+	(void)envpcpy;
 	i = 0;
 	ret_val = 0;
-	if (!ch_ar)
+	if (!args)
 		return (1);
-	while (ch_ar[i])
+	if (ft_strcmp("echo", args[i]) == 0)
+		i++;
+	check_for_nl(args[i])
+		i++;
+	while (args[i])
 	{
-		ret_val = printf("%s", ch_ar[i]);
+		//check if first arg is a -n or any combo of ns. if a non n appears, treat as a word
+
+		ret_val = printf("%s", args[i]);
 		if (!ret_val)
 			return (-1);
-		if (ch_ar[i + 1])
+		if (args[i + 1])
 			ret_val = printf(" ");
 		i++;
 	}
@@ -35,11 +69,3 @@ int	ft_echo(char **ch_ar, int print_nl)
 	return (0);
 }
 
-// int	main(int argc, char **argv)
-// {
-// 	(void)argc;
-// 	if (argv[1] && !ft_strncmp(argv[1], "-n", 2))
-// 		ft_echo(argv+2, 0);
-// 	else
-// 		ft_echo(argv+1, 1);
-// }

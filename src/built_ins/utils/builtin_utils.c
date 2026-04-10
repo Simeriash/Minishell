@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 09:05:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/03/25 09:06:16 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/03/27 13:58:52 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,13 @@ int	ft_lstsize(t_envpcpy *lst)
 		lst = lst->next;
 	}
 	return (i);
+}
+int ft_strcmp(const char *s1, const char *s2)
+{
+	int i = 0;
+
+	while (s1[i] && s1[i] == s2[i])
+		i++;
+
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

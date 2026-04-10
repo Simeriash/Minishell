@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:29:14 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/03/25 14:32:17 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/04/03 11:03:57 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char *find_env_var(char *key, t_envpcpy **envpcpy)
 	t_envpcpy *tmp;
 
 	i = 0;
+	if (!key)
+		return (NULL);
 	len = ft_strlen(key);
 	tmp = *envpcpy;
 	if (!tmp)
@@ -39,6 +41,8 @@ t_envpcpy	*find_env_var_pos(char *key, t_envpcpy **envpcpy)
 	t_envpcpy *tmp;
 
 	i = 0;
+	if (!key)
+		return (NULL);
 	len = ft_strlen(key);
 	tmp = *envpcpy;
 	if (!tmp)
@@ -50,4 +54,20 @@ t_envpcpy	*find_env_var_pos(char *key, t_envpcpy **envpcpy)
 		tmp = tmp->next;
 	}
 	return (NULL);
+}
+
+int	change_env_var(char *key, char *value, t_envpcpy **envpcpy)
+{
+	t_envpcpy *tmp;
+
+	if (!value || !envpcpy || !*envpcpy)
+		return (0);
+	tmp = find_env_var_pos(key, envpcpy);
+	if (!tmp)
+		return (0);
+	free(tmp->key);
+	free(tmp->value);
+	tmp->key = ft_strdup(key);
+	tmp->value = ft_strdup(value);
+	return (0);
 }
