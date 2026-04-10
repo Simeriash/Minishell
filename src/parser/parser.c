@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 13:01:42 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/10 07:50:16 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/10 11:09:00 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_ast	*parser(t_token *token_list, t_env *envc)
 	if (check_parenthesis(token_list, envc) && expand(token_list, envc))
 		return (NULL);
 	ast = ast_creation(token_list, NULL, OR);
-	if (ast)
+	if (!ast)
 	{
 		error_parser(token_list, envc, MALLOC);
 		return (NULL);

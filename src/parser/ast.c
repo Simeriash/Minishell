@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 14:51:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/10 09:53:45 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/10 13:18:56 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,62 +26,73 @@ static t_ast	*init_ast(t_type type, t_cmd *cmd, t_ast *left, t_ast *right)
 	return (ast);
 }
 
-t_ast	*ast_creation(t_token *token, t_token *stop, t_type type)
+static t_ast	*ast_node(t_token *token, t_token *stop, t_type t_1, t_type t_2)
 {
 	t_ast	*ast;
 	t_ast	*tmp_1;
 	t_ast	*tmp_2;
 	t_token	*new_token;
-	t_token	*tmp;
 
 	new_token = token->next;
-	tmp = new_token;
-	if (type == OR)
+	while (new_token != NULL && new_token != stop)
 	{
-		while (new_token != NULL && new_token != stop)
+		if (new_token->type == t_1)
 		{
-			if (new_token->type == OR)
-			{
-				tmp_1 = ast_creation(token, new_token, AND);
-				tmp_2 = ast_creation(new_token, stop, OR);
-				if ((!tmp_1 || !tmp_2) && !free_ast(tmp_1) && !free_ast(tmp_2))
-					return (NULL);
-				ast = init_ast(OR, NULL, tmp_1, tmp_2);
-				return (ast);
-			}
+			tmp_1 = ast_creation(token, new_token, t_2);
+			tmp_2 = ast_creation(new_token, stop, t_1);
+			if ((!tmp_1 || !tmp_2) && !free_ast(tmp_1) && !free_ast(tmp_2))
+				return (NULL);
+			ast = init_ast(t_1, NULL, tmp_1, tmp_2);
+			return (ast);
 		}
+		new_token = new_token->next;
 	}
-	new_token = tmp;
-	if (type == AND || type == OR)
-	{
-		while (new_token != NULL && new_token != stop)
-		{
-			if (new_token->type == AND)
-			{
-				tmp_1 = ast_creation(token, new_token, PIPE);
-				tmp_2 = ast_creation(new_token, stop, AND);
-				if ((!tmp_1 || !tmp_2) && !free_ast(tmp_1) && !free_ast(tmp_2))
-					return (NULL);
-				ast = init_ast(AND, NULL, tmp_1, tmp_2);
-				return (ast);
-			}
-		}
-	}
-	new_token = tmp;
+	ast = malloc(sizeof(*ast));
+	if (!ast)
+		return (NULL);
+	ast->type = NONE;
+	return (ast);
+}
+
+static t_ast	*ast_next_creation(t_token *token, t_token *stop, t_type type)
+{
+	t_ast	*ast;
+
 	if (type == PIPE || type == AND || type == OR)
 	{
-		while (new_token != NULL && new_token != stop)
-		{
-			if (new_token->type == PIPE)
-			{
-				tmp_1 = ast_creation(token, new_token, WORD);
-				tmp_2 = ast_creation(new_token, stop, PIPE);
-				if ((!tmp_1 || !tmp_2) && !free_ast(tmp_1) && !free_ast(tmp_2))
-					return (NULL);
-				ast = init_ast(PIPE, NULL, tmp_1, tmp_2);
-				return (ast);
-			}
-		}
+		ast = ast_node(token, stop, PIPE, WORD);
+		if (ast && ast->type == NONE)
+			free(ast);
+		else
+			return (ast);
 	}
+	if (type == WORD || type == PIPE || type == AND || type == OR)
+	{
+
+	}
+	return (NULL);
+}
+
+t_ast	*ast_creation(t_token *token, t_token *stop, t_type type)
+{
+	t_ast	*ast;
+
+	if (type == OR)
+	{
+		ast = ast_node(token, stop, OR, AND);
+		if (ast && ast->type == NONE)
+			free(ast);
+		else
+			return (ast);
+	}
+	if (type == AND || type == OR)
+	{
+		ast = ast_node(token, stop, AND, PIPE);
+		if (ast && ast->type == NONE)
+			free(ast);
+		else
+			return (ast);
+	}
+	ast = ast_next_creation(token, stop, type);
 	return (ast);
 }
