@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/09 14:40:18 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/10 09:51:27 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ char	*check_env(t_token *token, t_env *envc, int *i, int *j);
 
 /*=======================ast=======================*/
 
-t_ast	*ast_creation(t_token *token_list, t_token *stop);
+t_ast	*ast_creation(t_token *token, t_token *stop, t_type type);
+int		free_ast(t_ast *ast);
 
 #endif
