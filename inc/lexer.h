@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:21:25 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/07 12:35:44 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/13 09:01:26 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef enum e_error
 	OK,
 	MALLOC,
 	OPEN_QUOTE,
+	OPEN_PARENTHESIS,
 	AMPERSAND
 }	t_error;
 

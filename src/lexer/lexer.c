@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 14:19:55 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/07 11:46:30 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/13 09:54:14 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static int	quote_state(char *str, t_token **token, int *i, t_state state)
 		error_lexer(error);
 		return (1);
 	}
+	(*i)++;
 	return (0);
 }
 
@@ -78,17 +79,13 @@ static t_ret	lex_next(char *str, t_token *token_list, int *i, t_state *state)
 		return (BREAK);
 	if (*state == NORMAL)
 	{
-		if (str[*i] == '\'' || str[*i] == '"')
-		{
-			if (str[++(*i)] == '\0')
-				return (BREAK);
-			return (0);
-		}
 		if (normal_state(str, &last, i))
 			return (NUL);
 	}
 	else if (quote_state(str, &last, i, *state))
 		return (NUL);
+	if (*state != NORMAL)
+		*state = NORMAL;
 	last = last->next;
 	return (0);
 }
@@ -101,6 +98,8 @@ t_token	*lexer(char *str)
 	t_token	*token_list;
 
 	token_list = init_token_list();
+	if (!token_list)
+		return (NULL);
 	i = 0;
 	state = NORMAL;
 	while (str[i] != '\0')
