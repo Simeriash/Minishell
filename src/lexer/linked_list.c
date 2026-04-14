@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 16:06:07 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/28 12:43:47 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/13 09:47:11 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ t_token	*init_token_list(void)
 
 	token = malloc(sizeof(*token));
 	if (!token)
+	{
 		error_lexer(MALLOC);
+		return (NULL);
+	}
 	token->type = NONE;
 	token->value = NULL;
 	token->next = NULL;

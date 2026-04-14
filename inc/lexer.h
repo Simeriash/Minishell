@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/19 14:21:25 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/07 12:35:44 by julauren         ###   ########.fr       */
+/*   Created: 2026/04/13 09:40:34 by julauren          #+#    #+#             */
+/*   Updated: 2026/04/14 13:09:16 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef enum e_type
 {
 	NONE,
 	WORD,
+	CMD,
 	EXPAND,
 	PIPE,
 	IN,
@@ -50,6 +51,7 @@ typedef enum e_state
 
 typedef enum e_ret
 {
+	NEXT,
 	CONTINUE,
 	BREAK,
 	NUL
@@ -60,11 +62,13 @@ typedef enum e_error
 	OK,
 	MALLOC,
 	OPEN_QUOTE,
+	OPEN_PARENTHESIS,
 	AMPERSAND
 }	t_error;
 
-int		shell_space(int c);
-void	error_lexer(t_error error);
+void	shell_space(char *str, int *i);
+int		end_condition(char c);
+void	state_condition(char c, t_state *state);
 
 /*====================linked_list====================*/
 
@@ -75,8 +79,10 @@ void	free_token(t_token *token_list);
 /*===================token_creation===================*/
 
 t_error	meta_token(char *str, t_token *token, int *i);
-t_error	word_token(char *str, t_token *token, int *i);
-t_error	quote_token(char *str, t_token *token, int *i, t_state state);
+
+/*=======================error=======================*/
+
+void	error_lexer(t_error error);
 
 t_token	*lexer(char *str);		//	/!\	A ENLEVER
 #endif

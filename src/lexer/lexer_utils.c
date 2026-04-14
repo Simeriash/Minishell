@@ -6,15 +6,86 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 11:37:57 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/26 11:52:28 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/14 12:43:38 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/lexer.h"
 
-int	shell_space(int c)
+void	shell_space(char *str, int *i)
 {
-	if (c == 9 || (c >= 11 && c <= 13) || c == 32)
+	while (str[*i] == 9 || (str[*i] >= 11 && str[*i] <= 13) || str[*i] == 32)
+		(*i)++;
+}
+
+int	end_condition(char c)
+{
+	if (c == '\0' || ft_isspace(c) || c == '<' || c == '>' || c == '|'
+		|| c == '&' || c == '(' || c == ')')
 		return (1);
+	return (0);
+}
+
+void	state_condition(char c, t_state *state)
+{
+	if (c == '\'' && *state == NORMAL)
+		*state = SIMPLE_QUOTE;
+	else if (c == '\'' && *state == SIMPLE_QUOTE)
+		*state = NORMAL;
+	else if (c == '"' && *state == NORMAL)
+		*state = DOUBLE_QUOTE;
+	else if (c == '"' && *state == DOUBLE_QUOTE)
+		*state = NORMAL;
+}
+
+static void	search_type(char *str, int *i, t_type *type)
+{
+	if (str[*i] == '<')
+	{
+		if (str[*i + 1] == '<')
+			*type = HEREDOC;
+		else
+			*type = IN;
+	}
+	else if (str[*i] == '>')
+	{
+		if (str[*i + 1] == '>')
+			*type = APPEND;
+		else
+			*type = OUT;
+	}
+	else if (str[*i] == '|')
+	{
+		if (str[*i + 1] == '|')
+			*type = OR;
+		else
+			*type = PIPE;
+	}
+}
+
+t_error	meta_token(char *str, t_token *token, int *i)
+{
+	t_type	type;
+
+	if (str[*i] == '<' || str[*i] == '>' || str[*i] == '|')
+		search_type(str, i, &type);
+	else if (str[*i] == '&')
+	{
+		if (str[*i + 1] == '&')
+			type = AND;
+		else
+			return (AMPERSAND);
+	}
+	else if (str[*i] == '(')
+		type = LEFT_PARENTHESIS;
+	else if (str[*i] == ')')
+		type = RIGHT_PARENTHESIS;
+	else
+		type = RET;
+	if (add_after(token, type, NULL))
+		return (MALLOC);
+	(*i)++;
+	if (type == HEREDOC || type == APPEND || type == OR || type == AND)
+		(*i)++;
 	return (0);
 }
