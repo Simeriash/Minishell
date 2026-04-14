@@ -5,106 +5,97 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/19 14:19:55 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/13 09:54:14 by julauren         ###   ########.fr       */
+/*   Created: 2026/04/13 09:38:57 by julauren          #+#    #+#             */
+/*   Updated: 2026/04/14 12:43:47 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/lexer.h"
 
-static int	state_condition(char *str, int *i, t_state *state)
+static t_ret	lexer_next3(t_token **last, char *s)
 {
-	while (shell_space(str[*i]))
-		(*i)++;
-	if (str[*i] == '\0')
-		return (1);
-	if (str[*i] == '\'' && *state == NORMAL)
-		*state = SIMPLE_QUOTE;
-	else if (str[*i] == '\'' && *state == SIMPLE_QUOTE)
-		*state = NORMAL;
-	else if (str[*i] == '"' && *state == NORMAL)
-		*state = DOUBLE_QUOTE;
-	else if (str[*i] == '"' && *state == DOUBLE_QUOTE)
-		*state = NORMAL;
+	if (add_after(*last, WORD, s))
+	{
+		error_lexer(MALLOC);
+		return (NUL);
+	}
+	*last = (*last)->next;
 	return (0);
 }
 
-static int	normal_state(char *str, t_token **token, int *i)
+static t_ret	lexer_next2(char *str, char **s, int *i, int start)
+{
+	t_state	state;
+
+	state = NORMAL;
+	while (str[*i] != '\0' && ((state == NORMAL && !end_condition(str[*i]))
+			|| state == SIMPLE_QUOTE || state == DOUBLE_QUOTE))
+		state_condition(str[(*i)++], &state);
+	if (state != NORMAL)
+	{
+		error_lexer(OPEN_QUOTE);
+		return (NUL);
+	}
+	*s = ft_substr(str, start, *i - start);
+	if (!(*s))
+	{
+		error_lexer(MALLOC);
+		return (NUL);
+	}
+	if (((*s)[0] == '\'' && (*s)[1] == '\'')
+		|| ((*s)[0] == '"' && (*s)[1] == '"'))
+	{
+		free(*s);
+		return (CONTINUE);
+	}
+	return (0);
+}
+
+static t_ret	lexer_next(char *str, t_token **last, int *i)
 {
 	t_error	error;
+	t_ret	ret;
+	char	*s;
+	int		start;
 
+	start = *i;
 	if (str[*i] == '<' || str[*i] == '>' || str[*i] == '|' || str[*i] == '&'
 		|| str[*i] == '(' || str[*i] == ')' || str[*i] == '\n')
 	{
-		error = meta_token(str, *token, i);
+		error = meta_token(str, *last, i);
 		if (error)
 		{
 			error_lexer(error);
-			return (1);
-		}
-	}
-	else
-	{
-		error = word_token(str, *token, i);
-		if (error)
-		{
-			error_lexer(error);
-			return (1);
-		}
-	}
-	return (0);
-}
-
-static int	quote_state(char *str, t_token **token, int *i, t_state state)
-{
-	t_error	error;
-
-	error = quote_token(str, *token, i, state);
-	if (error)
-	{
-		error_lexer(error);
-		return (1);
-	}
-	(*i)++;
-	return (0);
-}
-
-static t_ret	lex_next(char *str, t_token *token_list, int *i, t_state *state)
-{
-	static t_token	*last;
-
-	if (!last || (*i == 0 && last))
-		last = token_list;
-	if (state_condition(str, i, state))
-		return (BREAK);
-	if (*state == NORMAL)
-	{
-		if (normal_state(str, &last, i))
 			return (NUL);
+		}
+		*last = (*last)->next;
+		return (CONTINUE);
 	}
-	else if (quote_state(str, &last, i, *state))
-		return (NUL);
-	if (*state != NORMAL)
-		*state = NORMAL;
-	last = last->next;
-	return (0);
+	ret = lexer_next2(str, &s, i, start);
+	if (ret != 0)
+		return (ret);
+	ret = lexer_next3(last, s);
+	return (ret);
 }
 
 t_token	*lexer(char *str)
 {
 	int		i;
 	t_ret	ret;
-	t_state	state;
 	t_token	*token_list;
+	t_token	*last;
 
 	token_list = init_token_list();
 	if (!token_list)
 		return (NULL);
 	i = 0;
-	state = NORMAL;
+	last = token_list;
 	while (str[i] != '\0')
 	{
-		ret = lex_next(str, token_list, &i, &state);
+		shell_space(str, &i);
+		if (str[i] == '\0')
+			break ;
+		ret = lexer_next(str, &last, &i);
 		if (ret == BREAK)
 			break ;
 		if (ret == NUL)
