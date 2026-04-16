@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/10 09:51:27 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/16 09:55:30 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-typedef enum e_redir_type
-{
-	REDIR_IN,
-	REDIR_OUT,
-	REDIR_HEREDOC,
-	REDIR_APPEND
-}	t_redir_type;
-
 typedef struct s_redir
 {
 	t_type			type;
@@ -46,14 +38,6 @@ typedef struct s_cmd
 	char	**args;
 	t_redir	*redir;
 }	t_cmd;
-
-typedef enum e_node_type
-{
-	NODE_CMD,
-	NODE_PIPE,
-	NODE_AND,
-	NODE_OR
-}	t_node_type;
 
 typedef struct s_ast
 {
@@ -68,7 +52,7 @@ void	error_parser(t_token *token_list, t_env *envc, t_error error);
 /*====================expander====================*/
 
 int		expand(t_token *token_list, t_env *envc);
-char	*check_env(t_token *token, t_env *envc, int *i, int *j);
+char	*check_env(t_token *token, t_env *envc, int i, int *j);
 
 /*=======================ast=======================*/
 

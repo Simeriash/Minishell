@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/09 16:32:11 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/16 09:17:59 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,24 @@ static int	change_value(t_token *token, char *new_value, int start, int end)
 	return (0);
 }
 
-static char	*check_new_value(t_token *token, t_env *envc, int *i, int *j)
+static char	*check_new_value(t_token *token, t_env *envc, int i, int *j)
 {
 	char	*new_value;
 
-	if (token->value[*i] == '?')
+	if (token->value[i] == '?')
 	{
 		// new_value = retour du status de la dernière cmd;
 	}
-	else if ((token->value[*i] == '_' && (ft_isspace(token->value[*j])
+	else if ((token->value[i] == '_' && (ft_isspace(token->value[*j])
 				|| token->value[*j] == '\0'))
-		|| (!ft_isalpha(token->value[*i]) && token->value[*i] != '_'))
+		|| (!ft_isalpha(token->value[i]) && token->value[i] != '_'))
 	{
 		new_value = malloc(sizeof(*new_value));
 		if (!new_value)
 			return (NULL);
 		new_value = "";
 	}
-	else if (ft_isalpha(token->value[*i]) || token->value[*i] == '_')
+	else if (ft_isalpha(token->value[i]) || token->value[i] == '_')
 	{
 		new_value = check_env(token, envc, i, j);
 		if (!new_value)
@@ -61,16 +61,19 @@ static char	*check_new_value(t_token *token, t_env *envc, int *i, int *j)
 	return (new_value);
 }
 
-static t_error	expander(t_token *token, t_env *envc)
+static int	expander(t_token *token, t_env *envc)
 {
 	int		i;
 	int		j;
 	char	*new_value;
+	t_state	state;
 
 	i = 0;
+	state = NORMAL;
 	while (token->value[i] != '\0')
 	{
-		if (token->value[i] == '$')
+		state_condition(token->value[i], &state);
+		if (state != SIMPLE_QUOTE && token->value[i] == '$')
 		{
 			i++;
 			if (token->value[i] == '\0')
@@ -78,11 +81,61 @@ static t_error	expander(t_token *token, t_env *envc)
 			if (ft_isspace(token->value[i]))
 				continue ;
 			j = i + 1;
-			new_value = check_new_value(token, envc, &i, &j);
-			if (!new_value && change_value(token, new_value, i, j))
-				return (MALLOC);
+			new_value = check_new_value(token, envc, i, &j);
+			if (!new_value || change_value(token, new_value, i, j))
+				return (1);
 		}
 		i++;
+	}
+	return (0);
+}
+
+static int	more_token(t_token **token)
+{
+	int		i;
+	t_state	state;
+	char	*tmp;
+	char	*old_value;
+
+	i = 0;
+	state = NORMAL;
+	old_value = (*token)->value;
+	while ((*token)->value[i] != '\0')
+	{
+		state_condition((*token)->value[i], &state);
+		while ((*token)->value[i] != '\0' && state == NORMAL
+			&& !ft_isspace((*token)->value[i]))
+			state_condition((*token)->value[++i], &state);
+		if ((*token)->value[i] == '\0')
+			return (0);
+		if (state == NORMAL && ft_isspace((*token)->value[i]))
+		{
+			tmp = ft_substr(old_value, 0, i);
+			if (!tmp)
+				return (1);
+			(*token)->value = tmp;
+			i++;
+			while ((*token)->value[i] != '\0' && ft_isspace((*token)->value[i]))
+				i++;
+			if ((*token)->value[i] == '\0')
+			{
+				free(old_value);
+				return (0);
+			}
+			tmp = ft_substr(old_value, i, ft_strlen(old_value));
+			free(old_value);
+			if (!tmp)
+				return (1);
+			if (add_after(*token, WORD, tmp))
+			{
+				free(tmp);
+				return (1);
+			}
+			*token = (*token)->next;
+			i = 0;
+		}
+		else
+			i++;
 	}
 	return (0);
 }
@@ -90,17 +143,15 @@ static t_error	expander(t_token *token, t_env *envc)
 int	expand(t_token *token_list, t_env *envc)
 {
 	t_token	*tmp;
-	t_error	error;
 
 	tmp = token_list->next;
 	while (tmp != NULL)
 	{
-		if (tmp->type == EXPAND)
+		if (tmp->type == WORD)
 		{
-			error = expander(tmp, envc);
-			if (error)
+			if (expander(tmp, envc) || more_token(&tmp))
 			{
-				error_parser(token_list, envc, error);
+				error_parser(token_list, envc, MALLOC);
 				return (1);
 			}
 		}

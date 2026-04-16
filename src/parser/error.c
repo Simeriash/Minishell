@@ -6,12 +6,11 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:40:12 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/08 13:10:50 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/14 13:35:24 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
-#include <unistd.h>
 
 void	error_parser(t_token *token_list, t_env *envc, t_error error)
 {
