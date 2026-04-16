@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/16 09:17:59 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/16 10:55:59 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static int	change_value(t_token *token, char *new_value, int start, int end)
 	ft_strlcpy(str, token->value, start);
 	ft_strlcat(str, new_value, len + 1);
 	ft_strlcat(str, &token->value[end], len + 1);
-	free(new_value);
 	free(token->value);
 	token->value = str;
 	return (0);
@@ -61,11 +60,24 @@ static char	*check_new_value(t_token *token, t_env *envc, int i, int *j)
 	return (new_value);
 }
 
+static	int	next_expander(t_token *token, t_env *envc, int *i, int *j)
+{
+	char	*new_value;
+	int		len;
+
+	new_value = check_new_value(token, envc, *i, j);
+	if (!new_value || change_value(token, new_value, *i, *j))
+		return (1);
+	len = ft_strlen(new_value);
+	free(new_value);
+	*i = *i + len - 1;
+	return (0);
+}
+
 static int	expander(t_token *token, t_env *envc)
 {
 	int		i;
 	int		j;
-	char	*new_value;
 	t_state	state;
 
 	i = 0;
@@ -81,58 +93,8 @@ static int	expander(t_token *token, t_env *envc)
 			if (ft_isspace(token->value[i]))
 				continue ;
 			j = i + 1;
-			new_value = check_new_value(token, envc, i, &j);
-			if (!new_value || change_value(token, new_value, i, j))
+			if (next_expander(token, envc, &i, &j))
 				return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-static int	more_token(t_token **token)
-{
-	int		i;
-	t_state	state;
-	char	*tmp;
-	char	*old_value;
-
-	i = 0;
-	state = NORMAL;
-	old_value = (*token)->value;
-	while ((*token)->value[i] != '\0')
-	{
-		state_condition((*token)->value[i], &state);
-		while ((*token)->value[i] != '\0' && state == NORMAL
-			&& !ft_isspace((*token)->value[i]))
-			state_condition((*token)->value[++i], &state);
-		if ((*token)->value[i] == '\0')
-			return (0);
-		if (state == NORMAL && ft_isspace((*token)->value[i]))
-		{
-			tmp = ft_substr(old_value, 0, i);
-			if (!tmp)
-				return (1);
-			(*token)->value = tmp;
-			i++;
-			while ((*token)->value[i] != '\0' && ft_isspace((*token)->value[i]))
-				i++;
-			if ((*token)->value[i] == '\0')
-			{
-				free(old_value);
-				return (0);
-			}
-			tmp = ft_substr(old_value, i, ft_strlen(old_value));
-			free(old_value);
-			if (!tmp)
-				return (1);
-			if (add_after(*token, WORD, tmp))
-			{
-				free(tmp);
-				return (1);
-			}
-			*token = (*token)->next;
-			i = 0;
 		}
 		else
 			i++;
