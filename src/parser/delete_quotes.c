@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 14:58:22 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/16 15:59:33 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/17 11:32:16 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,19 @@ static t_ret	state_quote(t_token *token, t_state *state, int *i, int *j)
 	if (*state != NORMAL)
 	{
 		(*j)++;
+		if ((*state == SIMPLE_QUOTE && token->value[*j] == '\'')
+			|| (*state == DOUBLE_QUOTE && token->value[*j] == '"'))
+		{
+			(*j)++;
+			*state = NORMAL;
+			return (CONTINUE);
+		}
 		while (*state != NORMAL && token->value[*j] != '\0')
 		{
 			token->value[(*i)++] = token->value[(*j)++];
 			state_condition(token->value[*j], state);
 		}
-		(*j)++;
-		if (token->value[*j] == '\0')
+		if (token->value[*j] == '\0' || token->value[++(*j)] == '\0')
 		{
 			token->value[*i] = token->value[*j];
 			return (BREAK);

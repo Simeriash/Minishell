@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 10:01:29 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/16 11:48:18 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/17 12:54:58 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static int	second_step(t_token **token, char *old_value, int *i)
 	if (!tmp)
 		return (1);
 	(*token)->value = tmp;
+	(*token)->type = WORD;
 	(*i)++;
 	while ((*token)->value[*i] != '\0' && ft_isspace((*token)->value[*i]))
 		i++;

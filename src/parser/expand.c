@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/16 10:55:59 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/17 12:58:08 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static int	change_value(t_token *token, char *new_value, int start, int end)
 	ft_strlcat(str, &token->value[end], len + 1);
 	free(token->value);
 	token->value = str;
+	token->type = EXPAND;
 	return (0);
 }
 
@@ -111,7 +112,8 @@ int	expand(t_token *token_list, t_env *envc)
 	{
 		if (tmp->type == WORD)
 		{
-			if (expander(tmp, envc) || more_token(&tmp))
+			if (expander(tmp, envc)
+				|| (tmp->type == EXPAND && more_token(&tmp)))
 			{
 				error_parser(token_list, envc, MALLOC);
 				return (1);
@@ -119,5 +121,6 @@ int	expand(t_token *token_list, t_env *envc)
 		}
 		tmp = tmp->next;
 	}
+	delete_quotes(token_list);
 	return (0);
 }
