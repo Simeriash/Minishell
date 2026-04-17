@@ -6,11 +6,74 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 14:58:22 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/16 15:01:43 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/16 15:59:33 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
+
+static t_ret	state_normal(t_token *token, t_state *state, int *i, int *j)
+{
+	if (*state == NORMAL && *j != *i)
+	{
+		while (*state == NORMAL && token->value[*j] != '\0')
+		{
+			token->value[(*i)++] = token->value[(*j)++];
+			state_condition(token->value[*j], state);
+		}
+		if (token->value[*j] == '\0')
+		{
+			token->value[*i] = token->value[*j];
+			return (BREAK);
+		}
+		*state = NORMAL;
+		return (CONTINUE);
+	}
+	return (0);
+}
+
+static t_ret	state_quote(t_token *token, t_state *state, int *i, int *j)
+{
+	if (*state != NORMAL)
+	{
+		(*j)++;
+		while (*state != NORMAL && token->value[*j] != '\0')
+		{
+			token->value[(*i)++] = token->value[(*j)++];
+			state_condition(token->value[*j], state);
+		}
+		(*j)++;
+		if (token->value[*j] == '\0')
+		{
+			token->value[*i] = token->value[*j];
+			return (BREAK);
+		}
+		return (CONTINUE);
+	}
+	return (0);
+}
+
+static void	next_delete(t_token *token, t_state *state, int *i, int *j)
+{
+	t_ret	ret;
+
+	while (token->value[*i] != '\0')
+	{
+		state_condition(token->value[*j], state);
+		ret = state_quote(token, state, i, j);
+		if (ret == BREAK)
+			break ;
+		if (ret == CONTINUE)
+			continue ;
+		ret = state_normal(token, state, i, j);
+		if (ret == BREAK)
+			break ;
+		if (ret == CONTINUE)
+			continue ;
+		i++;
+		j++;
+	}
+}
 
 void	delete_quotes(t_token *token_list)
 {
@@ -26,45 +89,7 @@ void	delete_quotes(t_token *token_list)
 		i = 0;
 		j = 0;
 		if (tmp->type == WORD)
-		{
-			while (tmp->value[i] != '\0')
-			{
-				state_condition(tmp->value[j], &state);
-				if (state != NORMAL)
-				{
-					j++;
-					while (state != NORMAL && tmp->value[j] != '\0')
-					{
-						tmp->value[i++] = tmp->value[j++];
-						state_condition(tmp->value[j], &state);
-					}
-					j++;
-					if (tmp->value[j] == '\0')
-					{
-						tmp->value[i] = tmp->value[j];
-						break ;
-					}
-					continue ;
-				}
-				if (state == NORMAL && j != i)
-				{
-					while (state == NORMAL && tmp->value[j] != '\0')
-					{
-						tmp->value[i++] = tmp->value[j++];
-						state_condition(tmp->value[j], &state);
-					}
-					if (tmp->value[j] == '\0')
-					{
-						tmp->value[i] = tmp->value[j];
-						break ;
-					}
-					state = NORMAL;
-					continue ;
-				}
-				i++;
-				j++;
-			}
-		}
+			next_delete(tmp, &state, &i, &j);
 		tmp = tmp->next;
 	}
 }
