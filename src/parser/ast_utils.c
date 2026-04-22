@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 17:02:54 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/10 09:25:34 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/22 06:45:56 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ static void	free_cmd(t_cmd *cmd)
 		redir = tmp;
 	}
 	free(cmd);
+	cmd = NULL;
 }
 
 int	free_ast(t_ast *ast)
@@ -70,4 +71,18 @@ int	free_ast(t_ast *ast)
 	free(ast);
 	ast = NULL;
 	return (0);
+}
+
+t_ast	*init_ast(t_type type, t_cmd *cmd, t_ast *left, t_ast *right)
+{
+	t_ast	*ast;
+
+	ast = malloc(sizeof(*ast));
+	if (!ast)
+		return (NULL);
+	ast->type = type;
+	ast->cmd = cmd;
+	ast->left = left;
+	ast->right = right;
+	return (ast);
 }
