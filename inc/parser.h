@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/18 10:36:07 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/29 15:04:57 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ typedef struct s_cmd
 	t_redir	*redir;
 }	t_cmd;
 
+typedef struct s_arg
+{
+	char			*str;
+	struct s_arg	*next;
+}	t_arg;
+
 typedef struct s_ast
 {
 	t_type			type;
@@ -60,6 +66,8 @@ void	delete_quotes(t_token *token_list);
 
 t_ast	*ast_creation(t_token *token, t_token *stop, t_type type);
 t_ast	*init_ast(t_type type, t_cmd *cmd, t_ast *left, t_ast *right);
-int		free_ast(t_ast *ast);
+t_cmd	*looking_for_cmd(t_token *token, t_token *stop);
+int		free_ast(t_ast **ast);
+void	free_cmd(t_cmd **cmd);
 
 #endif

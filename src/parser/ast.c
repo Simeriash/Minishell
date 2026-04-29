@@ -6,20 +6,11 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 14:51:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/22 08:58:53 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/29 15:13:40 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
-
-static t_cmd	*looking_for_cmd(t_token *token, t_token *stop)
-{
-	t_cmd	*cmd;
-	t_token	*new_token;
-	t_redir	*redir;
-
-	return (cmd);
-}
 
 static t_ast	*ast_node(t_token *token, t_token *stop, t_type t_1, t_type t_2)
 {
@@ -35,6 +26,10 @@ static t_ast	*ast_node(t_token *token, t_token *stop, t_type t_1, t_type t_2)
 		if (t_2 == NONE && new_token->type == WORD)
 		{
 			cmd = looking_for_cmd(new_token, stop);
+			if (!cmd)
+				return (NULL);
+			if (cmd->args == NULL && cmd->redir->type == NONE)
+				free_cmd(&cmd);
 			ast = init_ast(CMD, cmd, NULL, NULL);
 			return (ast);
 		}
@@ -42,11 +37,9 @@ static t_ast	*ast_node(t_token *token, t_token *stop, t_type t_1, t_type t_2)
 		{
 			ast_1 = ast_creation(token, new_token, t_2);
 			ast_2 = ast_creation(new_token, stop, t_1);
-			if ((!ast_1 || !ast_2) && !free_ast(ast_1) && !free_ast(ast_2))
+			if ((!ast_1 || !ast_2) && !free_ast(&ast_1) && !free_ast(&ast_2))
 				return (NULL);
 			ast = init_ast(t_1, NULL, ast_1, ast_2);
-			if (!ast)
-				free_ast(ast);
 			return (ast);
 		}
 		new_token = new_token->next;
