@@ -6,76 +6,14 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:39:08 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/04/15 08:29:39 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/04/30 12:32:52 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 #include <string.h>
 
-int execute_tree(t_tree *node, char **envp);
-int	execute_pipe(t_tree *node, char **envp);
-int	execute_cmd(t_tree *node, char **envp);
-
-int execute_tree(t_tree *node, char **envp)
-{
-	if (node->value == PIPE)
-		execute_pipe(node, envp);
-	if (node->value == CMD)
-		execute_cmd(node, envp);
-	if (node->value == 99)
-		printf("%s\n", node->str);
-	return 0;
-}
-
-int	execute_cmd(t_tree *node, char **envp)
-{
-	char *arr[2] = {"wc", NULL};
-
-	execve("/bin/wc", arr, envp);
-}
-
-int	pipefunc(int *fd, int unused, int used, int newfd, t_tree *side, char **envp)
-{
-	int ret;
-
-	close(fd[unused]);
-	dup2(fd[used], newfd);
-	ret = execute_tree(side, envp);
-	close(fd[used]);
-	return (ret);
-}
-
-int	execute_pipe(t_tree *node, char **envp)
-{
-	int		fd[2];
-	pid_t	pid1;
-	pid_t	pid2;
-	int		ret = 0;
-	int		status;
-
-	if (pipe(fd) < 0)
-		return (0);
-	pid1 = fork();
-	if (pid1 == 0)
-	{
-		close(fd[0]);
-		dup2(fd[1], STDOUT_FILENO);
-		execute_tree(node->left, envp);
-		exit (ret);
-	}
-	pid2 = fork();
-	if (pid2 == 0)
-	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-		execute_tree(node->right, envp);
-		exit (ret);
-	}
-	close(fd[0]);
-	close(fd[1]);
-	return (0);
-}
+int execute_tree(t_tree *node, char **envp, int in_fd, int out_fd);
 
 int my_strcmp(const char *s1, const char *s2)
 {
@@ -126,30 +64,147 @@ t_tree *makenode(char *value)
 		node->value = i;
 		i++;
 		if (my_strcmp(value, "PIPE") == 0)
-			node->value = PIPE;
-		else if (my_strcmp(value, "CMD") == 0)
-			node->value = CMD;
+			node->type = PIPE;
+		else if (my_strcmp(value, "AND") == 0)
+			node->type = AND;
 		else
 		{
-			node->value = 99;
+			node->type = CMD;
+			if (strcmp("hello", value) == 0)
+			{
+				node->args = ft_split("ls", ' ');
+				int j = 0;
+				while (node->args[j])
+					printf("node args: %s\n", node->args[j++]);
+			}
+			else if (strcmp("everyone", value) == 0)
+			{
+				node->args = ft_split("wc", ' ');
+				int f = 0;
+				while (node->args[f])
+					printf("node args: %s\n", node->args[f++]);
+			}
 			node->str = my_strdup(value);
 		}
 	}
 	return (node);
 }
 
+/*
+	prefer method where we count number of tokens to then establish number of pipes to make.
+	this allows creation of pid array that will then be used for waitpid.
+
+	something along the lines of pid = ft_calloc();
+	pid[i] = fork;
+	then later
+	while pid[i] != NULL
+	{
+		waitpid(pid[i], &status, 0);
+	}
+*/
+
+int execute_pipe(t_tree *node, char **envp, int in_fd, int out_fd)
+{
+	int		fd[2];
+	int		current_in;
+	pid_t   pid;
+	pid_t	last_pid;
+	int		status;
+	int		ret;
+
+	current_in = in_fd;
+	while (node->type == PIPE)
+	{
+		pipe(fd);
+		pid = fork();
+		if (pid == 0)
+		{
+			close(fd[0]);
+			execute_tree(node->left, envp, current_in, fd[1]);
+			exit(1);
+		}
+		close(fd[1]);
+		if (current_in != STDIN_FILENO)
+			close(current_in);
+		current_in = fd[0];
+		node = node->right;
+	}
+	last_pid = fork();
+	if (last_pid == 0)
+	{
+		ret = execute_tree(node, envp, current_in, out_fd);
+		exit(ret);
+	}
+	if (current_in != STDIN_FILENO)
+		close(current_in);
+	while (1)
+	{
+    	pid = wait(&status);
+    	if (pid <= 0)
+        	break;
+    	if (pid == last_pid)
+    	    ret = status;
+	}
+	if (WIFEXITED(ret))
+		return WEXITSTATUS(ret);
+	if (WIFSIGNALED(ret))
+		return 128 + WTERMSIG(ret);
+	return (0);
+}
+
+int execute_tree(t_tree *node, char **envp, int in_fd, int out_fd)
+{
+	int ret;
+
+	//--- PIPE ----
+	int		fds[2];
+	int		status;
+	pid_t	left_node;
+	pid_t	right_node;
+	//--- ENDPIPE ---
+
+	if (node->type == AND)
+	{
+		ret = execute_tree(node->left, envp, in_fd, out_fd);
+		if (ret == 0)
+			ret = execute_tree(node->right, envp, in_fd, out_fd);
+		printf("It worked!\n");
+		return (ret);
+	}
+	if (node->type == OR)
+	{
+		ret = execute_tree(node->left, envp, in_fd, out_fd);
+		if (ret != 0)
+			ret = execute_tree(node->right, envp, in_fd, out_fd);
+		return (ret);
+	}
+	if (node->type == PIPE)
+	{
+		ret = execute_pipe(node, envp, in_fd, out_fd);
+		return (ret);
+	}
+	if (node->type == CMD)
+	{
+		printf("We in this bih\n");
+		execute_cmd(node, node->args, envp, in_fd, out_fd);
+		return 0;
+	}
+	return (0);
+}
+
 int main(int argc, char **argv, char **envp)
 {
-	t_tree *n1 = makenode("PIPE");
-	t_tree *n2 = makenode("PIPE");
-	t_tree *n3 = makenode("CMD");
 
-	n1->left = n2;
-	n1->right = n3;
+	t_tree *head = makenode("PIPE");
+	t_tree *node_l = makenode("hello");
+	t_tree *node_r = makenode("everyone");
 
-	execute_tree(n1, envp);
+	head->left = node_l;
+	head->right = node_r;
 
-	free(n1);
-	free(n2);
-	free(n3);
+	printf("Head: PIPE, left: CMD, right: CMD\n");
+	execute_tree(head, envp, STDIN_FILENO, STDOUT_FILENO);
+	free(head);
+	free(node_l);
+	free(node_r);
 }

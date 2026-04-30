@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/03/09 12:02:10 by julauren         ###   ########.fr       */
+/*   Updated: 2026/04/24 11:15:20 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@ int	main()
 {
 	char	*cmd;
 
-	cmd = readline("Ghost\\>: ");
-	printf("%s\n", cmd);
-	free(cmd);
-	printf("%s\n", cmd);
+	while (1)
+	{
+		cmd = readline("Ghost\\>: ");
+		free(cmd);
+	}
 }
