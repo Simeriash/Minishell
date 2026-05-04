@@ -6,14 +6,12 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:39:08 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/04/30 12:32:52 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/04 17:05:53 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 #include <string.h>
-
-int execute_tree(t_tree *node, char **envp, int in_fd, int out_fd);
 
 int my_strcmp(const char *s1, const char *s2)
 {
@@ -25,33 +23,7 @@ int my_strcmp(const char *s1, const char *s2)
     return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-#include <stdlib.h>
-
-char *my_strdup(const char *src)
-{
-    int i = 0;
-    char *dup;
-
-    // find length
-    while (src[i])
-        i++;
-
-    // allocate memory (+1 for '\0')
-    dup = malloc(sizeof(char) * (i + 1));
-    if (!dup)
-        return NULL;
-
-    // copy string
-    i = 0;
-    while (src[i])
-    {
-        dup[i] = src[i];
-        i++;
-    }
-    dup[i] = '\0';
-
-    return dup;
-}
+// REMOVE MAKE NODE
 
 t_tree *makenode(char *value)
 {
@@ -84,7 +56,7 @@ t_tree *makenode(char *value)
 				while (node->args[f])
 					printf("node args: %s\n", node->args[f++]);
 			}
-			node->str = my_strdup(value);
+			node->str = ft_strdup(value);
 		}
 	}
 	return (node);
@@ -103,13 +75,34 @@ t_tree *makenode(char *value)
 	}
 */
 
+int	wait_pids(pid_t last_pid)
+{
+	int		ret_val;
+	int		status;
+	pid_t	pid;
+
+	ret_val = 0;
+	while (1)
+	{
+		pid = wait(&status);
+		if (pid <= 0)
+			break;
+		if (pid == last_pid)
+			ret_val = status;
+	}
+	if (WIFEXITED(ret_val))
+		return (WEXITSTATUS(ret_val));
+	if (WIFSIGNALED(ret_val))
+		return (128 + WTERMSIG(ret_val));
+	return (0);
+}
+
 int execute_pipe(t_tree *node, char **envp, int in_fd, int out_fd)
 {
 	int		fd[2];
 	int		current_in;
 	pid_t   pid;
 	pid_t	last_pid;
-	int		status;
 	int		ret;
 
 	current_in = in_fd;
@@ -137,38 +130,31 @@ int execute_pipe(t_tree *node, char **envp, int in_fd, int out_fd)
 	}
 	if (current_in != STDIN_FILENO)
 		close(current_in);
-	while (1)
-	{
-    	pid = wait(&status);
-    	if (pid <= 0)
-        	break;
-    	if (pid == last_pid)
-    	    ret = status;
-	}
-	if (WIFEXITED(ret))
-		return WEXITSTATUS(ret);
-	if (WIFSIGNALED(ret))
-		return 128 + WTERMSIG(ret);
-	return (0);
+	ret = wait_pids(last_pid);
+	// while (1)
+	// {
+	// 	pid = wait(&status);
+    // 	if (pid <= 0)
+    //     	break;
+    // 	if (pid == last_pid)
+    // 	    ret = status;
+	// }
+	// if (WIFEXITED(ret))
+	// 	return WEXITSTATUS(ret);
+	// if (WIFSIGNALED(ret))
+	// 	return 128 + WTERMSIG(ret);
+	return (ret);
 }
 
 int execute_tree(t_tree *node, char **envp, int in_fd, int out_fd)
 {
 	int ret;
 
-	//--- PIPE ----
-	int		fds[2];
-	int		status;
-	pid_t	left_node;
-	pid_t	right_node;
-	//--- ENDPIPE ---
-
 	if (node->type == AND)
 	{
 		ret = execute_tree(node->left, envp, in_fd, out_fd);
 		if (ret == 0)
 			ret = execute_tree(node->right, envp, in_fd, out_fd);
-		printf("It worked!\n");
 		return (ret);
 	}
 	if (node->type == OR)
@@ -185,12 +171,13 @@ int execute_tree(t_tree *node, char **envp, int in_fd, int out_fd)
 	}
 	if (node->type == CMD)
 	{
-		printf("We in this bih\n");
-		execute_cmd(node, node->args, envp, in_fd, out_fd);
-		return 0;
+		ret = execute_cmd(node, node->args, envp, in_fd, out_fd);
+		return (ret);
 	}
 	return (0);
 }
+
+// REMOVE MAIN
 
 int main(int argc, char **argv, char **envp)
 {

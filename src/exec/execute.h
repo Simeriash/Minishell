@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:46:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/04/30 12:50:37 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/04 10:57:53 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,6 @@ typedef struct s_tree
 } t_tree;
 
 int execute_cmd(t_tree *node, char **argv, char **envp, int fd_in, int fd_out);
+int execute_tree(t_tree *node, char **envp, int in_fd, int out_fd);
 
 #endif
