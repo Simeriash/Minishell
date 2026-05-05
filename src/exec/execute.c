@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:39:08 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/04 17:05:53 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/05 10:10:34 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,30 @@ int	wait_pids(pid_t last_pid)
 	return (0);
 }
 
+t_tree *build_pipe(t_tree *node, char **envp, int *current_in)
+{
+	int		fd[2];
+	pid_t	pid;
+
+	while (node->type == PIPE)
+	{
+		pipe(fd);
+		pid = fork();
+		if (pid == 0)
+		{
+			close(fd[0]);
+			execute_tree(node->left, envp, *current_in, fd[1]);
+			exit(1);
+		}
+		close(fd[1]);
+		if (*current_in != STDIN_FILENO)
+			close(*current_in);
+		*current_in = fd[0];
+		node = node->right;
+	}
+	return (node);
+}
+
 int execute_pipe(t_tree *node, char **envp, int in_fd, int out_fd)
 {
 	int		fd[2];
@@ -106,22 +130,23 @@ int execute_pipe(t_tree *node, char **envp, int in_fd, int out_fd)
 	int		ret;
 
 	current_in = in_fd;
-	while (node->type == PIPE)
-	{
-		pipe(fd);
-		pid = fork();
-		if (pid == 0)
-		{
-			close(fd[0]);
-			execute_tree(node->left, envp, current_in, fd[1]);
-			exit(1);
-		}
-		close(fd[1]);
-		if (current_in != STDIN_FILENO)
-			close(current_in);
-		current_in = fd[0];
-		node = node->right;
-	}
+	node = build_pipe(node, envp, &current_in);
+	//while (node->type == PIPE)
+	// {
+	// 	pipe(fd);
+	// 	pid = fork();
+	// 	if (pid == 0)
+	// 	{
+	// 		close(fd[0]);
+	// 		execute_tree(node->left, envp, current_in, fd[1]);
+	// 		exit(1);
+	// 	}
+	// 	close(fd[1]);
+	// 	if (current_in != STDIN_FILENO)
+	// 		close(current_in);
+	// 	current_in = fd[0];
+	// 	node = node->right;
+	// }
 	last_pid = fork();
 	if (last_pid == 0)
 	{
