@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 14:06:30 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/29 16:45:56 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/05 14:08:57 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ static void	free_all_cmd()
 	// mettre a null token->value apres le free
 }
 
-t_cmd	*looking_for_cmd(t_token *token, t_token *stop)
+t_ast	*looking_for_cmd(t_token *token, t_token *stop)
 {
+	t_ast	*ast;
 	t_cmd	*cmd;
 	t_token	*new_token;
 	t_redir	*redir;
@@ -84,5 +85,8 @@ t_cmd	*looking_for_cmd(t_token *token, t_token *stop)
 		}
 		new_token = new_token->next;
 	}
-	return (cmd);
+	if (cmd->args == NULL && cmd->redir->type == NONE)
+		free_cmd(&cmd);
+	ast = init_ast(CMD, cmd, NULL, NULL);
+	return (ast);
 }

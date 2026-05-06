@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 17:02:54 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/29 15:08:04 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/05 16:29:28 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,30 @@ t_ast	*init_ast(t_type type, t_cmd *cmd, t_ast *left, t_ast *right)
 	ast->left = left;
 	ast->right = right;
 	return (ast);
+}
+
+t_type	which_type(t_token *token_list, t_token *stop)
+{
+	t_token	*token;
+	int		and;
+	int		pipe;
+
+	and = 0;
+	pipe = 0;
+	token = token_list->next;
+	while (token != NULL && token != stop)
+	{
+		if (token->type == OR)
+			return (OR);
+		else if (token->type == AND)
+			and++;
+		else if (token->type == PIPE)
+			pipe++;
+		token = token->next;
+	}
+	if (and)
+		return (AND);
+	if (pipe)
+		return (PIPE);
+	return (CMD);
 }
