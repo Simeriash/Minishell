@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 11:37:57 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/14 12:43:38 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/06 10:40:14 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	shell_space(char *str, int *i)
 
 int	end_condition(char c)
 {
-	if (c == '\0' || ft_isspace(c) || c == '<' || c == '>' || c == '|'
-		|| c == '&' || c == '(' || c == ')')
+	if (c == '\0' || ft_isspace(c) || c == '<' || c == '>' || c == '|')
 		return (1);
 	return (0);
 }
@@ -55,12 +54,7 @@ static void	search_type(char *str, int *i, t_type *type)
 			*type = OUT;
 	}
 	else if (str[*i] == '|')
-	{
-		if (str[*i + 1] == '|')
-			*type = OR;
-		else
-			*type = PIPE;
-	}
+		*type = PIPE;
 }
 
 t_error	meta_token(char *str, t_token *token, int *i)
@@ -69,23 +63,12 @@ t_error	meta_token(char *str, t_token *token, int *i)
 
 	if (str[*i] == '<' || str[*i] == '>' || str[*i] == '|')
 		search_type(str, i, &type);
-	else if (str[*i] == '&')
-	{
-		if (str[*i + 1] == '&')
-			type = AND;
-		else
-			return (AMPERSAND);
-	}
-	else if (str[*i] == '(')
-		type = LEFT_PARENTHESIS;
-	else if (str[*i] == ')')
-		type = RIGHT_PARENTHESIS;
 	else
 		type = RET;
 	if (add_after(token, type, NULL))
 		return (MALLOC);
 	(*i)++;
-	if (type == HEREDOC || type == APPEND || type == OR || type == AND)
+	if (type == HEREDOC || type == APPEND)
 		(*i)++;
 	return (0);
 }

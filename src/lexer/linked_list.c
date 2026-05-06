@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 16:06:07 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/13 09:47:11 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/06 10:44:07 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,11 @@ int	add_after(t_token *token, t_type type, char *value)
 
 	new_token = malloc(sizeof(*new_token));
 	if (!new_token)
+	{
+		if (value)
+			free(value);
 		return (1);
+	}
 	new_token->type = type;
 	new_token->value = value;
 	new_token->next = token->next;
