@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 09:40:34 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/14 13:09:16 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/06 11:42:31 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,6 @@ typedef enum e_type
 	OUT,
 	HEREDOC,
 	APPEND,
-	AND,
-	OR,
-	LEFT_PARENTHESIS,
-	RIGHT_PARENTHESIS,
 	RET
 }	t_type;
 
@@ -62,8 +58,6 @@ typedef enum e_error
 	OK,
 	MALLOC,
 	OPEN_QUOTE,
-	OPEN_PARENTHESIS,
-	AMPERSAND
 }	t_error;
 
 void	shell_space(char *str, int *i);
