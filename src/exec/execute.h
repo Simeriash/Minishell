@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:46:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/04 10:57:53 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/07 15:40:37 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,34 @@ typedef enum {
   OR
 } e_cmdtype;
 
+typedef enum e_redir_type
+{
+	IN,
+	OUT,
+	APPEND
+}	t_redir_type;
+
+typedef struct s_redirs
+{
+	t_redir_type redir_type;
+	char *redir_file;
+	struct s_redirs *redirs_next;
+}	t_redirs;
+
+typedef struct s_cmd
+{
+	char **args;
+	t_redirs *redirs;
+
+}	t_cmd;
+
+
 typedef struct s_tree
 {
+	struct s_tree *head;
 	e_cmdtype type;
 	int value;
-	char *str;
-	char **args;
+	t_cmd	*cmd;
 	struct s_tree	*left;
 	struct s_tree	*right;
 } t_tree;
