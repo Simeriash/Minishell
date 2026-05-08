@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/07 15:05:56 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/08 12:48:10 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_ast
 	struct s_ast	*right;
 }	t_ast;
 
-void	error_parser(t_token *token_list, t_env *envc, t_error error);
+void	error_parser(t_token *token_list, t_error error);
 
 /*====================expander====================*/
 

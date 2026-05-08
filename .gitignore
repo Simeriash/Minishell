@@ -3,5 +3,6 @@ obj/
 *.a
 *.o
 *.sh
+*.gch
 main.c
 minishell
