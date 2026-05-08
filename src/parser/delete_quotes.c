@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 14:58:22 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/17 11:32:16 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/08 12:23:39 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ static void	next_delete(t_token *token, t_state *state, int *i, int *j)
 			break ;
 		if (ret == CONTINUE)
 			continue ;
-		i++;
-		j++;
+		(*i)++;
+		(*j)++;
 	}
 }
 

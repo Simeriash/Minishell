@@ -2,5 +2,6 @@ obj/
 *.out
 *.a
 *.o
+*.sh
 main.c
 minishell
