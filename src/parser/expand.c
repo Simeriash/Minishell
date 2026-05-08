@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/17 12:58:08 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/08 10:46:24 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static char	*check_new_value(t_token *token, t_env *envc, int i, int *j)
 {
 	char	*new_value;
 
+	new_value = NULL;
 	if (token->value[i] == '?')
 	{
 		// new_value = retour du status de la dernière cmd;
@@ -50,7 +51,7 @@ static char	*check_new_value(t_token *token, t_env *envc, int i, int *j)
 		new_value = malloc(sizeof(*new_value));
 		if (!new_value)
 			return (NULL);
-		new_value = "";
+		new_value[0] = '\0';
 	}
 	else if (ft_isalpha(token->value[i]) || token->value[i] == '_')
 	{
@@ -67,7 +68,7 @@ static	int	next_expander(t_token *token, t_env *envc, int *i, int *j)
 	int		len;
 
 	new_value = check_new_value(token, envc, *i, j);
-	if (!new_value || change_value(token, new_value, *i, *j))
+	if (new_value && change_value(token, new_value, *i, *j))
 		return (1);
 	len = ft_strlen(new_value);
 	free(new_value);
@@ -121,6 +122,6 @@ int	expand(t_token *token_list, t_env *envc)
 		}
 		tmp = tmp->next;
 	}
-	delete_quotes(token_list);
+	// delete_quotes(token_list);
 	return (0);
 }

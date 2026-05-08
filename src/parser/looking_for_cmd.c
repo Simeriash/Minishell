@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 14:06:30 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/05 14:08:57 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/06 13:21:41 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_ast	*looking_for_cmd(t_token *token, t_token *stop)
 		new_token = new_token->next;
 	}
 	if (cmd->args == NULL && cmd->redir->type == NONE)
-		free_cmd(&cmd);
+		free_cmd(cmd);
 	ast = init_ast(CMD, cmd, NULL, NULL);
 	return (ast);
 }

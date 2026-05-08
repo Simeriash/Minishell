@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 16:46:10 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/16 11:57:20 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/08 10:20:05 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char	*check_key(char *key, t_env *envc)
 	tmp = envc->next;
 	while (tmp != NULL)
 	{
-		if (ft_strncmp(key, tmp->key, ft_strlen(key)) == 0)
+		if (ft_strcmp(key, tmp->key) == 0)
 		{
 			str = ft_strdup(tmp->value);
 			if (!str)
@@ -32,7 +32,7 @@ static char	*check_key(char *key, t_env *envc)
 	str = malloc(sizeof(*str));
 	if (!str)
 		return (NULL);
-	str = "";
+	str[0] = '\0';
 	return (str);
 }
 
