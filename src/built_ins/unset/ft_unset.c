@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:15 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/03/31 11:05:52 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/13 15:24:52 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,17 @@ static void	free_node(t_envpcpy *to_free)
 	free(to_free);
 }
 
-void	check_valid_var();
+// int	check_valid_var(char *key)
+// {
+// 	if (key[0] != '_')
+// 	{
+// 		if (!ft_isalpha(key[0]))
+// 			return (-1);
+// 		else
+// 			return (0);
+// 	}
+// 	return (0);
+// }
 
 static int	key_in_array(char *lookingfor, char **keys)
 {
@@ -52,8 +62,10 @@ int	ft_unset(char **key, t_envpcpy **envpcpy)
 	t_envpcpy	*prev;
 	t_envpcpy	*next;
 
-	if (!key || !envpcpy)
-		return (-1);
+	if (!envpcpy)
+		return (1);
+	if (!key || !key[0])
+		return (0);
 	tmp = *envpcpy;
 	prev = NULL;
 	while (tmp)
@@ -70,5 +82,5 @@ int	ft_unset(char **key, t_envpcpy **envpcpy)
 			tmp = tmp->next;
 		}
 	}
-	return (-1);
+	return (0);
 }

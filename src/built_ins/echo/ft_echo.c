@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:27:58 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/04/03 18:01:44 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/13 15:37:05 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	ft_echo(char *path, char **args, t_envpcpy **envpcpy)
 		return (1);
 	if (ft_strcmp("echo", args[i]) == 0)
 		i++;
-	check_for_nl(args[i])
+	print_nl = check_for_nl(args[i]);
 		i++;
 	while (args[i])
 	{

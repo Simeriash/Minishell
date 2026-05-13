@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:00 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/04/03 17:41:08 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/13 15:53:53 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,17 @@ static int	print_env_in_alpha_order(t_envpcpy **envpcpy)
 	return 0;
 }
 
-int	check_valid_var(char *in)
+int	check_valid_var(char *key)
 {
-	if (ft_isdigit(in[0]))
+	if (key[0] != '_')
 	{
-		printf("bash: export: `%s': not a valid identifier\n", in);
-		return (-1);
+		if (!ft_isalpha(key[0]))
+		{
+			printf("bash: export: `%s': not a valid identifier\n", key);
+			return (-1);
+		}
+		else
+			return (0);
 	}
 	return (0);
 }
@@ -203,7 +208,10 @@ int	ft_export(char *path, char **args, t_envpcpy **envpcpy)
 	while (args[i])
 	{
 		if (check_valid_var(args[i]) < 0)
-			return (-1);
+		{
+			i++;
+			continue ;
+		}
 		error = get_key(args[i], &key);
 		if (error < 0)
 			return (-1);

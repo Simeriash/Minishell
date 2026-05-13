@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:29:23 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/04/03 17:30:21 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/13 15:36:36 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef	struct s_envpcpy
 	struct s_envpcpy *next;
 }	t_envpcpy;
 
-int			ft_echo(char **ch_ar, int print_nl);
+int			ft_echo(char *path, char **args, t_envpcpy **envpcpy);
 int			ft_cd(char *path ,t_envpcpy **envpcpy);
 int			ft_exit(int exit_val, t_envpcpy **delete);
 int			ft_pwd(t_envpcpy **envpcpy);
