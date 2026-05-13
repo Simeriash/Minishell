@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:04:33 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/07 15:47:41 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/13 14:16:29 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,12 @@ int	wait_pids(pid_t last_pid)
 	if (WIFEXITED(ret_val))
 		return (WEXITSTATUS(ret_val));
 	if (WIFSIGNALED(ret_val))
+	{
+		if (WTERMSIG(ret_val) == SIGQUIT)
+			write(2, "Quit\n", 6);
+		dprintf(2 , "\n");
 		return (128 + WTERMSIG(ret_val));
+	}
 	return (0);
 }
 
@@ -90,6 +95,13 @@ int execute_pipe(t_tree *node, char **envp, int in_fd, int out_fd)
 	if (current_in != STDIN_FILENO)
 		close(current_in);
 	ret = wait_pids(last_pid);
+	if (WIFSIGNALED(ret))
+	{
+		if (WTERMSIG(ret) == SIGQUIT)
+			dprintf(2, "Quit");
+		dprintf(2, "\n");
+		return (128 + WTERMSIG(ret));
+	}
 	return (ret);
 }
 
@@ -113,6 +125,8 @@ int execute_tree(t_tree *node, char **envp, int in_fd, int out_fd)
 t_tree *makenode(char *value)
 {
 	static int i = 0;
+	if (!value)
+		return NULL;
 	t_tree *node = calloc(1, sizeof(t_tree));
 	node->cmd = NULL;
 	if (node != NULL)
@@ -129,9 +143,6 @@ t_tree *makenode(char *value)
 			node->cmd = calloc(1, sizeof(t_cmd));
 			node->cmd->redirs = NULL;
 			node->cmd->args = ft_split(value, ' ');
-			int j = 0;
-			while (node->cmd->args[j])
-				printf("node args: %s\n", node->cmd->args[j++]);
 		}
 	}
 	return (node);
@@ -183,18 +194,59 @@ void free_tree(t_tree *node)
 	free(node);
 }
 
-int main(int argc, char **argv, char **envp)
+/*
+
+exec(args)
 {
-	(void)argc;
-	t_tree *head = makenode("PIPE");
-	t_tree *node_l = makenode(argv[1]);
-	t_tree *node_r = makenode(argv[2]);
+	pid = fork();
+	if (0 == pid)
+	{
+		if (redirect_output)
+		{
+			dup2 for the output;
+		}
+		if (redirect_input)
+		{
+			dup2 for the input;
+		}
+		close(all);
 
-	head->left = node_l;
-	head->right = node_r;
-	head->head = head;
-
-	printf("Head: PIPE, left: CMD, right: CMD\n");
-	execute_tree(head, envp, STDIN_FILENO, STDOUT_FILENO);
-	free_tree(head);
+		exeve(cmd);
+	}
+	return (pid);
 }
+
+cmds array : char **cmd[]
+
+int pipe1[2];
+int pipe2[2];
+
+int pids[nbr_cmd];
+
+if (nbr_cmd == 1)
+	exec(cmd[0], NULL, NULL);
+
+pipe(pipe1);
+pids[0] = exec(cmd[0], pipe1, NULL); Redirect output here, not input
+index = 1;
+while (cmd[index])
+{
+	if (index < nbr_cmd -1)
+	{
+		pipe(pipe2);
+		pids[index] = exec(cmd[index], pipe2, pipe1) reirect input and output
+		close(pipe1[0]);
+		close(pipe1[1]);
+		pipe1[0] = pipe2[0];
+		pipe1[1] = pipe2[1];
+		++index;
+		continue;
+	}
+	pids[index] = exec(cmd[index], NULL, pipe1); Redirect input, not output
+	close(pipe[0]);
+	close(pipe[1]);
+	++index;
+}
+for (pid in pids)
+	waitpid(pid);
+*/

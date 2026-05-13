@@ -1,6 +1,6 @@
 #include "execute.h"
 
-void free_array(char **array)
+void free_array(char **array) //util
 {
 	int	i;
 
@@ -13,7 +13,7 @@ void free_array(char **array)
 	free(array);
 }
 
-char *create_exec_path(char *path, char *cmd)
+char *create_exec_path(char *path, char *cmd) //cmd util
 {
 	char *tmp;
 	char *ret;
@@ -28,7 +28,7 @@ char *create_exec_path(char *path, char *cmd)
 	return (ret);
 }
 
-char **create_paths(t_exec_err *err)
+char **create_paths(t_exec_err *err) //cmd util
 {
 	char	*path;
 	char	**ret;
@@ -234,6 +234,8 @@ int execute_cmd(t_tree *node, char **argv, char **envp, int fd_in, int fd_out)
 	exec = fork();
 	if (exec == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		apply_redirects(node, &fd_in, &fd_out);
 		if (fd_in != STDIN_FILENO)
 		{
@@ -250,11 +252,21 @@ int execute_cmd(t_tree *node, char **argv, char **envp, int fd_in, int fd_out)
 		free(executable);
 		exit(126);
 	}
+	// dprintf(2, "Waiting for cmd: %s\n", cmd);
 	waitpid(exec, &status, 0);
+	// dprintf(2, "Finished waiting for cmd: %s\n", cmd);
 	free(executable);
 	if (WIFEXITED(status))
+	{
+		// write(2, "we're in here!!!!\n", 19);
 		return (WEXITSTATUS(status));
+	}
 	if (WIFSIGNALED(status))
+	{
+		// if (WTERMSIG(status) == SIGQUIT)
+			// dprintf(2, "Quilts");
+		// dprintf(2, "\n");
 		return (128 + WTERMSIG(status));
+	}
 	return (0);
 }

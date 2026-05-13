@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:46:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/07 15:40:37 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/13 14:55:38 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <unistd.h>
 # include <errno.h>
 # include <sys/stat.h>
+#include <signal.h>
 
 typedef enum e_exec_err
 {
@@ -75,5 +76,8 @@ typedef struct s_tree
 
 int execute_cmd(t_tree *node, char **argv, char **envp, int fd_in, int fd_out);
 int execute_tree(t_tree *node, char **envp, int in_fd, int out_fd);
+void free_array(char **array);
+t_tree *makenode(char *value);
+void free_tree(t_tree *node);
 
 #endif
