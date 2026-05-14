@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/08 12:48:10 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/14 10:15:11 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,11 @@ void	delete_quotes(t_token *token_list);
 
 t_ast	*ast_creation(t_token *token, t_token *stop, t_type type);
 t_ast	*init_ast(t_type type, t_cmd *cmd, t_ast *left, t_ast *right);
-t_ast	*looking_for_cmd(t_token *token, t_token *stop);
+t_ast	*cmd_node(t_token *token, t_token *stop);
+int		add_redir(t_redir **redir, t_token **token);
+int		add_arg(t_arg **arg, char *str);
 int		free_ast(t_ast *ast);
 void	free_cmd(t_cmd *cmd);
+void	free_struct(t_arg *arg, t_redir *redir);
 
 #endif
