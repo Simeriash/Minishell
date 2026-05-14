@@ -2,5 +2,7 @@ obj/
 *.out
 *.a
 *.o
+*.sh
+*.gch
 main.c
 minishell
