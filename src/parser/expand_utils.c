@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 16:46:10 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/08 10:20:05 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/16 09:39:23 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ static char	*check_key(char *key, t_env *envc)
 	return (str);
 }
 
-char	*check_env(t_token *token, t_env *envc, int i, int *j)
+char	*check_env(char *value, t_env *envc, int i, int *j)
 {
 	char	*key;
 	char	*new_value;
 
-	while (ft_isalnum(token->value[*j]) || token->value[*j] == '_')
+	while (ft_isalnum(value[*j]) || value[*j] == '_')
 		(*j)++;
-	key = ft_substr(token->value, i, *j - i);
+	key = ft_substr(value, i, *j - i);
 	if (!key)
 		return (NULL);
 	new_value = check_key(key, envc);
