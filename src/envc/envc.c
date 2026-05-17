@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 08:48:09 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/17 12:43:52 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/17 15:02:25 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ t_env	*env_copy(char **envp)
 		}
 		last = last->next;
 		i++;
+	}
+	if (init_envc(envc))
+	{
+		error_envc(envc);
+		return (NULL);
 	}
 	return (envc);
 }
