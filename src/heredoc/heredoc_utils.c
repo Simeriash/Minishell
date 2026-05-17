@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 12:31:31 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/16 15:33:23 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/17 07:03:08 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	test_limiter(char *eof, int i, int *limiter, t_state state)
 {
 	if (i == 2)
 	{
-		// error_heredoc(invalid_limiter);
+		// error_heredoc(INVALID_LIMITER);
 		return (1);
 	}
 	if (state != NORMAL)
@@ -39,10 +39,9 @@ static int	test_limiter(char *eof, int i, int *limiter, t_state state)
 	}
 	if ((eof[0] == '\'' || eof[0] == '"') && eof[0] == eof[i - 1])
 		*limiter = 0;
-	else if ((eof[0] == '\'' || eof[0] == '"')
-		&& eof[0] != eof[i - 1])
+	else if ((eof[0] == '\'' || eof[0] == '"') && eof[0] != eof[i - 1])
 	{
-		// error_heredoc(invalid_limiter);
+		// error_heredoc(INVALID_LIMITER);
 		return (1);
 	}
 	return (0);
@@ -80,7 +79,7 @@ int	delimiter(int *limiter, char *eof)
 		state_condition(eof[i], &state);
 		if (ft_isspace(eof[i]))
 		{
-			// error_heredoc(invalid_limiter);
+			// error_heredoc(INVALID_LIMITER);
 			return (1);
 		}
 		i++;

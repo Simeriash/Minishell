@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 12:30:30 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/16 15:27:04 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/17 07:12:45 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static int	next_expander(char **cmd, t_env *envc, int *i, int *j)
 	new_value = check_new_value(*cmd, envc, *i, j);
 	if (new_value && change_value(cmd, new_value, *i, *j))
 	{
-		free(*cmd);
 		error_heredoc(MALLOC);
 		return (1);
 	}
@@ -48,6 +47,7 @@ static int	expander(char **cmd, t_env *envc, int fd)
 			j = i + 1;
 			if (next_expander(cmd, envc, &i, &j))
 			{
+				free(*cmd);
 				close(fd);
 				return (1);
 			}
