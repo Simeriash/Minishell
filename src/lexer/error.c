@@ -6,11 +6,11 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 17:42:38 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/06 11:45:58 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/17 08:25:56 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/lexer.h"
+#include "../../inc/error.h"
 
 void	error_lexer(t_error error)
 {

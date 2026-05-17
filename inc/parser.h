@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/16 10:17:31 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/17 08:31:51 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,11 @@
 # define PARSER_H
 
 # include "../src/libft/libft.h"
+# include "minishell.h"
 # include "lexer.h"
+# include "error.h"
 
 # include <stdlib.h>
-
-//	/!\		A CHANGER !!	(OU PAS)
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
-
-typedef struct s_redir
-{
-	t_type			type;
-	char			*file;
-	struct s_redir	*next;
-}	t_redir;
-
-typedef struct s_cmd
-{
-	char	**args;
-	t_redir	*redir;
-}	t_cmd;
 
 typedef struct s_arg
 {
@@ -45,15 +26,7 @@ typedef struct s_arg
 	struct s_arg	*next;
 }	t_arg;
 
-typedef struct s_ast
-{
-	t_type			type;
-	t_cmd			*cmd;
-	struct s_ast	*left;
-	struct s_ast	*right;
-}	t_ast;
-
-void	error_parser(t_token *token_list, t_error error);
+int		heredoc(char *eof, t_env *envc);
 
 /*====================expander====================*/
 

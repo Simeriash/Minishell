@@ -6,11 +6,11 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 15:05:03 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/17 07:20:56 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/17 08:25:45 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/heredoc.h"
+#include "../../inc/error.h"
 
 void	error_heredoc(t_error error)
 {

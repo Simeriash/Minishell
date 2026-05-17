@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/26 15:40:12 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/17 08:26:48 by julauren         ###   ########.fr       */
+/*   Created: 2026/05/17 07:43:23 by julauren          #+#    #+#             */
+/*   Updated: 2026/05/17 08:25:32 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/error.h"
-#include "../../inc/lexer.h"
+#ifndef ERROR_H
+# define ERROR_H
 
-void	error_parser(t_token *token_list, t_error error)
+# include "../src/libft/libft.h"
+# include "minishell.h"
+
+typedef enum e_error
 {
-	free_token(token_list);
-	if (error == MALLOC)
-		ft_putendl_fd("Error malloc", 2);
-}
+	OK,
+	MALLOC,
+	OPEN_QUOTE,
+	INVALID_LIMITER,
+	FD
+}	t_error;
+
+void	error_lexer(t_error error);
+void	error_parser(t_token *token_list, t_error error);
+void	error_heredoc(t_error error);
+
+#endif

@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 12:30:30 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/17 07:12:45 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/17 08:03:03 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	heredoc(char *eof, t_env *envc)
 	fd = open("minishell_heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		// error_heredoc(FD);
+		error_heredoc(FD);
 		return (1);
 	}
 	while (1)

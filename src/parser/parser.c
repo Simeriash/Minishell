@@ -6,17 +6,46 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 13:01:42 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/08 12:49:04 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/17 08:12:49 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
+
+static int	search_heredoc(t_token *token_list, t_env *envc)
+{
+	t_token	*token;
+
+	token = token_list->next;
+	while (token != NULL)
+	{
+		if (token->type == HEREDOC)
+		{
+			if (!(token->next) || (token->next && !(token->next->value)))
+			{
+				free_token(token_list);
+				error_heredoc(INVALID_LIMITER);
+				return (1);
+			}
+			if (heredoc(token->next->value, envc))
+			{
+				free_token(token_list);
+				return (1);
+			}
+			token = token->next;
+		}
+		token = token->next;
+	}
+	return (0);
+}
 
 t_ast	*parser(t_token *token_list, t_env *envc)
 {
 	t_ast	*ast;
 
 	if (expand(token_list, envc))
+		return (NULL);
+	if (search_heredoc(token_list, envc))
 		return (NULL);
 	ast = ast_creation(token_list, NULL, PIPE);
 	if (!ast)

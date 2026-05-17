@@ -6,30 +6,17 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 12:31:31 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/17 07:03:08 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/17 08:03:21 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/heredoc.h"
 
-//	/!\ A EFFACER
-static void	state_condition(char c, t_state *state)
-{
-	if (c == '\'' && *state == NORMAL)
-		*state = SIMPLE_QUOTE;
-	else if (c == '\'' && *state == SIMPLE_QUOTE)
-		*state = NORMAL;
-	else if (c == '"' && *state == NORMAL)
-		*state = DOUBLE_QUOTE;
-	else if (c == '"' && *state == DOUBLE_QUOTE)
-		*state = NORMAL;
-}
-
 static int	test_limiter(char *eof, int i, int *limiter, t_state state)
 {
 	if (i == 2)
 	{
-		// error_heredoc(INVALID_LIMITER);
+		error_heredoc(INVALID_LIMITER);
 		return (1);
 	}
 	if (state != NORMAL)
@@ -41,7 +28,7 @@ static int	test_limiter(char *eof, int i, int *limiter, t_state state)
 		*limiter = 0;
 	else if ((eof[0] == '\'' || eof[0] == '"') && eof[0] != eof[i - 1])
 	{
-		// error_heredoc(INVALID_LIMITER);
+		error_heredoc(INVALID_LIMITER);
 		return (1);
 	}
 	return (0);
@@ -79,7 +66,7 @@ int	delimiter(int *limiter, char *eof)
 		state_condition(eof[i], &state);
 		if (ft_isspace(eof[i]))
 		{
-			// error_heredoc(INVALID_LIMITER);
+			error_heredoc(INVALID_LIMITER);
 			return (1);
 		}
 		i++;
