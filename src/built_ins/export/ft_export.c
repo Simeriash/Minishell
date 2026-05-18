@@ -6,118 +6,31 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:00 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/13 15:53:53 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/18 15:54:59 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static int	create_new_export(char *key, char *value, t_envpcpy **envpcpy)
+static int	check_valid_var(char *key)
 {
-	t_envpcpy	*new;
-	char		*tmp1;
-	char		*tmp2;
+	int	i;
 
-	if (!key)
-		return (-1);
-	tmp1 = ft_strdup(key);
-	if (!tmp1)
-		return (-1);
-	tmp2 = NULL;
-	if (value)
-	{
-		tmp2 = ft_strdup(value);
-		if (!tmp2)
-		{
-			free(tmp1);
-			return (-1);
-		}
-	}
-	new = ft_lstnew(tmp1, tmp2);
-	if (!new)
-	{
-		free(tmp1);
-		free(tmp2);
-		return (-1);
-	}
-	ft_lstaddback(envpcpy, new);
-	return (0);
-}
-
-static void sort_array(t_envpcpy **arr, int size)
-{
-	int i = 0;
-	int min_index;
-	int	j;
-	t_envpcpy *tmp;
-
-	while (i < size - 1)
-	{
-		min_index = i;
-		j = i + 1;
-		while (j < size)
-		{
-			if (ft_strcmp(arr[j]->key, arr[min_index]->key) < 0)
-				min_index = j;
-			j++;
-		}
-		if (min_index != i)
-		{
-			tmp = arr[i];
-			arr[i] = arr[min_index];
-			arr[min_index] = tmp;
-		}
-		i++;
-	}
-}
-
-static int	print_env_in_alpha_order(t_envpcpy **envpcpy)
-{
-	t_envpcpy	**arr;
-	int			size;
-	int			i;
-	int			j;
-	t_envpcpy	*tmp;
-
-	size = ft_lstsize(*envpcpy);
-	if (size == 0)
-		return 0;
-	arr = malloc(size * sizeof(t_envpcpy *));
-	if (!arr)
-		return -1;
 	i = 0;
-	tmp = *envpcpy;
-	while (tmp)
+	if (!(key[i] == '_' || ft_isalpha(key[i])))
 	{
-		arr[i] = tmp;
-		tmp = tmp->next;
-		i++;
+		printf("bash: export: `%s': not a valid identifier\n", key);
+		return (-1);
 	}
-	sort_array(arr, size);
-	j = 0;
-	while (j < size)
+	i++;
+	while (key[i] && key[i] != '=')
 	{
-		printf("declare -x %s", arr[j]->key);
-		if (arr[j]->value || (arr[j]->value && arr[j]->value[0] == '\0'))
-			printf("=\"%s\"", arr[j]->value);
-		printf("\n");
-		j++;
-	}
-	free(arr);
-	return 0;
-}
-
-int	check_valid_var(char *key)
-{
-	if (key[0] != '_')
-	{
-		if (!ft_isalpha(key[0]))
+		if (!(key[i] == '_' || ft_isalnum(key[i])))
 		{
 			printf("bash: export: `%s': not a valid identifier\n", key);
 			return (-1);
 		}
-		else
-			return (0);
+		i++;
 	}
 	return (0);
 }
@@ -175,6 +88,10 @@ static	int	append_value(t_envpcpy *target_node, char *new_value)
 
 	if (!target_node->value)
 		target_node->value = ft_strdup(new_value);
+		if (!target_node->value)
+		{
+
+		}
 	else
 	{
 		tmp = ft_strjoin(target_node->value, new_value);
@@ -197,9 +114,7 @@ int	ft_export(char *path, char **args, t_envpcpy **envpcpy)
 	(void)path;
 	i = 0;
 	if (!args)
-	return (-1);
-	if (ft_strcmp("export", args[i]) == 0)
-		i++;
+		return (-1);
 	if (!args[i])
 	{
 		print_env_in_alpha_order(envpcpy);
@@ -207,14 +122,15 @@ int	ft_export(char *path, char **args, t_envpcpy **envpcpy)
 	}
 	while (args[i])
 	{
-		if (check_valid_var(args[i]) < 0)
-		{
-			i++;
-			continue ;
-		}
 		error = get_key(args[i], &key);
 		if (error < 0)
 			return (-1);
+		if (check_valid_var(key) < 0)
+		{
+			i++;
+			free(key);
+			continue ;
+		}
 		error = get_value(args[i], &new_value);
 		if (error < 0)
 			return (-1);
