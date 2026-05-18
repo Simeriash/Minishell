@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 15:10:38 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/03/27 09:16:25 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/18 10:20:04 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,20 @@
 
 int	ft_env(t_envpcpy **envpcpy)
 {
-	t_envpcpy *tmp;
+	t_envpcpy	*tmp;
+	int			ret_val;
 
+	if (!envpcpy)
+		return (1);
 	tmp = *envpcpy;
 	while (tmp)
 	{
 		if (tmp->value != NULL)
-			printf("%s=%s\n", tmp->key, tmp->value);
+		{
+			ret_val = printf("%s=%s\n", tmp->key, tmp->value);
+			if (ret_val < 0)
+				return (-1);
+		}
 		tmp = tmp->next;
 	}
 	return (0);
