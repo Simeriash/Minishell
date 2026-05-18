@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:29:23 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/13 15:36:36 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/18 15:23:41 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,9 @@ int			ft_strcmp(const char *s1, const char *s2);
 char		*find_env_var(char *key, t_envpcpy **envpcpy);
 t_envpcpy	*find_env_var_pos(char *key, t_envpcpy **envpcpy);
 int			change_env_var(char *key, char *value, t_envpcpy **envpcpy);
+
+int			create_new_export(char *key, char *value, t_envpcpy **envpcpy);
+
+int			print_env_in_alpha_order(t_envpcpy **envpcpy);
 
 #endif
