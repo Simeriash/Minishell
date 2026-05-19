@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   envc.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/17 07:43:23 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/17 12:42:22 by julauren         ###   ########.fr       */
+/*   Created: 2026/05/17 08:48:24 by julauren          #+#    #+#             */
+/*   Updated: 2026/05/19 14:00:20 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#ifndef ENVC_H
+# define ENVC_H
 
 # include "../src/libft/libft.h"
 # include "minishell.h"
+# include "error.h"
 
-typedef enum e_error
-{
-	OK,
-	MALLOC,
-	OPEN_QUOTE,
-	INVALID_LIMITER,
-	FD
-}	t_error;
+# include <unistd.h>
 
-void	error_envc(t_env *envc);
-void	error_lexer(t_error error);
-void	error_parser(t_token *token_list, t_error error);
-void	error_heredoc(t_error error);
-
-void	ft_free_envc(t_env *envc);
+t_env	*init_envc_list(void);
+int		add_after(t_env *envc, char *key, char *value);
+t_env	*env_copy(char **envp);
+int		init_envc(t_env *envc);
 
 #endif
