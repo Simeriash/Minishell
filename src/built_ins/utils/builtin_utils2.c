@@ -6,17 +6,17 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:29:14 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/04/03 11:03:57 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/19 14:56:53 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-char *find_env_var(char *key, t_envpcpy **envpcpy)
+char	*find_env_var(char *key, t_envpcpy **envpcpy)
 {
-	int	i;
-	int	len;
-	t_envpcpy *tmp;
+	int			i;
+	int			len;
+	t_envpcpy	*tmp;
 
 	i = 0;
 	if (!key)
@@ -27,7 +27,7 @@ char *find_env_var(char *key, t_envpcpy **envpcpy)
 		return (NULL);
 	while (tmp)
 	{
-		if (ft_strncmp(tmp->key, key, len) == 0  && tmp->key[len] == '\0')
+		if (ft_strncmp(tmp->key, key, len) == 0 && tmp->key[len] == '\0')
 			return (tmp->value);
 		tmp = tmp->next;
 	}
@@ -36,9 +36,9 @@ char *find_env_var(char *key, t_envpcpy **envpcpy)
 
 t_envpcpy	*find_env_var_pos(char *key, t_envpcpy **envpcpy)
 {
-	int	i;
-	int	len;
-	t_envpcpy *tmp;
+	int			i;
+	int			len;
+	t_envpcpy	*tmp;
 
 	i = 0;
 	if (!key)
@@ -49,7 +49,7 @@ t_envpcpy	*find_env_var_pos(char *key, t_envpcpy **envpcpy)
 		return (NULL);
 	while (tmp)
 	{
-		if (ft_strncmp(tmp->key, key, len) == 0  && tmp->key[len] == '\0')
+		if (ft_strncmp(tmp->key, key, len) == 0 && tmp->key[len] == '\0')
 			return (tmp);
 		tmp = tmp->next;
 	}
@@ -58,7 +58,7 @@ t_envpcpy	*find_env_var_pos(char *key, t_envpcpy **envpcpy)
 
 int	change_env_var(char *key, char *value, t_envpcpy **envpcpy)
 {
-	t_envpcpy *tmp;
+	t_envpcpy	*tmp;
 
 	if (!value || !envpcpy || !*envpcpy)
 		return (0);

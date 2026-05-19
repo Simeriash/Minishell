@@ -6,15 +6,15 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 09:05:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/03/27 13:58:52 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/19 14:55:42 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-t_envpcpy *ft_lstnew(char *newkey, char *newvalue)
+t_envpcpy	*ft_lstnew(char *newkey, char *newvalue)
 {
-	t_envpcpy *test;
+	t_envpcpy	*test;
 
 	test = malloc(sizeof(t_envpcpy));
 	if (!test)
@@ -27,7 +27,7 @@ t_envpcpy *ft_lstnew(char *newkey, char *newvalue)
 
 void	ft_lstaddback(t_envpcpy **lst, t_envpcpy *new)
 {
-	t_envpcpy *ptr;
+	t_envpcpy	*ptr;
 
 	if (lst != NULL || new != NULL)
 	{
@@ -72,12 +72,13 @@ int	ft_lstsize(t_envpcpy *lst)
 	}
 	return (i);
 }
-int ft_strcmp(const char *s1, const char *s2)
-{
-	int i = 0;
 
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	int	i;
+
+	i = 0;
 	while (s1[i] && s1[i] == s2[i])
 		i++;
-
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
