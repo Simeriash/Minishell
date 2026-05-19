@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 07:43:23 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/17 12:42:22 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/19 17:09:06 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	error_envc(t_env *envc);
 void	error_lexer(t_error error);
 void	error_parser(t_token *token_list, t_error error);
 void	error_heredoc(t_error error);
+void	error_envc(t_env *envc);
 
 void	ft_free_envc(t_env *envc);
 

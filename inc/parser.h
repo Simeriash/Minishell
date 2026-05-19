@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/17 08:31:51 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:29:04 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct s_arg
 	struct s_arg	*next;
 }	t_arg;
 
-int		heredoc(char *eof, t_env *envc);
+int		search_heredoc(t_token *token_list, t_env *envc);
 
 /*====================expander====================*/
 

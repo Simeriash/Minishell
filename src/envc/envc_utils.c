@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 14:46:00 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/19 15:09:30 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/19 15:36:26 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	ft_get_oldpwd(t_env *envc, char *value)
 	key = ft_strdup("OLDPWD");
 	if (!key)
 		return (1);
-	if (add_after(envc, key, value))
+	if (add_after_envc(envc, key, value))
 	{
 		free(key);
 		free(value);
@@ -57,7 +57,7 @@ static char	*ft_getpwd(t_env *envc)
 		free(value);
 		return (NULL);
 	}
-	if (add_after(envc, key, value))
+	if (add_after_envc(envc, key, value))
 	{
 		free(value);
 		free(key);

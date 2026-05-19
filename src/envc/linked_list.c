@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 10:42:34 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/17 12:48:36 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/19 15:35:38 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_env	*init_envc_list(void)
 	return (envc);
 }
 
-int	add_after(t_env *envc, char *key, char *value)
+int	add_after_envc(t_env *envc, char *key, char *value)
 {
 	t_env	*new_envc;
 

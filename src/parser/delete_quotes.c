@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 14:58:22 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/08 13:46:52 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:56:55 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,13 @@ void	delete_quotes(t_token *token_list)
 	{
 		i = 0;
 		j = 0;
-		if (tmp->type == WORD)
+		if (tmp->type == HEREDOC)
+		{
+			tmp = tmp->next;
+			if (!tmp)
+				break ;
+		}
+		else if (tmp->type == WORD)
 			next_delete(tmp, &state, &i, &j);
 		tmp = tmp->next;
 	}

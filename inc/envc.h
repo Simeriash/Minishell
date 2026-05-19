@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 08:48:24 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/19 14:00:20 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:34:22 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@
 # include <unistd.h>
 
 t_env	*init_envc_list(void);
-int		add_after(t_env *envc, char *key, char *value);
-t_env	*env_copy(char **envp);
+int		add_after_envc(t_env *envc, char *key, char *value);
 int		init_envc(t_env *envc);
 
 #endif
