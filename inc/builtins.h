@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:29:23 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/18 15:23:41 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/19 14:58:58 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,22 @@
 # include <stdlib.h>
 # include <errno.h>
 
-typedef	struct s_envpcpy
+typedef struct s_envpcpy
 {
-	char *key;
-	char *value;
-	struct s_envpcpy *next;
+	char				*key;
+	char				*value;
+	struct s_envpcpy	*next;
 }	t_envpcpy;
 
+typedef struct s_export_inputs
+{
+	char			*key;
+	char			*value;
+	t_envpcpy		*target_node;
+}	t_export_inputs;
+
 int			ft_echo(char *path, char **args, t_envpcpy **envpcpy);
-int			ft_cd(char *path ,t_envpcpy **envpcpy);
+int			ft_cd(char *path, t_envpcpy **envpcpy);
 int			ft_exit(int exit_val, t_envpcpy **delete);
 int			ft_pwd(t_envpcpy **envpcpy);
 int			ft_env(t_envpcpy **envpcpy);
@@ -45,8 +52,17 @@ char		*find_env_var(char *key, t_envpcpy **envpcpy);
 t_envpcpy	*find_env_var_pos(char *key, t_envpcpy **envpcpy);
 int			change_env_var(char *key, char *value, t_envpcpy **envpcpy);
 
-int			create_new_export(char *key, char *value, t_envpcpy **envpcpy);
+int			create_new_export(t_export_inputs *data, t_envpcpy **envpcpy);
 
 int			print_env_in_alpha_order(t_envpcpy **envpcpy);
+
+int			cvi_error_check(char *input, int i);
+int			must_append(char *in);
+int			get_key(char *in, char **to_change);
+int			get_value(char *in, char **to_change);
+int			append_value(t_export_inputs *data);
+
+int			append_export(t_export_inputs *data, t_envpcpy **envpcpy);
+int			set_export(t_export_inputs *data, t_envpcpy **envpcpy);
 
 #endif
