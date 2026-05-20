@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:34:49 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/19 14:41:00 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/20 15:19:53 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,26 +72,5 @@ int	get_value(char *in, char **to_change)
 	*to_change = ft_strdup(in + i);
 	if (!(*to_change))
 		return (-1);
-	return (0);
-}
-
-int	append_value(t_export_inputs *data)
-{
-	char	*tmp;
-
-	if (!data->target_node->value)
-	{
-		data->target_node->value = ft_strdup(data->value);
-		if (!data->target_node->value)
-			return (-1);
-	}
-	else
-	{
-		tmp = ft_strjoin(data->target_node->value, data->value);
-		if (!tmp)
-			return (-1);
-		free(data->target_node->value);
-		data->target_node->value = tmp;
-	}
 	return (0);
 }

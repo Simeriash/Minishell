@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:29:14 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/19 14:56:53 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/20 14:19:42 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*find_env_var(char *key, t_envpcpy **envpcpy)
 	return (NULL);
 }
 
-t_envpcpy	*find_env_var_pos(char *key, t_envpcpy **envpcpy)
+t_envpcpy	*get_env_node(char *key, t_envpcpy **envpcpy)
 {
 	int			i;
 	int			len;
@@ -56,18 +56,22 @@ t_envpcpy	*find_env_var_pos(char *key, t_envpcpy **envpcpy)
 	return (NULL);
 }
 
-int	change_env_var(char *key, char *value, t_envpcpy **envpcpy)
-{
-	t_envpcpy	*tmp;
+// int	change_env_var(char *key, char *value, t_envpcpy **envpcpy)
+// {
+// 	t_envpcpy	*tmp;
 
-	if (!value || !envpcpy || !*envpcpy)
-		return (0);
-	tmp = find_env_var_pos(key, envpcpy);
-	if (!tmp)
-		return (0);
-	free(tmp->key);
-	free(tmp->value);
-	tmp->key = ft_strdup(key);
-	tmp->value = ft_strdup(value);
-	return (0);
-}
+// 	if (!value || !envpcpy || !*envpcpy)
+// 		return (0);
+// 	tmp = get_env_node(key, envpcpy);
+// 	if (!tmp)
+// 		return (-2);
+// 	free(tmp->key);
+// 	free(tmp->value);
+// 	tmp->key = ft_strdup(key);
+// 	if (!tmp->key)
+// 		return (-1);
+// 	tmp->value = ft_strdup(value);
+// 	if (!tmp->value)
+// 		return (-1);
+// 	return (0);
+// }

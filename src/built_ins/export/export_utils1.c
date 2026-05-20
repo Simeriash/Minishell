@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 13:37:26 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/19 14:50:21 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/20 14:13:04 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@ static int	copy_export_data(char **kdup, char **vdup, char *key, char *value)
 	return (0);
 }
 
-int	create_new_export(t_export_inputs *data, t_envpcpy **envpcpy)
+int	create_new_export(char *key, char *value, t_envpcpy **envpcpy)
 {
 	t_envpcpy	*new;
 	char		*key_dup;
 	char		*value_dup;
 
-	if (!data->key || !envpcpy)
+	if (!key || !envpcpy)
 		return (-1);
-	if (copy_export_data(&key_dup, &value_dup, data->key, data->value) < 0)
+	if (copy_export_data(&key_dup, &value_dup, key, value) < 0)
 		return (-1);
 	new = ft_lstnew(key_dup, value_dup);
 	if (!new)
@@ -51,37 +51,55 @@ int	create_new_export(t_export_inputs *data, t_envpcpy **envpcpy)
 	return (0);
 }
 
-int	append_export(t_export_inputs *data, t_envpcpy **envpcpy)
+int	append_value(t_envpcpy *node, char *value)
 {
-	int	ret;
-
-	ret = 0;
-	if (data->target_node)
-		ret = append_value(data);
-	else
-		ret = create_new_export(data, envpcpy);
-	return (ret);
-}
-
-int	set_export(t_export_inputs *data, t_envpcpy **envpcpy)
-{
-	int		ret;
 	char	*tmp;
 
-	ret = 0;
-	if (!data->target_node)
-		ret = create_new_export(data, envpcpy);
+	if (!node->value)
+	{
+		node->value = ft_strdup(value);
+		if (!node->value)
+			return (-1);
+	}
 	else
 	{
-		if (data->value)
-		{
-			tmp = ft_strdup(data->value);
-			if (!tmp)
-				return (-1);
-			if (data->target_node->value)
-				free(data->target_node->value);
-			data->target_node->value = tmp;
-		}
+		tmp = ft_strjoin(node->value, value);
+		if (!tmp)
+			return (-1);
+		free(node->value);
+		node->value = tmp;
 	}
-	return (ret);
+	return (0);
+}
+
+int	set_value(t_envpcpy *node, char *value)
+{
+	char	*dup;
+
+	dup = ft_strdup(value);
+	if (!dup)
+		return (-1);
+	free(node->value);
+	node->value = dup;
+	return (0);
+}
+
+int	env_set(char *key, char *value, t_envpcpy **envpcpy, t_env_mode mode)
+{
+	t_envpcpy		*node;
+	int				ret_val;
+
+	if (!key || !envpcpy)
+		return (-1);
+	node = get_env_node(key, envpcpy);
+	if (node)
+	{
+		if (mode == ENV_APPEND)
+			ret_val = append_value(node, value);
+		else
+			ret_val = set_value(node, value);
+		return (ret_val);
+	}
+	ret_val = create_new_export(key, value, envpcpy);
+	return (ret_val);
 }

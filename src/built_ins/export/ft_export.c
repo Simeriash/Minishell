@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:00 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/19 14:52:22 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/20 14:01:24 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,33 +53,24 @@ static int	set_key_and_value(char *arg, char **key, char **value)
 	return (0);
 }
 
-static	int	apply_rule(char *arg, t_export_inputs *data, t_envpcpy **envpcpy)
-{
-	int	error;
-
-	error = 0;
-	if (must_append(arg))
-		error = append_export(data, envpcpy);
-	else
-		error = set_export(data, envpcpy);
-	return (error);
-}
-
 static int	process_input(char *arg, t_envpcpy **envpcpy)
 {
-	t_export_inputs	data;
-	int				error;
+	char		*key;
+	char		*value;
+	t_env_mode	mode;
+	int			error;
 
-	data.key = NULL;
-	data.value = NULL;
-	data.target_node = NULL;
-	error = set_key_and_value(arg, &data.key, &data.value);
+	mode = ENV_REPLACE;
+	key = NULL;
+	value = NULL;
+	error = set_key_and_value(arg, &key, &value);
 	if (error < 0)
 		return (-1);
-	data.target_node = find_env_var_pos(data.key, envpcpy);
-	error = apply_rule(arg, &data, envpcpy);
-	free(data.key);
-	free(data.value);
+	if (must_append(arg))
+		mode = ENV_APPEND;
+	env_set(key, value, envpcpy, mode);
+	free(key);
+	free(value);
 	if (error < 0)
 		return (-1);
 	return (0);
