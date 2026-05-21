@@ -23,7 +23,10 @@ SRCS = $(SRC_DIR)/minishell.c \
 	   $(BUILTINS_DIR)/utils/builtin_utils.c \
 	   $(BUILTINS_DIR)/utils/builtin_utils2.c \
 	   $(BUILTINS_DIR)/unset/ft_unset.c \
+	   $(BUILTINS_DIR)/export/export_in_order_utils.c \
+	   $(BUILTINS_DIR)/export/export_utils1.c \
 	   $(BUILTINS_DIR)/export/ft_export.c \
+	   $(BUILTINS_DIR)/export/export_helpers1.c \
 
 
 # Object files in obj/ folder
