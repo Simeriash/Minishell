@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:29:23 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 10:55:53 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 14:59:10 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ typedef enum e_env_mode
 	ENV_APPEND
 }	t_env_mode;
 
-int			ft_echo(char *path, char **args, t_envpcpy **envpcpy);
-int			ft_cd(char *path, t_envpcpy **envpcpy);
-int			ft_exit(int exit_val, t_envpcpy **delete);
-int			ft_pwd(t_envpcpy **envpcpy);
-int			ft_env(t_envpcpy **envpcpy);
-int			ft_unset(char **key, t_envpcpy **envpcpy);
-int			ft_export(char *path, char **args, t_envpcpy **envpcpy);
+int			ft_cd(char **args, t_envpcpy **envpcpy);
+int			ft_echo(char **args, t_envpcpy **envpcpy);
+int			ft_env(char **args, t_envpcpy **envpcpy);
+int			ft_exit(char **args , t_envpcpy **delete);
+int			ft_export(char **args, t_envpcpy **envpcpy);
+int			ft_pwd(char **args, t_envpcpy **envpcpy);
+int			ft_unset(char **args, t_envpcpy **envpcpy);
 
 t_envpcpy	*ft_lstnew(char *newkey, char *newvalue);
 void		ft_lstaddback(t_envpcpy **lst, t_envpcpy *new);
