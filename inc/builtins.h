@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:29:23 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 14:59:10 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 16:08:47 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,14 @@ typedef enum e_env_mode
 	ENV_REPLACE,
 	ENV_APPEND
 }	t_env_mode;
+
+typedef int (*builtin_func)(char **args, t_envpcpy **envpcpy);
+
+typedef struct s_builtins
+{
+	char 			*cmd;
+	builtin_func	function;
+}	t_builtins;
 
 int			ft_cd(char **args, t_envpcpy **envpcpy);
 int			ft_echo(char **args, t_envpcpy **envpcpy);
