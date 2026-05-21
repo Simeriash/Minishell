@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:15 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 11:25:49 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 14:59:20 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	unlink_node(t_envpcpy *tmp, t_envpcpy *prev, t_envpcpy **envpcpy)
 	free_node(tmp);
 }
 
-int	ft_unset(char **key, t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
+int	ft_unset(char **args, t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
 {
 	t_envpcpy	*tmp;
 	t_envpcpy	*prev;
@@ -53,13 +53,13 @@ int	ft_unset(char **key, t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
 
 	if (!envpcpy)
 		return (1); // NULL_ARG
-	if (!key || !key[0])
+	if (!args || !args[0])
 		return (0); // SUCCESS
 	tmp = *envpcpy;
 	prev = NULL;
 	while (tmp)
 	{
-		if (key_in_array(tmp->key, key))
+		if (key_in_array(tmp->key, args))
 		{
 			next = tmp->next;
 			unlink_node(tmp, prev, envpcpy);

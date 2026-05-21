@@ -6,18 +6,19 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 12:59:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 10:54:52 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 14:58:03 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	ft_pwd(t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
+int	ft_pwd(char **args, t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
 {
 	char	*cwd;
 	char	*w_dir;
 	int		ret_val;
 
+	(void)args;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{

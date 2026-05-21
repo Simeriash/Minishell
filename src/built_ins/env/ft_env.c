@@ -6,17 +6,18 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 15:10:38 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 10:57:37 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 14:51:14 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	ft_env(t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
+int	ft_env(char **args, t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
 {
 	t_envpcpy	*tmp;
 	int			ret_val;
 
+	(void)args;
 	if (!envpcpy)
 		return (1); // NULL_ARG
 	tmp = *envpcpy;

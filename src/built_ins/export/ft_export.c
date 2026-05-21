@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:00 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 11:24:10 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 14:56:36 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,11 @@ static int	process_input(char *arg, t_envpcpy **envpcpy) // FROM INTO TO T_ERROR
 	return (0); // SUCCESS
 }
 
-int	ft_export(char *path, char **args, t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
+int	ft_export(char **args, t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
 {
 	int			i;
 	int			error;
 
-	(void)path;
 	i = 0;
 	if (!args)
 		return (-1); // NULL ARG

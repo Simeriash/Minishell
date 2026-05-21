@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 10:49:08 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 15:40:15 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,17 +85,17 @@ static	int	cd_to_home(t_envpcpy **envpcpy)
 	return (ret_val);
 }
 
-int	ft_cd(char *path, t_envpcpy **envpcpy)
+int	ft_cd(char **args, t_envpcpy **envpcpy)
 {
 	char	*new;
 	int		ret_val;
 
-	if (!path || (path[0] == '~' && path[1] == '\0'))
+	if (!args[1] || (args[1][0] == '~' && args[1][1] == '\0'))
 	{
 		ret_val = cd_to_home(envpcpy);
 		return (ret_val);
 	}
-	if (path[0] == '-' && path[1] == '\0')
+	if (args[1][0] == '-' && args[1][1] == '\0')
 	{
 		new = find_env_var("OLDPWD", envpcpy);
 		if (!new || new[0] == '\0')
@@ -105,9 +105,9 @@ int	ft_cd(char *path, t_envpcpy **envpcpy)
 		}
 		ret_val = cd_executor(new, envpcpy);
 		if (ret_val == 0)
-			ft_pwd(envpcpy);
+			ft_pwd(args, envpcpy);
 		return (ret_val);
 	}
-	ret_val = cd_executor(path, envpcpy);
+	ret_val = cd_executor(args[1], envpcpy);
 	return (ret_val);
 }
