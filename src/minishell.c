@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/04/03 12:47:50 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 15:42:29 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	check_for_space(char *cmd, t_envpcpy **envpcpy)
 	{
 		i = 0;
 		ch_ar = ft_split(cmd, ' ');
-		ft_export(NULL, ch_ar, envpcpy);
+		ft_export(ch_ar + 1, envpcpy);
 		while (ch_ar[i])
 			free(ch_ar[i++]);
 		free(ch_ar);
@@ -64,7 +64,7 @@ int	check_for_space(char *cmd, t_envpcpy **envpcpy)
 	if (!ft_strncmp(cmd, "pwd", i))
 	{
 		ch_ar = ft_split(cmd, ' ');
-		ret_val = ft_pwd(envpcpy);
+		ret_val = ft_pwd(ch_ar, envpcpy);
 		i = 0;
 		while (ch_ar[i])
 			free(ch_ar[i++]);
@@ -87,12 +87,12 @@ int	check_for_space(char *cmd, t_envpcpy **envpcpy)
 	}
 	if (!ft_strncmp(cmd, "env", i))
 	{
-		ft_env(envpcpy);
+		ft_env(NULL, envpcpy);
 	}
 	if (!ft_strncmp(cmd, "echo", i))
 	{
 		ch_ar = ft_split(cmd, ' ');
-		ret_val = ft_echo(ch_ar + 1, 1);
+		ret_val = ft_echo(ch_ar + 1, envpcpy);
 		i = 0;
 		while (ch_ar[i])
 			free(ch_ar[i++]);
@@ -102,7 +102,7 @@ int	check_for_space(char *cmd, t_envpcpy **envpcpy)
 	return (0);
 }
 
-char *get_key(char *envp)
+char *get_envp_key(char *envp)
 {
 	char *key;
 	int i = 0;
@@ -124,7 +124,7 @@ char *get_key(char *envp)
 	return (key);
 }
 
-char *get_value(char *envp)
+char *get_envp_value(char *envp)
 {
 	char *value;
 	int i = 0;
@@ -151,8 +151,8 @@ t_envpcpy	*create_envpcpy(char **envp)
 	head = NULL;
 	while (envp[i])
 	{
-		key = get_key(envp[i]);
-		value = get_value(envp[i]);
+		key = get_envp_key(envp[i]);
+		value = get_envp_value(envp[i]);
 		new = ft_lstnew(key, value);
 		if (ft_strncmp(key, "PWD", 3) == 0)
 			printf("%s=%s\n", key, value);
