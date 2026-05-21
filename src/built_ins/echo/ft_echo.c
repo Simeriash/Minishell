@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:27:58 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/18 10:08:17 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 10:56:52 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,6 @@ int	ft_echo(char *path, char **args, t_envpcpy **envpcpy)
 	}
 	ret_val = print_words(i, args, nl_flag);
 	if (ret_val < 0)
-		return (ret_val);
-	return (0);
+		return (ret_val); // WRITE FAIL
+	return (0); // SUCCESS
 }

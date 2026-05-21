@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:00 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/20 14:01:24 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 11:24:10 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,49 +34,49 @@ int	check_valid_input(char *in)
 	return (0);
 }
 
-static int	set_key_and_value(char *arg, char **key, char **value)
+static int	set_key_and_value(char *arg, char **key, char **value) // FROM INT TO T_ERRORS
 {
-	int	error;
+	int	error; // BECOME T_ERRORS ERROR
 
 	*key = NULL;
 	*value = NULL;
 	error = get_key(arg, key);
 	if (error < 0)
-		return (-1);
+		return (-1); // RETURN ERROR
 	error = get_value(arg, value);
 	if (error < 0)
 	{
 		free(*key);
 		*key = NULL;
-		return (-1);
+		return (-1); // RETURN ERROR
 	}
-	return (0);
+	return (0); // RETURN SUCCESS (HELD IN ERROR)
 }
 
-static int	process_input(char *arg, t_envpcpy **envpcpy)
+static int	process_input(char *arg, t_envpcpy **envpcpy) // FROM INTO TO T_ERRORS
 {
 	char		*key;
 	char		*value;
 	t_env_mode	mode;
-	int			error;
+	int			error; // BECOME T_ERRORS ERROR
 
 	mode = ENV_REPLACE;
 	key = NULL;
 	value = NULL;
 	error = set_key_and_value(arg, &key, &value);
 	if (error < 0)
-		return (-1);
+		return (-1); // RETURN ERROR
 	if (must_append(arg))
 		mode = ENV_APPEND;
 	env_set(key, value, envpcpy, mode);
 	free(key);
 	free(value);
 	if (error < 0)
-		return (-1);
-	return (0);
+		return (-1); // RETURN ERROR
+	return (0); // SUCCESS
 }
 
-int	ft_export(char *path, char **args, t_envpcpy **envpcpy)
+int	ft_export(char *path, char **args, t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
 {
 	int			i;
 	int			error;
@@ -84,11 +84,11 @@ int	ft_export(char *path, char **args, t_envpcpy **envpcpy)
 	(void)path;
 	i = 0;
 	if (!args)
-		return (-1);
+		return (-1); // NULL ARG
 	if (!args[i])
 	{
-		print_env_in_alpha_order(envpcpy);
-		return (0);
+		print_env_in_alpha_order(envpcpy); // ERROR =
+		return (0); // RETURN ERROR
 	}
 	while (args[i])
 	{
@@ -99,8 +99,8 @@ int	ft_export(char *path, char **args, t_envpcpy **envpcpy)
 		}
 		error = process_input(args[i], envpcpy);
 		if (error < 0)
-			return (-1);
+			return (-1); // RETURN ERROR
 		i++;
 	}
-	return (0);
+	return (0); // SUCCESS
 }

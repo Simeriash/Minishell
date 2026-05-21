@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:29:14 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/20 14:19:42 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 10:50:15 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,21 @@ t_envpcpy	*get_env_node(char *key, t_envpcpy **envpcpy)
 	return (NULL);
 }
 
-// int	change_env_var(char *key, char *value, t_envpcpy **envpcpy)
-// {
-// 	t_envpcpy	*tmp;
+void	print_error(char *cmd, char *bad_input, int err)
+{
+	write(2, "bash: ", 6);
+	if (cmd)
+	{
+		write(2, cmd, ft_strlen(cmd));
+		write(2, ": ", 2);
+	}
+	if (bad_input)
+	{
+		write(2, bad_input, ft_strlen(bad_input));
+		write(2, ": ", 2);
+	}
+	write(2, strerror(err), ft_strlen(strerror(err)));
+	write(2, "\n", 1);
+	return ;
+}
 
-// 	if (!value || !envpcpy || !*envpcpy)
-// 		return (0);
-// 	tmp = get_env_node(key, envpcpy);
-// 	if (!tmp)
-// 		return (-2);
-// 	free(tmp->key);
-// 	free(tmp->value);
-// 	tmp->key = ft_strdup(key);
-// 	if (!tmp->key)
-// 		return (-1);
-// 	tmp->value = ft_strdup(value);
-// 	if (!tmp->value)
-// 		return (-1);
-// 	return (0);
-// }

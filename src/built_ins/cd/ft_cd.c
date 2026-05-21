@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/20 15:26:15 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 10:49:08 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,42 +32,38 @@ static int	update_oldpwd_pwd(char *old, char *new, t_envpcpy **envpcpy)
 	return (ret_val);
 }
 
+static int	chdir_success(char **current, char *old, t_envpcpy **envpcpy)
+{
+	int	ret_val;
+
+	ret_val = 0;
+	*current = getcwd(NULL, 0);
+	if (!*current)
+		return (-1);
+	ret_val = update_oldpwd_pwd(old, *current, envpcpy);
+	if (ret_val < 0)
+		return (-1);
+	return (ret_val);
+}
+
 static int	cd_executor(char *cd_input, t_envpcpy **envpcpy)
 {
 	int		ret_val;
 	char	*old_path;
 	char	*current_path;
+	int		err;
 
-	errno = 0;
 	current_path = NULL;
 	old_path = getcwd(NULL, 0);
 	if (!old_path)
 		return (-1);
 	ret_val = chdir(cd_input);
 	if (ret_val == 0)
+		ret_val = chdir_success(&current_path, old_path, envpcpy);
+	else
 	{
-		current_path = getcwd(NULL, 0);
-		if (!current_path)
-		{
-			free(old_path);
-			return (-1);
-		}
-		ret_val = update_oldpwd_pwd(old_path, current_path, envpcpy);
-		if (ret_val < 0)
-		{
-			free(old_path);
-			free(current_path);
-			return (-1);
-		}
-	}
-	else if (errno)
-	{
-		// replace with a ft_dprintf
-		write(2, "bash: cd: ", 11);
-		write(2, cd_input, ft_strlen(cd_input));
-		write(2, ": ", 2);
-		write(2, strerror(errno), ft_strlen(strerror(errno)));
-		write(2, "\n", 1);
+		err = errno;
+		print_error("cd", cd_input, err);
 	}
 	free(old_path);
 	free(current_path);
@@ -89,10 +85,10 @@ static	int	cd_to_home(t_envpcpy **envpcpy)
 	return (ret_val);
 }
 
-int	ft_cd(char *path ,t_envpcpy **envpcpy)
+int	ft_cd(char *path, t_envpcpy **envpcpy)
 {
-	char *new;
-	int	ret_val;
+	char	*new;
+	int		ret_val;
 
 	if (!path || (path[0] == '~' && path[1] == '\0'))
 	{
@@ -115,4 +111,3 @@ int	ft_cd(char *path ,t_envpcpy **envpcpy)
 	ret_val = cd_executor(path, envpcpy);
 	return (ret_val);
 }
-

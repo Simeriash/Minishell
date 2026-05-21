@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:29:23 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/20 14:23:06 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/21 10:55:53 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,17 @@
 # include <readline/history.h>
 # include <stdlib.h>
 # include <errno.h>
+
+// typedef enum e_errors
+// {
+// 	SUCCESS,
+// 	MALLOC_FAIL,
+// 	WRITE_FAIL,
+// 	READ_FAIL,
+// 	NULL_ARG,
+// 	UNSET_ENV,
+
+// }	t_errors;
 
 typedef struct s_envpcpy
 {
@@ -71,5 +82,6 @@ int			append_value(t_envpcpy *node, char *value);
 int			env_set(char *key, char *value, t_envpcpy **envpcpy, t_env_mode mode);
 //int			append_export(t_export_inputs *data, t_envpcpy **envpcpy);
 //int			set_export(t_export_inputs *data, t_envpcpy **envpcpy);
+void		print_error(char *cmd, char *bad_input, int err);
 
 #endif
