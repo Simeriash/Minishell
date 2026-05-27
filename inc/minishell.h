@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/14 13:43:26 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 08:52:49 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:21:35 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_cmd
 
 typedef struct s_ast
 {
+	t_token			*token;
 	t_type			type;
 	t_cmd			*cmd;
 	struct s_ast	*left;

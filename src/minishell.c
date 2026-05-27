@@ -6,14 +6,13 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 14:02:46 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:30:42 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 #include "../inc/execute.h"
 #include "../inc/parser.h"
-#include <readline/chardefs.h>
 
 void	handler(int signum)
 {
@@ -47,9 +46,9 @@ int main(int argc, char **argv, char **envp)
 	t_token				*token;
 	t_env				*envc;
 	t_ast				*ast;
+
 	(void)argc;
 	(void)argv;
-
 	envc = env_copy(envp);
 	while (1)
 	{
@@ -69,7 +68,6 @@ int main(int argc, char **argv, char **envp)
 		if (!ast)
 			continue ;
 		execute_tree(ast, envp, STDIN_FILENO, STDOUT_FILENO);
-		free_token(&token);
 		free_ast(ast);
 	}
 	ft_free_envc(envc);

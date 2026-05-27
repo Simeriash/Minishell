@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 14:51:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/12 17:26:37 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:24:44 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	free_ast(t_ast *ast)
 		free_ast(ast->left);
 	if (ast->right)
 		free_ast(ast->right);
+	if (ast->token)
+		free_token((ast->token));
 	free(ast);
 	return (0);
 }
@@ -57,6 +59,7 @@ t_ast	*init_ast(t_type type, t_cmd *cmd, t_ast *left, t_ast *right)
 		free_ast(right);
 		return (NULL);
 	}
+	ast->token = NULL;
 	ast->type = type;
 	ast->cmd = cmd;
 	ast->left = left;

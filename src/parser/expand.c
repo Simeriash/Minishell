@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 13:54:31 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:24:56 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int	expand(t_token *token_list, t_env *envc)
 	delete_quotes(token_list);
 	if (token_list->next == NULL)
 	{
-		free_token(&token_list);
+		free_token(token_list);
 		return (1);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 13:01:42 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 13:53:48 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:25:14 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	search_suite(t_token *token_list, t_token *token, t_env *envc)
 {
 	if (heredoc(token->next->value, envc))
 	{
-		free_token(&token_list);
+		free_token(token_list);
 		return (1);
 	}
 	else
@@ -43,7 +43,7 @@ int	search_heredoc(t_token *token_list, t_env *envc)
 		{
 			if (!(token->next) || (token->next && !(token->next->value)))
 			{
-				free_token(&token_list);
+				free_token(token_list);
 				error_heredoc(INVALID_LIMITER);
 				return (1);
 			}
@@ -70,5 +70,6 @@ t_ast	*parser(t_token *token_list, t_env *envc)
 		error_parser(token_list, MALLOC);
 		return (NULL);
 	}
+	ast->token = token_list;
 	return (ast);
 }
