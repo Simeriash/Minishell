@@ -6,13 +6,14 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 11:28:39 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 11:50:16 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 #include "../inc/execute.h"
 #include "../inc/parser.h"
+#include <readline/chardefs.h>
 
 void	handler(int signum)
 {
@@ -63,14 +64,14 @@ int main(int argc, char **argv, char **envp)
 		}
 		set_signal_action(1);
 		token = lexer(cmd);
+		free(cmd);
 		ast = parser(token, envc);
+		if (!ast)
+			continue ;
 		execute_tree(ast, envp, STDIN_FILENO, STDOUT_FILENO);
 		free_ast(ast);
-		free(cmd);
 		free_token(token);
 	}
-	if (cmd)
-		free(cmd);
 	ft_free_envc(envc);
 	printf("exit\n");
 	return (0);
