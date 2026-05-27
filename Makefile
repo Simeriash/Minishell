@@ -14,6 +14,7 @@ NAME = minishell
 
 # Sources
 SRCS = $(SRC_DIR)/minishell.c \
+	   $(BUILTINS_DIR)/get_builtin.c \
        $(BUILTINS_DIR)/echo/ft_echo.c \
        $(BUILTINS_DIR)/cd/ft_cd.c \
        $(BUILTINS_DIR)/exit/ft_exit.c \

@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 13:37:26 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 11:06:22 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 12:10:54 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ static int	copy_export_data(char **kdup, char **vdup, char *key, char *value) //
 	return (0); // SUCCESS
 }
 
-int	create_new_export(char *key, char *value, t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
+int	create_new_export(char *key, char *value, t_env **envpcpy) // FROM INT TO T_ERRORS
 {
-	t_envpcpy	*new;
+	t_env	*new;
 	char		*key_dup;
 	char		*value_dup;
 
@@ -51,7 +51,7 @@ int	create_new_export(char *key, char *value, t_envpcpy **envpcpy) // FROM INT T
 	return (0); // SUCCESS
 }
 
-int	append_value(t_envpcpy *node, char *value) // FROM INTO TO T_ERRORS
+int	append_value(t_env *node, char *value) // FROM INTO TO T_ERRORS
 {
 	char	*tmp;
 
@@ -72,7 +72,7 @@ int	append_value(t_envpcpy *node, char *value) // FROM INTO TO T_ERRORS
 	return (0); // SUCCESS
 }
 
-int	set_value(t_envpcpy *node, char *value) // FROM INT TO T_ERRORS
+int	set_value(t_env *node, char *value) // FROM INT TO T_ERRORS
 {
 	char	*dup;
 
@@ -84,9 +84,9 @@ int	set_value(t_envpcpy *node, char *value) // FROM INT TO T_ERRORS
 	return (0); // SUCCESS
 }
 
-int	env_set(char *key, char *value, t_envpcpy **envpcpy, t_env_mode mode) // FROM INT TO T_ERRORS
+int	env_set(char *key, char *value, t_env **envpcpy, t_env_mode mode) // FROM INT TO T_ERRORS
 {
-	t_envpcpy		*node;
+	t_env		*node;
 	int				ret_val; // BECOME ERROR??
 
 	if (!key || !envpcpy)

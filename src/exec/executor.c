@@ -3,32 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:04:33 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 09:30:42 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:47:56 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/execute.h"
+#include "../../inc/parser.h"
 
 // void free_tree(t_tree *node);
 
-int my_strcmp(const char *s1, const char *s2)
-{
-    int i = 0;
+// int my_strcmp(const char *s1, const char *s2)
+// {
+//     int i = 0;
 
-    while (s1[i] && s2[i] && s1[i] == s2[i])
-        i++;
+//     while (s1[i] && s2[i] && s1[i] == s2[i])
+//         i++;
 
-    return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
+//     return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+// }
 
-t_ast *build_pipe(t_ast *node, char **envp, int *current_in)
+t_ast *build_pipe(t_ast *node, t_env **envp, int *current_in)
 {
 	int		fd[2];
 	pid_t	pid;
+	t_ast	*head;
 
+	head = node;
 	while (node->type == PIPE)
 	{
 		pipe(fd);
@@ -37,7 +40,11 @@ t_ast *build_pipe(t_ast *node, char **envp, int *current_in)
 		{
 			close(fd[0]);
 			execute_tree(node->left, envp, *current_in, fd[1]);
-
+			// if (*current_in != STDIN_FILENO)
+			// 	close(*current_in);
+			close(fd[1]);
+			free_ast(head);
+			ft_free_envc(*envp);
 			exit(1);
 		}
 		close(fd[1]);
@@ -76,20 +83,24 @@ int	wait_pids(pid_t last_pid)
 	return (0);
 }
 
-int execute_pipe(t_ast *node, char **envp, int in_fd, int out_fd)
+int execute_pipe(t_ast *node, t_env **envp, int in_fd, int out_fd)
 {
-	//int		fd[2];
 	int		current_in;
-	//pid_t   pid;
 	pid_t	last_pid;
 	int		ret;
+	t_ast	*head;
 
 	current_in = in_fd;
+	head = node;
 	node = build_pipe(node, envp, &current_in);
 	last_pid = fork();
 	if (last_pid == 0)
 	{
 		ret = execute_tree(node, envp, current_in, out_fd);
+		if (current_in != STDIN_FILENO)
+			close(current_in);
+		free_ast(head);
+		ft_free_envc(*envp);
 		exit(ret);
 	}
 	if (current_in != STDIN_FILENO)
@@ -105,7 +116,7 @@ int execute_pipe(t_ast *node, char **envp, int in_fd, int out_fd)
 	return (ret);
 }
 
-int execute_tree(t_ast *node, char **envp, int in_fd, int out_fd)
+int execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd)
 {
 	int ret;
 

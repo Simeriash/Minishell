@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:46:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 09:24:46 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 12:10:54 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "../src/libft/libft.h"
 # include "minishell.h"
+# include "builtins.h"
 //# include <readline/readline.h>
 //# include <readline/history.h>
 # include <stdlib.h>
@@ -74,9 +75,10 @@ typedef enum e_exec_err
 // 	struct s_tree	*right;
 // } t_tree;
 
-int execute_cmd(t_ast *node, char **argv, char **envp, int fd_in, int fd_out);
-int execute_tree(t_ast *node, char **envp, int in_fd, int out_fd);
+int execute_cmd(t_ast *node, char **argv, t_env **envp, int fd_in, int fd_out);
+int execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd);
 void free_array(char **array);
+builtin_func	get_builtin(char **args, t_env **envpcpy);
 t_ast *makenode(char *value);
 void free_tree(t_ast *node);
 

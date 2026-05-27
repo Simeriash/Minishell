@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_cmd.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/27 12:41:20 by dlanehar          #+#    #+#             */
+/*   Updated: 2026/05/27 14:31:21 by dlanehar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../inc/parser.h"
 #include "../../inc/execute.h"
 
 void free_array(char **array) //util
@@ -214,14 +227,108 @@ void error_handling(int	err)
 	//if (err == EXEC_NO_PATH)
 }
 
-int execute_cmd(t_ast *node, char **argv, char **envp, int fd_in, int fd_out)
+char *env_join(char *key, char *value)
 {
-	char	*cmd = argv[0];
+	int len1;
+	int len2;
+	char *res;
+	int i;
+	int	j;
+
+	len1 = strlen(key);
+	len2 = strlen(value);
+	res = malloc(len1 + len2 + 2);
+	i = 0;
+	j = 0;
+	if (!res)
+		return NULL;
+	while (key[j])
+		res[i++] = key[j++];
+	res[i++] = '=';
+	j = 0;
+	while (value[j])
+		res[i++] = value[j++];
+	res[i] = '\0';
+	return res;
+}
+
+t_error make_env_execve(t_env **envpc, char ***array)
+{
+	size_t		size;
+	size_t		i;
+	t_env	*tmp;
+
+	tmp = (*envpc)->next;
+	size = ft_lstsize(*envpc);
+	i = 0;
+	(*array) = malloc((size + 1) * sizeof(char *));
+	if (!(*array))
+		return (MALLOC);
+	(*array)[size] = NULL;
+	while (tmp)
+	{
+		if (tmp->value)
+			(*array)[i] = env_join(tmp->key, tmp->value);
+		else
+			(*array)[i] = ft_strdup(tmp->key);
+		if (!(*array)[i])
+			return (MALLOC);
+		i++;
+		tmp = tmp->next;
+	}
+	(*array)[i] = NULL;
+	return(OK);
+}
+
+static void child_exec(t_ast *node, char **argv, int fd_in, int fd_out, char *exec, char **arr)
+{
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+	apply_redirects(node, &fd_in, &fd_out);
+	if (fd_in != STDIN_FILENO)
+	{
+		dup2(fd_in, STDIN_FILENO);
+		close(fd_in);
+	}
+	if (fd_out != STDOUT_FILENO)
+	{
+		dup2(fd_out, STDOUT_FILENO);
+		close(fd_out);
+	}
+	execve(exec, argv, arr);
+	printf("CoolCustomShell: %s: %s\n", exec, strerror(errno));
+	free(exec);
+	exit(126);
+}
+
+int execute_cmd(t_ast *node, char **argv, t_env **envp, int fd_in, int fd_out)
+{
+	char	*cmd;
 	char	*executable;
 	t_exec_err	err;
+	t_error	error;
 	pid_t	exec;
 	int		status;
+	char	**envp_array;
+	builtin_func	func;
 
+	if (!argv)
+		return (0);
+	error = make_env_execve(envp, &envp_array);
+	cmd = argv[0];
+	func = get_builtin(argv, envp);
+	if (func)
+	{
+		error = func(argv, envp);
+		if (ft_strcmp("exit", argv[0]) == 0)
+		{
+			free_ast(node);
+			free_array(envp_array);
+			exit(error);
+		}
+		free_array(envp_array);
+		return (error);
+	}
 	executable = find_executable(cmd, &err);
 	if (!executable)
 	{
@@ -234,39 +341,31 @@ int execute_cmd(t_ast *node, char **argv, char **envp, int fd_in, int fd_out)
 	exec = fork();
 	if (exec == 0)
 	{
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
-		apply_redirects(node, &fd_in, &fd_out);
-		if (fd_in != STDIN_FILENO)
-		{
-			dup2(fd_in, STDIN_FILENO);
-			close(fd_in);
-		}
-		if (fd_out != STDOUT_FILENO)
-		{
-			dup2(fd_out, STDOUT_FILENO);
-			close(fd_out);
-		}
-		execve(executable, argv, envp);
-		printf("CoolCustomShell: %s: %s\n", executable, strerror(errno));
-		free(executable);
-		exit(126);
+		child_exec(node, argv, fd_in, fd_out, executable, envp_array);
+		// signal(SIGQUIT, SIG_DFL);
+		// signal(SIGINT, SIG_DFL);
+		// apply_redirects(node, &fd_in, &fd_out);
+		// if (fd_in != STDIN_FILENO)
+		// {
+		// 	dup2(fd_in, STDIN_FILENO);
+		// 	close(fd_in);
+		// }
+		// if (fd_out != STDOUT_FILENO)
+		// {
+		// 	dup2(fd_out, STDOUT_FILENO);
+		// 	close(fd_out);
+		// }
+		// execve(executable, argv, envp_array);
+		// printf("CoolCustomShell: %s: %s\n", executable, strerror(errno));
+		// free(executable);
+		// exit(126);
 	}
-	// dprintf(2, "Waiting for cmd: %s\n", cmd);
 	waitpid(exec, &status, 0);
-	// dprintf(2, "Finished waiting for cmd: %s\n", cmd);
 	free(executable);
+	free_array(envp_array);
 	if (WIFEXITED(status))
-	{
-		// write(2, "we're in here!!!!\n", 19);
 		return (WEXITSTATUS(status));
-	}
 	if (WIFSIGNALED(status))
-	{
-		// if (WTERMSIG(status) == SIGQUIT)
-			// dprintf(2, "Quilts");
-		// dprintf(2, "\n");
 		return (128 + WTERMSIG(status));
-	}
 	return (0);
 }

@@ -6,13 +6,14 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:15 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 14:59:20 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 14:11:00 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+#include "../../inc/error.h"
 
-static void	free_node(t_envpcpy *to_free)
+static void	free_node(t_env *to_free)
 {
 	free(to_free->key);
 	free(to_free->value);
@@ -33,9 +34,9 @@ static int	key_in_array(char *lookingfor, char **keys)
 	return (0);
 }
 
-static void	unlink_node(t_envpcpy *tmp, t_envpcpy *prev, t_envpcpy **envpcpy)
+static void	unlink_node(t_env *tmp, t_env *prev, t_env **envpcpy)
 {
-	t_envpcpy	*next;
+	t_env	*next;
 
 	next = tmp->next;
 	if (!prev)
@@ -45,16 +46,16 @@ static void	unlink_node(t_envpcpy *tmp, t_envpcpy *prev, t_envpcpy **envpcpy)
 	free_node(tmp);
 }
 
-int	ft_unset(char **args, t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
+int	ft_unset(char **args, t_env **envpcpy)
 {
-	t_envpcpy	*tmp;
-	t_envpcpy	*prev;
-	t_envpcpy	*next;
+	t_env	*tmp;
+	t_env	*prev;
+	t_env	*next;
 
 	if (!envpcpy)
-		return (1); // NULL_ARG
+		return (NULL_ARG);
 	if (!args || !args[0])
-		return (0); // SUCCESS
+		return (OK);
 	tmp = *envpcpy;
 	prev = NULL;
 	while (tmp)
@@ -71,5 +72,5 @@ int	ft_unset(char **args, t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
 			tmp = tmp->next;
 		}
 	}
-	return (0); // SUCCESS
+	return (OK);
 }
