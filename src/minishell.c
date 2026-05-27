@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 09:40:10 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 11:28:39 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		write(2, "\n", 1);
+		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -26,20 +26,33 @@ void	handler(int signum)
 	}
 }
 
+static void	set_signal_action(int i)
+{
+	struct sigaction	act;
+
+	ft_bzero(&act, sizeof(act));
+	act.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &act, NULL);
+	if (i == 0)
+		act.sa_handler = &handler;
+	else
+		act.sa_handler = SIG_IGN;
+	sigaction(SIGINT, &act, NULL);
+}
+
 int main(int argc, char **argv, char **envp)
 {
-	char	*cmd;
-	t_token	*token;
-	t_env	*envc;
-	t_ast	*ast;
+	char				*cmd;
+	t_token				*token;
+	t_env				*envc;
+	t_ast				*ast;
 	(void)argc;
 	(void)argv;
 
 	envc = env_copy(envp);
 	while (1)
 	{
-		signal(SIGINT, &handler);
-		signal(SIGQUIT, SIG_IGN);
+		set_signal_action(0);
 		cmd = readline("Ghost\\>: ");
 		if (!cmd)
 			break ;
@@ -48,29 +61,17 @@ int main(int argc, char **argv, char **envp)
 			free(cmd);
 			continue ;
 		}
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
-		// char **splinput = ft_split(input, ' ');
-		// free(input);
-		// t_tree *head = makenode("PIPE");
-		// t_tree *node_l = makenode(splinput[0]);
-		// t_tree *node_r = makenode(splinput[1]);
-
-		// head->left = node_l;
-		// head->right = node_r;
-		// head->head = head;
+		set_signal_action(1);
 		token = lexer(cmd);
 		ast = parser(token, envc);
 		execute_tree(ast, envp, STDIN_FILENO, STDOUT_FILENO);
 		free_ast(ast);
 		free(cmd);
 		free_token(token);
-		// free_array(splinput);
-
 	}
-	free(cmd);
+	if (cmd)
+		free(cmd);
 	ft_free_envc(envc);
 	printf("exit\n");
 	return (0);
 }
-
