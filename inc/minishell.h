@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/14 13:43:26 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/19 16:28:44 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 08:50:02 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
