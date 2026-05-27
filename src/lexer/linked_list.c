@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 16:06:07 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/06 10:44:07 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 14:05:54 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,22 @@ int	add_after(t_token *token, t_type type, char *value)
 	return (0);
 }
 
-void	free_token(t_token *token_list)
+void	free_token(t_token **token_list)
 {
 	t_token	*token;
 	t_token	*tmp;
 
-	token = token_list->next;
+	token = (*token_list)->next;
 	while (token != NULL)
 	{
 		tmp = token->next;
 		if (token->value)
+		{
 			free(token->value);
+			token->value = NULL;
+		}
 		free(token);
 		token = tmp;
 	}
-	free(token_list);
+	free(*token_list);
 }

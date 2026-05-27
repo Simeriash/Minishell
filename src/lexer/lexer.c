@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 09:38:57 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 10:07:06 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 13:51:02 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_token	*lexer(char *str)
 			break ;
 		if (create_token(str, &last, &i))
 		{
-			free_token(token_list);
+			free_token(&token_list);
 			return (NULL);
 		}
 	}
