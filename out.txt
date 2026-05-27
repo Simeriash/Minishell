@@ -1,0 +1,10 @@
+a.out
+inc
+main.c
+Makefile
+minishell
+obj
+out.txt
+readline.supp
+README.md
+src

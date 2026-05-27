@@ -1,4 +1,4 @@
-#include "execute.h"
+#include "../../inc/execute.h"
 
 void free_array(char **array) //util
 {
@@ -182,24 +182,24 @@ void redir_fd_helper(int *fd, char *path, int flags)
 	*fd = open (path, flags, 0664);
 }
 
-void apply_redirects(t_tree *node, int *fd_in, int *fd_out)
+void apply_redirects(t_ast *node, int *fd_in, int *fd_out)
 {
-	t_redirs *tmp;
+	t_redir *tmp;
 
-	tmp = node->cmd->redirs;
-	if (!node->cmd->redirs || !node->cmd->redirs->redir_type)
+	tmp = node->cmd->redir;
+	if (!node->cmd->redir || !node->cmd->redir->type)
 		return ;
 	while (tmp)
 	{
-		if (tmp->redir_type == IN)
-			redir_fd_helper(fd_in, tmp->redir_file, O_RDONLY);
-		else if (tmp->redir_type == OUT)
-			redir_fd_helper(fd_out, tmp->redir_file,
+		if (tmp->type == IN)
+			redir_fd_helper(fd_in, tmp->file, O_RDONLY);
+		else if (tmp->type == OUT)
+			redir_fd_helper(fd_out, tmp->file,
 				O_CREAT | O_WRONLY | O_TRUNC);
-		else if (tmp->redir_type == APPEND)
-			redir_fd_helper(fd_out, tmp->redir_file,
+		else if (tmp->type == APPEND)
+			redir_fd_helper(fd_out, tmp->file,
 				O_CREAT | O_WRONLY | O_APPEND);
-		tmp = tmp->redirs_next;
+		tmp = tmp->next;
 	}
 	return ;
 }
@@ -214,7 +214,7 @@ void error_handling(int	err)
 	//if (err == EXEC_NO_PATH)
 }
 
-int execute_cmd(t_tree *node, char **argv, char **envp, int fd_in, int fd_out)
+int execute_cmd(t_ast *node, char **argv, char **envp, int fd_in, int fd_out)
 {
 	char	*cmd = argv[0];
 	char	*executable;
