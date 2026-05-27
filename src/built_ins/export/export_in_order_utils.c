@@ -6,21 +6,21 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 15:22:13 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 11:22:49 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 12:33:33 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static t_envpcpy	**create_env_array(int size, t_envpcpy **envpcpy)
+static t_env	**create_env_array(int size, t_env **envpcpy)
 {
-	t_envpcpy	**array;
-	t_envpcpy	*tmp;
+	t_env	**array;
+	t_env	*tmp;
 	int			i;
 
 	i = 0;
 	tmp = *envpcpy;
-	array = malloc(((size + 1) * sizeof(t_envpcpy *)));
+	array = malloc(((size + 1) * sizeof(t_env *)));
 	if (!array)
 		return (NULL);
 	while (tmp)
@@ -33,12 +33,12 @@ static t_envpcpy	**create_env_array(int size, t_envpcpy **envpcpy)
 	return (array);
 }
 
-static void	sort_env_array(t_envpcpy **arr, int size)
+static void	sort_env_array(t_env **arr, int size)
 {
 	int			i;
 	int			min_index;
 	int			j;
-	t_envpcpy	*tmp;
+	t_env	*tmp;
 
 	i = 0;
 	while (i < size - 1)
@@ -61,7 +61,7 @@ static void	sort_env_array(t_envpcpy **arr, int size)
 	}
 }
 
-static void	print_env_array(t_envpcpy **array, int size) // FROM VOID TO T_ERRORS
+static void	print_env_array(t_env **array, int size) // FROM VOID TO T_ERRORS
 {
 	int	i;
 	//INT ERROR;
@@ -86,9 +86,9 @@ static void	print_env_array(t_envpcpy **array, int size) // FROM VOID TO T_ERROR
 	//RETURN (SUCCESS);
 }
 
-int	print_env_in_alpha_order(t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
+int	print_env_in_alpha_order(t_env **envpcpy) // FROM INT TO T_ERRORS
 {
-	t_envpcpy	**env_array;
+	t_env	**env_array;
 	int			size;
 	//T_ERRORS ERROR;
 

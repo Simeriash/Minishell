@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 07:43:23 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/19 17:09:06 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 14:00:56 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ typedef enum e_error
 	MALLOC,
 	OPEN_QUOTE,
 	INVALID_LIMITER,
-	FD
+	FD,
+	WRITE,
+	READ,
+	NULL_ARG,
+	UNSET_ENV
 }	t_error;
 
 void	error_envc(t_env *envc);

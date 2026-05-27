@@ -6,17 +6,17 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 09:05:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/19 14:55:42 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 12:10:54 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-t_envpcpy	*ft_lstnew(char *newkey, char *newvalue)
+t_env	*ft_lstnew(char *newkey, char *newvalue)
 {
-	t_envpcpy	*test;
+	t_env	*test;
 
-	test = malloc(sizeof(t_envpcpy));
+	test = malloc(sizeof(t_env));
 	if (!test)
 		return (NULL);
 	test->key = newkey;
@@ -25,9 +25,9 @@ t_envpcpy	*ft_lstnew(char *newkey, char *newvalue)
 	return (test);
 }
 
-void	ft_lstaddback(t_envpcpy **lst, t_envpcpy *new)
+void	ft_lstaddback(t_env **lst, t_env *new)
 {
-	t_envpcpy	*ptr;
+	t_env	*ptr;
 
 	if (lst != NULL || new != NULL)
 	{
@@ -41,7 +41,7 @@ void	ft_lstaddback(t_envpcpy **lst, t_envpcpy *new)
 	}
 }
 
-t_envpcpy	*ft_lstlast(t_envpcpy *lst)
+t_env	*ft_lstlast(t_env *lst)
 {
 	int	i;
 	int	end;
@@ -58,7 +58,7 @@ t_envpcpy	*ft_lstlast(t_envpcpy *lst)
 	return (lst);
 }
 
-int	ft_lstsize(t_envpcpy *lst)
+int	ft_lstsize(t_env *lst)
 {
 	int	i;
 

@@ -6,17 +6,17 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:29:14 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 10:50:15 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 12:30:12 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-char	*find_env_var(char *key, t_envpcpy **envpcpy)
+char	*find_env_var(char *key, t_env **envpcpy)
 {
 	int			i;
 	int			len;
-	t_envpcpy	*tmp;
+	t_env	*tmp;
 
 	i = 0;
 	if (!key)
@@ -34,11 +34,11 @@ char	*find_env_var(char *key, t_envpcpy **envpcpy)
 	return (NULL);
 }
 
-t_envpcpy	*get_env_node(char *key, t_envpcpy **envpcpy)
+t_env	*get_env_node(char *key, t_env **envpcpy)
 {
 	int			i;
 	int			len;
-	t_envpcpy	*tmp;
+	t_env	*tmp;
 
 	i = 0;
 	if (!key)

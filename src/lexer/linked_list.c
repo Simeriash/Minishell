@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 16:06:07 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/06 10:44:07 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:23:59 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ void	free_token(t_token *token_list)
 	{
 		tmp = token->next;
 		if (token->value)
+		{
 			free(token->value);
+			token->value = NULL;
+		}
 		free(token);
 		token = tmp;
 	}

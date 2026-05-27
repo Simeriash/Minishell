@@ -6,29 +6,32 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:04:33 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/13 14:16:29 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:47:56 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execute.h"
+#include "../../inc/execute.h"
+#include "../../inc/parser.h"
 
-void free_tree(t_tree *node);
+// void free_tree(t_tree *node);
 
-int my_strcmp(const char *s1, const char *s2)
-{
-    int i = 0;
+// int my_strcmp(const char *s1, const char *s2)
+// {
+//     int i = 0;
 
-    while (s1[i] && s2[i] && s1[i] == s2[i])
-        i++;
+//     while (s1[i] && s2[i] && s1[i] == s2[i])
+//         i++;
 
-    return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
+//     return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+// }
 
-t_tree *build_pipe(t_tree *node, char **envp, int *current_in)
+t_ast *build_pipe(t_ast *node, t_env **envp, int *current_in)
 {
 	int		fd[2];
 	pid_t	pid;
+	t_ast	*head;
 
+	head = node;
 	while (node->type == PIPE)
 	{
 		pipe(fd);
@@ -37,7 +40,11 @@ t_tree *build_pipe(t_tree *node, char **envp, int *current_in)
 		{
 			close(fd[0]);
 			execute_tree(node->left, envp, *current_in, fd[1]);
-
+			// if (*current_in != STDIN_FILENO)
+			// 	close(*current_in);
+			close(fd[1]);
+			free_ast(head);
+			ft_free_envc(*envp);
 			exit(1);
 		}
 		close(fd[1]);
@@ -76,20 +83,24 @@ int	wait_pids(pid_t last_pid)
 	return (0);
 }
 
-int execute_pipe(t_tree *node, char **envp, int in_fd, int out_fd)
+int execute_pipe(t_ast *node, t_env **envp, int in_fd, int out_fd)
 {
-	//int		fd[2];
 	int		current_in;
-	//pid_t   pid;
 	pid_t	last_pid;
 	int		ret;
+	t_ast	*head;
 
 	current_in = in_fd;
+	head = node;
 	node = build_pipe(node, envp, &current_in);
 	last_pid = fork();
 	if (last_pid == 0)
 	{
 		ret = execute_tree(node, envp, current_in, out_fd);
+		if (current_in != STDIN_FILENO)
+			close(current_in);
+		free_ast(head);
+		ft_free_envc(*envp);
 		exit(ret);
 	}
 	if (current_in != STDIN_FILENO)
@@ -105,7 +116,7 @@ int execute_pipe(t_tree *node, char **envp, int in_fd, int out_fd)
 	return (ret);
 }
 
-int execute_tree(t_tree *node, char **envp, int in_fd, int out_fd)
+int execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd)
 {
 	int ret;
 
@@ -122,77 +133,77 @@ int execute_tree(t_tree *node, char **envp, int in_fd, int out_fd)
 	return (0);
 }
 
-t_tree *makenode(char *value)
-{
-	static int i = 0;
-	if (!value)
-		return NULL;
-	t_tree *node = calloc(1, sizeof(t_tree));
-	node->cmd = NULL;
-	if (node != NULL)
-	{
-		node->left = NULL;
-		node->right = NULL;
-		node->value = i;
-		i++;
-		if (my_strcmp(value, "PIPE") == 0)
-			node->type = PIPE;
-		else
-		{
-			node->type = CMD;
-			node->cmd = calloc(1, sizeof(t_cmd));
-			node->cmd->redirs = NULL;
-			node->cmd->args = ft_split(value, ' ');
-		}
-	}
-	return (node);
-}
+// t_ast *makenode(char *value)
+// {
+// 	static int i = 0;
+// 	if (!value)
+// 		return NULL;
+// 	t_ast *node = calloc(1, sizeof(t_ast));
+// 	node->cmd = NULL;
+// 	if (node != NULL)
+// 	{
+// 		node->left = NULL;
+// 		node->right = NULL;
+// 		node->value = i;
+// 		i++;
+// 		if (my_strcmp(value, "PIPE") == 0)
+// 			node->type = PIPE;
+// 		else
+// 		{
+// 			node->type = CMD;
+// 			node->cmd = calloc(1, sizeof(t_cmd));
+// 			node->cmd->redir = NULL;
+// 			node->cmd->args = ft_split(value, ' ');
+// 		}
+// 	}
+// 	return (node);
+// }
 
-void free_redirs(t_redirs *r)
-{
-	t_redirs *tmp;
+// void free_redirs(t_redir *r)
+// {
+// 	t_redir *tmp;
 
-	while (r)
-	{
-		tmp = r->redirs_next;
-		free(r->redir_file);
-		free(r);
-		r = tmp;
-	}
-}
+// 	while (r)
+// 	{
+// 		tmp = r->redirs_next;
+// 		free(r->redir_file);
+// 		free(r);
+// 		r = tmp;
+// 	}
+// }
 
-void free_cmd(t_cmd *cmd)
-{
-	int i;
+// void free_cmd(t_cmd *cmd)
+// {
+// 	int i;
 
-	if (!cmd)
-		return;
+// 	if (!cmd)
+// 		return;
 
-	if (cmd->args)
-	{
-		i = 0;
-		while (cmd->args[i])
-			free(cmd->args[i++]);
-		free(cmd->args);
-	}
+// 	if (cmd->args)
+// 	{
+// 		i = 0;
+// 		while (cmd->args[i])
+// 			free(cmd->args[i++]);
+// 		free(cmd->args);
+// 	}
 
-	free_redirs(cmd->redirs);
-	free(cmd);
-}
+// 	free_redirs(cmd->redir);
+// 	free(cmd);
+// }
 
-void free_tree(t_tree *node)
-{
-	if (!node)
-		return;
+// void free_tree(t_ast *node)
+// {
+// 	if (!node)
+// 		return;
 
-	free_tree(node->left);
-	free_tree(node->right);
+// 	free_tree(node->left);
+// 	free_tree(node->right);
 
-	if (node->type == CMD)
-		free_cmd(node->cmd);
+// 	if (node->type == CMD)
+// 		free_cmd(node->cmd);
 
-	free(node);
-}
+// 	free(node);
+// }
 
 /*
 
@@ -218,7 +229,7 @@ exec(args)
 
 cmds array : char **cmd[]
 
-int pipe1[2];
+int pipe1[2];src/exec/execute.h
 int pipe2[2];
 
 int pids[nbr_cmd];

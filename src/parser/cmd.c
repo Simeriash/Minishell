@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 14:06:30 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/14 11:14:25 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 14:47:47 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ static int	cmd_struct(t_cmd *cmd, t_arg *arg, t_redir *redir)
 	cmd->args = struct_to_tab(arg, i);
 	if (!(cmd->args))
 	{
-		free_struct(arg, redir);
 		free(cmd);
 		return (1);
 	}
@@ -102,13 +101,11 @@ t_ast	*cmd_node(t_token *token, t_token *stop)
 		new_token = new_token->next;
 	}
 	cmd = malloc(sizeof(*cmd));
-	if (!cmd)
+	if (!cmd || cmd_struct(cmd, arg, redir))
 	{
 		free_struct(arg, redir);
 		return (NULL);
 	}
-	if (cmd_struct(cmd, arg, redir))
-		return (NULL);
 	ast = init_ast(CMD, cmd, NULL, NULL);
 	return (ast);
 }

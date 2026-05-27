@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:00 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 14:56:36 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 12:10:54 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	set_key_and_value(char *arg, char **key, char **value) // FROM INT TO
 	return (0); // RETURN SUCCESS (HELD IN ERROR)
 }
 
-static int	process_input(char *arg, t_envpcpy **envpcpy) // FROM INTO TO T_ERRORS
+static int	process_input(char *arg, t_env **envpcpy) // FROM INTO TO T_ERRORS
 {
 	char		*key;
 	char		*value;
@@ -76,7 +76,7 @@ static int	process_input(char *arg, t_envpcpy **envpcpy) // FROM INTO TO T_ERROR
 	return (0); // SUCCESS
 }
 
-int	ft_export(char **args, t_envpcpy **envpcpy) // FROM INT TO T_ERRORS
+int	ft_export(char **args, t_env **envpcpy) // FROM INT TO T_ERRORS
 {
 	int			i;
 	int			error;

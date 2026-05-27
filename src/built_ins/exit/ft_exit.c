@@ -6,16 +6,16 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:50:55 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 14:54:56 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 12:44:32 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	ft_exit(char **args, t_envpcpy **delete) //needs to call tree_deletion.
+int	ft_exit(char **args, t_env **delete) //needs to call tree_deletion.
 {
-	t_envpcpy	*next;
-	t_envpcpy	*tmp;
+	t_env	*next;
+	t_env	*tmp;
 	int			exit_value;
 
 	exit_value = 0;
@@ -32,6 +32,6 @@ int	ft_exit(char **args, t_envpcpy **delete) //needs to call tree_deletion.
 		free(tmp);
 		tmp = next;
 	}
-	exit(exit_value);
+	return(exit_value);
 }
 

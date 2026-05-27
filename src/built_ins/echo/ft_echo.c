@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:27:58 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 14:50:30 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 12:10:54 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	print_words(int index, char **args, int nl_flag)
 	return (ret_val);
 }
 
-int	ft_echo(char **args, t_envpcpy **envpcpy)
+int	ft_echo(char **args, t_env **envpcpy)
 {
 	int	i;
 	int	ret_val;

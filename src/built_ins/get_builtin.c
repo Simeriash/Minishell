@@ -6,13 +6,13 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 08:45:02 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 08:45:16 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 12:14:42 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "inc/builtins.h"
+#include "../../inc/builtins.h"
 
-builtin_func	get_builtin(char **args, t_envpcpy **envpcpy)
+builtin_func	get_builtin(char **args, t_env **envpcpy)
 {
 	static t_builtins func_array[] =
 	{
@@ -27,6 +27,7 @@ builtin_func	get_builtin(char **args, t_envpcpy **envpcpy)
 	};
 	int	i;
 
+	(void)envpcpy;
 	i = 0;
 	while(func_array[i].cmd)
 	{

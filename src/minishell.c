@@ -6,18 +6,19 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 08:54:10 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:39:08 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include "./exec/execute.h"
+#include "../inc/execute.h"
+#include "../inc/parser.h"
 
 void	handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		write(2, "\n", 1);
+		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -25,39 +26,51 @@ void	handler(int signum)
 	}
 }
 
-int main(int argc, char **argv, char **envp)
+static void	set_signal_action(int i)
 {
-	(void)argc;
-	(void)argv;
+	struct sigaction	act;
 
-	while (1)
-	{
-		signal(SIGINT, &handler);
-		signal(SIGQUIT, SIG_IGN);
-		char *input = readline("TestShell > ");
-		if (!input)
-		{
-			printf("exit\n");
-			return (0);
-		}
-		if (strcmp(input, "") == 0)
-			continue ;
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
-		char **splinput = ft_split(input, ' ');
-		free(input);
-		t_tree *head = makenode("PIPE");
-		t_tree *node_l = makenode(splinput[0]);
-		t_tree *node_r = makenode(splinput[1]);
-
-		head->left = node_l;
-		head->right = node_r;
-		head->head = head;
-		execute_tree(head, envp, STDIN_FILENO, STDOUT_FILENO);
-		free_tree(head);
-		free_array(splinput);
-
-	}
-	return (0);
+	ft_bzero(&act, sizeof(act));
+	act.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &act, NULL);
+	if (i == 0)
+		act.sa_handler = &handler;
+	else
+		act.sa_handler = SIG_IGN;
+	sigaction(SIGINT, &act, NULL);
 }
 
+int main(int argc, char **argv, char **envp)
+{
+	char				*cmd;
+	t_token				*token;
+	t_env				*envc;
+	t_ast				*ast;
+
+	(void)argc;
+	(void)argv;
+	envc = env_copy(envp);
+	while (1)
+	{
+		set_signal_action(0);
+		cmd = readline("Ghost\\>: ");
+		if (!cmd)
+			break ;
+		if (cmd[0] == '\0')
+		{
+			free(cmd);
+			continue ;
+		}
+		set_signal_action(1);
+		token = lexer(cmd);
+		free(cmd);
+		ast = parser(token, envc);
+		if (!ast)
+			continue ;
+		execute_tree(ast, &envc, STDIN_FILENO, STDOUT_FILENO);
+		free_ast(ast);
+	}
+	ft_free_envc(envc);
+	printf("exit\n");
+	return (0);
+}

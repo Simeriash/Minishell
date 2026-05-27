@@ -6,13 +6,13 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/21 15:40:15 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/27 12:10:54 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static int	update_oldpwd_pwd(char *old, char *new, t_envpcpy **envpcpy)
+static int	update_oldpwd_pwd(char *old, char *new, t_env **envpcpy)
 {
 	int				ret_val;
 
@@ -32,7 +32,7 @@ static int	update_oldpwd_pwd(char *old, char *new, t_envpcpy **envpcpy)
 	return (ret_val);
 }
 
-static int	chdir_success(char **current, char *old, t_envpcpy **envpcpy)
+static int	chdir_success(char **current, char *old, t_env **envpcpy)
 {
 	int	ret_val;
 
@@ -46,7 +46,7 @@ static int	chdir_success(char **current, char *old, t_envpcpy **envpcpy)
 	return (ret_val);
 }
 
-static int	cd_executor(char *cd_input, t_envpcpy **envpcpy)
+static int	cd_executor(char *cd_input, t_env **envpcpy)
 {
 	int		ret_val;
 	char	*old_path;
@@ -70,7 +70,7 @@ static int	cd_executor(char *cd_input, t_envpcpy **envpcpy)
 	return (ret_val);
 }
 
-static	int	cd_to_home(t_envpcpy **envpcpy)
+static	int	cd_to_home(t_env **envpcpy)
 {
 	char	*new;
 	int		ret_val;
@@ -85,7 +85,7 @@ static	int	cd_to_home(t_envpcpy **envpcpy)
 	return (ret_val);
 }
 
-int	ft_cd(char **args, t_envpcpy **envpcpy)
+int	ft_cd(char **args, t_env **envpcpy)
 {
 	char	*new;
 	int		ret_val;

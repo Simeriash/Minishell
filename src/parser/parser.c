@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 13:01:42 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/19 16:50:29 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:25:14 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,6 @@ t_ast	*parser(t_token *token_list, t_env *envc)
 		error_parser(token_list, MALLOC);
 		return (NULL);
 	}
+	ast->token = token_list;
 	return (ast);
 }
