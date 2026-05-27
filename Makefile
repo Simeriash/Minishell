@@ -1,41 +1,65 @@
-NAME := minishell
+# Compiler
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g
 
-CC := cc
-CFLAGS := -Wall -Wextra -Werror -g #-fsanitize=address
+# Directories
+SRC_DIR = src
+INC_DIR = inc
+LIBFT_DIR = src/libft
+BUILTINS_DIR = $(SRC_DIR)/built_ins
+OBJ_DIR = obj
 
-HEADER := /inc
+# Executable
+NAME = minishell
 
-LIBFT := src/libft/libft.a
+# Sources
+SRCS = $(SRC_DIR)/minishell.c \
+       $(SRC_DIR)/lexer/lexer.c \
+       $(BUILTINS_DIR)/echo/ft_echo.c \
+       $(BUILTINS_DIR)/cd/ft_cd.c \
+       $(BUILTINS_DIR)/exit/ft_exit.c \
+	   $(BUILTINS_DIR)/pwd/ft_pwd.c \
+	   $(BUILTINS_DIR)/env/ft_env.c \
+	   $(BUILTINS_DIR)/utils/builtin_utils.c \
+	   $(BUILTINS_DIR)/utils/builtin_utils2.c \
+	   $(BUILTINS_DIR)/unset/ft_unset.c \
+	   $(BUILTINS_DIR)/export/export_in_order_utils.c \
+	   $(BUILTINS_DIR)/export/export_utils1.c \
+	   $(BUILTINS_DIR)/export/ft_export.c \
+	   $(BUILTINS_DIR)/export/export_helpers1.c \
 
-SOURCES := minishell.c
 
-SRC_DIR := src/
-SRC := $(addprefix $(SRC_DIR), $(SOURCES))
+# Object files in obj/ folder
+OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 
-OBJ_DIR := obj/
-OBJ := $(addprefix $(OBJ_DIR), $(SOURCES:.c=.o))
+# Libraries
+LIBFT = $(LIBFT_DIR)/libft.a
 
-.PHONY : all clean fclean re
+# Include flags
+INC_FLAGS = -I$(INC_DIR) -I$(LIBFT_DIR) -Irea
 
-all : $(NAME)
+# Rules
+all: $(NAME)
 
-$(NAME) : $(OBJ_DIR) $(OBJ)
-	# $(MAKE) -C src/libft
-	$(CC) $(CFLAGS) $(OBJ) -lreadline -o $@
+$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
 
-$(OBJ_DIR) :
-	mkdir -p $(OBJ_DIR)
+# Compile objects, creating subdirectories if needed
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
 
-$(OBJ_DIR)%.o : $(SRC_DIR)%.c
-	$(CC) $(CFLAGS) -I $(HEADER) -c $< -o $@
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
 
-clean :
-	# $(MAKE) -C src/libft -B clean
-	rm -rf $(OBJ)
+clean:
+	$(MAKE) -C $(LIBFT_DIR) clean
 	rm -rf $(OBJ_DIR)
 
-fclean : clean
-	# $(MAKE) -C src/libft -B fclean
-	rm -rf $(NAME)
+fclean: clean
+	$(MAKE) -C $(LIBFT_DIR) fclean
+	rm -f $(NAME)
 
-re : fclean all
+re: fclean all
+
+.PHONY: all clean fclean re
