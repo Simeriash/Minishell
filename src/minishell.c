@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/28 12:03:20 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/28 12:20:40 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,28 @@ static void	set_signal_action(int i)
 	sigaction(SIGINT, &act, NULL);
 }
 
-int main(int argc, char **argv, char **envp)
+static int	cmd_minishell(char *cmd, t_env *envc, t_ast **ast)
+{
+	t_token	*token;
+
+	if (cmd[0] == '\0')
+	{
+		free(cmd);
+		return (1);
+	}
+	token = lexer(cmd);
+	free(cmd);
+	if (!token)
+		return (1);
+	*ast = parser(token, envc);
+	if (!(*ast))
+		return (1);
+	return (0);
+}
+
+int	main(int argc, char **argv, char **envp)
 {
 	char				*cmd;
-	t_token				*token;
 	t_env				*envc;
 	t_ast				*ast;
 
@@ -57,17 +75,7 @@ int main(int argc, char **argv, char **envp)
 		set_signal_action(1);
 		if (!cmd)
 			break ;
-		if (cmd[0] == '\0')
-		{
-			free(cmd);
-			continue ;
-		}
-		token = lexer(cmd);
-		free(cmd);
-		if (!token)
-			continue ;
-		ast = parser(token, envc);
-		if (!ast)
+		if (cmd_minishell(cmd, envc, &ast))
 			continue ;
 		execute_tree(ast, &envc, STDIN_FILENO, STDOUT_FILENO);
 		free_ast(ast);
