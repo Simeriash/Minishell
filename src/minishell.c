@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 15:39:08 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/28 12:03:20 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../inc/execute.h"
 #include "../inc/parser.h"
 
-void	handler(int signum)
+static void	handler(int signum)
 {
 	if (signum == SIGINT)
 	{
@@ -54,6 +54,7 @@ int main(int argc, char **argv, char **envp)
 	{
 		set_signal_action(0);
 		cmd = readline("Ghost\\>: ");
+		set_signal_action(1);
 		if (!cmd)
 			break ;
 		if (cmd[0] == '\0')
@@ -61,9 +62,10 @@ int main(int argc, char **argv, char **envp)
 			free(cmd);
 			continue ;
 		}
-		set_signal_action(1);
 		token = lexer(cmd);
 		free(cmd);
+		if (!token)
+			continue ;
 		ast = parser(token, envc);
 		if (!ast)
 			continue ;
@@ -71,6 +73,5 @@ int main(int argc, char **argv, char **envp)
 		free_ast(ast);
 	}
 	ft_free_envc(envc);
-	printf("exit\n");
 	return (0);
 }

@@ -6,22 +6,18 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 12:31:31 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 17:10:41 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/28 11:44:42 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/heredoc.h"
 
-static int	test_limiter(char *eof, int i, int *limiter, t_state state)
+static int	test_limiter(char *eof, int i, int *limiter)
 {
-	if (i == 2)
+	if ((eof[0] && eof[1]) && (eof[0] == eof[1])
+		&& (eof[0] == '\'' || eof[0] == '"'))
 	{
 		error_heredoc(INVALID_LIMITER);
-		return (1);
-	}
-	if (state != NORMAL)
-	{
-		error_heredoc(OPEN_QUOTE);
 		return (1);
 	}
 	if ((eof[0] == '\'' || eof[0] == '"') && eof[0] == eof[i - 1])
@@ -71,39 +67,23 @@ int	delimiter(int *limiter, char *eof)
 		}
 		i++;
 	}
-	if (test_limiter(eof, i, limiter, state))
+	if (test_limiter(eof, i, limiter))
 		return (1);
 	if (*limiter == 0)
 		change_eof(eof);
 	return (0);
 }
 
-void	handler_heredoc(int signum, siginfo_t *info, void *none)
+void	free_heredoc(t_token *token_list, t_env *envc, char *cmd, int fd)
 {
-	extern int	g_sig;
-
-	(void)info;
-	(void)none;
-	if (signum == SIGINT)
-	{
-		g_sig = 1;
-		close(0);
-	}
-}
-
-void	set_signal_heredoc(int i)
-{
-	struct sigaction	act;
-
-	ft_bzero(&act, sizeof(act));
-	act.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &act, NULL);
-	if (i == 0)
-	{
-		act.sa_sigaction = &handler_heredoc;
-		act.sa_flags = SA_SIGINFO;
-	}
+	close(fd);
+	free_token(token_list);
+	ft_free_envc(envc);
+	if (cmd)
+		free(cmd);
 	else
-		act.sa_handler = SIG_IGN;
-	sigaction(SIGINT, &act, NULL);
+	{
+		unlink("minishell_heredoc");
+		exit (1);
+	}
 }
