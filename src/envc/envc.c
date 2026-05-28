@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 08:48:09 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/19 15:36:36 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/28 15:03:34 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,7 @@ static int	next_copy(char *envpi, t_env *last)
 		return (1);
 	}
 	if (add_after_envc(last, key, value))
-	{
-		free(key);
-		free(value);
 		return (1);
-	}
 	return (0);
 }
 
