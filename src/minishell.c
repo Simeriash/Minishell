@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/28 13:52:23 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/28 16:44:22 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,23 @@ static int	cmd_minishell(char *cmd, t_env *envc, t_ast **ast)
 	return (0);
 }
 
+static char	*ft_readline(void)
+{
+	char	*cmd;
+
+	set_signal_action(0);
+	cmd = readline("Ghost\\>: ");
+	if (cmd)
+		add_history(cmd);
+	set_signal_action(1);
+	return (cmd);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char				*cmd;
-	t_env				*envc;
-	t_ast				*ast;
+	char	*cmd;
+	t_env	*envc;
+	t_ast	*ast;
 
 	(void)argc;
 	(void)argv;
@@ -72,9 +84,7 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	while (1)
 	{
-		set_signal_action(0);
-		cmd = readline("Ghost\\>: ");
-		set_signal_action(1);
+		cmd = ft_readline();
 		if (!cmd)
 			break ;
 		if (cmd_minishell(cmd, envc, &ast))
@@ -82,6 +92,7 @@ int	main(int argc, char **argv, char **envp)
 		execute_tree(ast, &envc, STDIN_FILENO, STDOUT_FILENO);
 		free_ast(ast);
 	}
+	rl_clear_history();
 	ft_free_envc(envc);
 	return (0);
 }
