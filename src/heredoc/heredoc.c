@@ -6,11 +6,13 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 12:30:30 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/17 08:03:03 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 17:17:19 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/heredoc.h"
+
+int	g_sig;
 
 static int	next_expander(char **cmd, t_env *envc, int *i, int *j)
 {
@@ -58,11 +60,13 @@ static int	expander(char **cmd, t_env *envc, int fd)
 	return (0);
 }
 
-int	heredoc(char *eof, t_env *envc)
+int	heredoc(char *eof, t_token *token_list, t_env *envc)
 {
 	char	*cmd;
 	int		fd;
 	int		limiter;
+	pid_t	pid;
+	int		status;
 
 	if (delimiter(&limiter, eof))
 		return (1);
@@ -72,17 +76,48 @@ int	heredoc(char *eof, t_env *envc)
 		error_heredoc(FD);
 		return (1);
 	}
-	while (1)
+	pid = fork();
+	if (pid == 0)
 	{
-		cmd = readline("heredoc>: ");
-		if (!ft_strcmp(cmd, eof))
-			break ;
-		if (limiter && expander(&cmd, envc, fd))
-			return (1);
-		ft_putendl_fd(cmd, fd);
+		g_sig = 0;
+		while (1)
+		{
+			set_signal_heredoc(0);
+			cmd = readline("heredoc>: ");
+			set_signal_heredoc(1);
+			if (!cmd)
+			{
+				if (!g_sig)
+					ft_putendl_fd("warning: here-document at line 1 delimited\
+ by end-of-file (wanted `eof')", 2);
+				break ;
+			}
+			if (!ft_strcmp(cmd, eof))
+				break ;
+			if (limiter && expander(&cmd, envc, fd))
+			{
+				free_token(token_list);
+				ft_free_envc(envc);
+				exit (1);
+			}
+			ft_putendl_fd(cmd, fd);
+			free(cmd);
+		}
+		close(fd);
+		if (!cmd)
+		{
+			free_token(token_list);
+			ft_free_envc(envc);
+			unlink("minishell_heredoc");
+			exit (1);
+		}
 		free(cmd);
+		free_token(token_list);
+		ft_free_envc(envc);
+		exit(0);
 	}
+	else
+		wait(&status);
 	close(fd);
-	free(cmd);
 	return (0);
 }

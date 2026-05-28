@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 13:01:42 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 15:25:14 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 16:24:53 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	search_suite(t_token *token_list, t_token *token, t_env *envc)
 {
-	if (heredoc(token->next->value, envc))
+	if (heredoc(token->next->value, token_list, envc))
 	{
 		free_token(token_list);
 		return (1);

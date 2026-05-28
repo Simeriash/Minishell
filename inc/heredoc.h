@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 12:27:04 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/19 16:27:25 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/27 17:06:12 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
+# include <signal.h>
+# include <sys/wait.h>
 
 int		delimiter(int *limiter, char *eof);
+void	set_signal_heredoc(int i);
 void	error_heredoc(t_error error);
 
 #endif
