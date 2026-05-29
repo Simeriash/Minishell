@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 12:30:30 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/28 11:53:12 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/29 08:42:17 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static int	init_heredoc(char *eof, int *limiter, int *fd, pid_t *pid)
 
 static int	cmd_heredoc(char **cmd, char *eof)
 {
+	rl_clear_history();
 	set_signal_heredoc(0);
 	*cmd = readline("heredoc>: ");
 	set_signal_heredoc(1);
