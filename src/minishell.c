@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/28 16:44:22 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/30 09:35:27 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static char	*ft_readline(void)
 	char	*cmd;
 
 	set_signal_action(0);
-	cmd = readline("Ghost\\>: ");
+	cmd = readline("\033[32mGhost\\>: \033[39m");
 	if (cmd)
 		add_history(cmd);
 	set_signal_action(1);

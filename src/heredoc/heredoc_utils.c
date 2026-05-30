@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 12:31:31 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/28 11:44:42 by julauren         ###   ########.fr       */
+/*   Updated: 2026/05/29 11:29:56 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,6 @@ void	free_heredoc(t_token *token_list, t_env *envc, char *cmd, int fd)
 	else
 	{
 		unlink("minishell_heredoc");
-		exit (1);
+		exit (0);
 	}
 }
