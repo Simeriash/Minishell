@@ -6,151 +6,150 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 12:41:20 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 14:31:21 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/31 21:00:16 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
 #include "../../inc/execute.h"
 
-void free_array(char **array) //util
-{
-	int	i;
+// void free_array(char **array) //util
+// {
+// 	int	i;
 
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-}
+// 	i = 0;
+// 	while (array[i])
+// 	{
+// 		free(array[i]);
+// 		i++;
+// 	}
+// 	free(array);
+// }
 
-char *create_exec_path(char *path, char *cmd) //cmd util
-{
-	char *tmp;
-	char *ret;
+// char *create_exec_path(char *path, char *cmd) //cmd util
+// {
+// 	char *tmp;
+// 	char *ret;
 
-	tmp = ft_strjoin(path, "/");
-	if (!tmp)
-		return (NULL);
-	ret = ft_strjoin(tmp, cmd);
-	free(tmp);
-	if (!ret)
-		return (NULL);
-	return (ret);
-}
+// 	tmp = ft_strjoin(path, "/");
+// 	if (!tmp)
+// 		return (NULL);
+// 	ret = ft_strjoin(tmp, cmd);
+// 	free(tmp);
+// 	if (!ret)
+// 		return (NULL);
+// 	return (ret);
+// }
 
-char **create_paths(t_exec_err *err) //cmd util
-{
-	char	*path;
-	char	**ret;
+// char **create_paths(t_exec_err *err) //cmd util
+// {
+// 	char	*path;
+// 	char	**ret;
 
-	path = getenv("PATH");
-	if (!path)
-	{
-		*err = EXEC_NO_PATH;
-		return (NULL);
-	}
-	ret = ft_split(path, ':');
-	if (!ret)
-	{
-		*err = EXEC_MALLOC_FAIL;
-		return (NULL);
-	}
-	return (ret);
-}
+// 	path = getenv("PATH");
+// 	if (!path)
+// 	{
+// 		*err = EXEC_NO_PATH;
+// 		return (NULL);
+// 	}
+// 	ret = ft_split(path, ':');
+// 	if (!ret)
+// 	{
+// 		*err = EXEC_MALLOC_FAIL;
+// 		return (NULL);
+// 	}
+// 	return (ret);
+// }
 
-void	cleanup_helper(char *fallback)
-{
-	if (fallback)
-		free(fallback);
-	return ;
-}
+// void	cleanup_helper(char *fallback)
+// {
+// 	if (fallback)
+// 		free(fallback);
+// 	return ;
+// }
 
-int	get_candidate_type(struct stat *st)
-{
-	if (!S_ISDIR(st->st_mode) && (st->st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)))
-		return (0);
-	if (!S_ISDIR(st->st_mode))
-		return (1);
-	return (2);
-}
+// int	get_candidate_type(struct stat *st)
+// {
+// 	if (!S_ISDIR(st->st_mode) && (st->st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)))
+// 		return (0);
+// 	if (!S_ISDIR(st->st_mode))
+// 		return (1);
+// 	return (2);
+// }
 
-char *set_fallback_path(int type, char *candidate, char *fallback)
-{
-	struct stat st;
-	int fallback_type;
+// char *set_fallback_path(int type, char *candidate, char *fallback)
+// {
+// 	struct stat st;
+// 	int fallback_type;
 
-	if (!fallback)
-		return candidate;
-	if (stat(fallback, &st) == 0)
-		fallback_type = get_candidate_type(&st);
-	else
-	{
-		free(fallback);
-		return candidate;
-	}
-	if (type < fallback_type)
-	{
-		free(fallback);
-		return candidate;
-	}
+// 	if (!fallback)
+// 		return candidate;
+// 	if (stat(fallback, &st) == 0)
+// 		fallback_type = get_candidate_type(&st);
+// 	else
+// 	{
+// 		free(fallback);
+// 		return candidate;
+// 	}
+// 	if (type < fallback_type)
+// 	{
+// 		free(fallback);
+// 		return candidate;
+// 	}
 
-	free(candidate);
-	return fallback;
-}
+// 	free(candidate);
+// 	return fallback;
+// }
 
-char *handle_candidate(char *path, char *cmd, char *f_b, t_exec_err *err)
-{
-	char	*ret;
+// char *handle_candidate(char *path, char *cmd, char *f_b, t_exec_err *err)
+// {
+// 	char	*ret;
 
-	ret = create_exec_path(path, cmd);
-	if (!ret)
-	{
-		cleanup_helper(f_b);
-		*err = EXEC_MALLOC_FAIL;
-		return (NULL);
-	}
-	return (ret);
-}
+// 	ret = create_exec_path(path, cmd);
+// 	if (!ret)
+// 	{
+// 		cleanup_helper(f_b);
+// 		*err = EXEC_MALLOC_FAIL;
+// 		return (NULL);
+// 	}
+// 	return (ret);
+// }
 
-char *create_candidate(char *cmd, char **paths, t_exec_err *err)
-{
-	struct stat	st;
-	char		*candidate;
-	char		*fallback;
-	int			type;
-	int			i;
+// char *create_candidate(char *cmd, char **paths, t_exec_err *err)
+// {
+// 	struct stat	st;
+// 	char		*candidate;
+// 	char		*fallback;
+// 	int			type;
+// 	int			i;
 
-	i = 0;
-	fallback = NULL;
-	while (paths[i])
-	{
-		candidate = handle_candidate(paths[i], cmd, fallback, err);
-		if (!candidate && *err == EXEC_MALLOC_FAIL)
-			return (NULL);
-		if (stat(candidate, &st) == 0)
-		{
-			type = get_candidate_type(&st);
-			if (type == 0)
-			{
-				cleanup_helper(fallback);
-				return (candidate);
-			}
-			fallback = set_fallback_path(type, candidate, fallback);
-		}
-		else
-			free(candidate);
-		i++;
-	}
-	return (fallback);
-}
+// 	i = 0;
+// 	fallback = NULL;
+// 	while (paths[i])
+// 	{
+// 		candidate = handle_candidate(paths[i], cmd, fallback, err);
+// 		if (!candidate && *err == EXEC_MALLOC_FAIL)
+// 			return (NULL);
+// 		if (stat(candidate, &st) == 0)
+// 		{
+// 			type = get_candidate_type(&st);
+// 			if (type == 0)
+// 			{
+// 				cleanup_helper(fallback);
+// 				return (candidate);
+// 			}
+// 			fallback = set_fallback_path(type, candidate, fallback);
+// 		}
+// 		else
+// 			free(candidate);
+// 		i++;
+// 	}
+// 	return (fallback);
+// }
 
 char *find_executable(char *cmd, t_exec_err *err)
 {
 	char	**paths;
-	int		i;
 	char	*ret;
 
 	if (!cmd || !*cmd)
@@ -168,7 +167,6 @@ char *find_executable(char *cmd, t_exec_err *err)
 		}
 		return (ret);
 	}
-	i = 0;
 	paths = create_paths(err);
 	if (!paths)
 		return (NULL);
@@ -188,34 +186,34 @@ char *find_executable(char *cmd, t_exec_err *err)
 
 	char *cmd = argv[1] > char *cmd; cmd = node->args[0];
 */
-void redir_fd_helper(int *fd, char *path, int flags)
-{
-	if (*fd != -1)
-		close(*fd);
-	*fd = open (path, flags, 0664);
-}
+// void redir_fd_helper(int *fd, char *path, int flags)
+// {
+// 	if (*fd != -1)
+// 		close(*fd);
+// 	*fd = open (path, flags, 0664);
+// }
 
-void apply_redirects(t_ast *node, int *fd_in, int *fd_out)
-{
-	t_redir *tmp;
+// void apply_redirects(t_ast *node, int *fd_in, int *fd_out)
+// {
+// 	t_redir *tmp;
 
-	tmp = node->cmd->redir;
-	if (!node->cmd->redir || !node->cmd->redir->type)
-		return ;
-	while (tmp)
-	{
-		if (tmp->type == IN)
-			redir_fd_helper(fd_in, tmp->file, O_RDONLY);
-		else if (tmp->type == OUT)
-			redir_fd_helper(fd_out, tmp->file,
-				O_CREAT | O_WRONLY | O_TRUNC);
-		else if (tmp->type == APPEND)
-			redir_fd_helper(fd_out, tmp->file,
-				O_CREAT | O_WRONLY | O_APPEND);
-		tmp = tmp->next;
-	}
-	return ;
-}
+// 	tmp = node->cmd->redir;
+// 	if (!node->cmd->redir || !node->cmd->redir->type)
+// 		return ;
+// 	while (tmp)
+// 	{
+// 		if (tmp->type == IN)
+// 			redir_fd_helper(fd_in, tmp->file, O_RDONLY);
+// 		else if (tmp->type == OUT)
+// 			redir_fd_helper(fd_out, tmp->file,
+// 				O_CREAT | O_WRONLY | O_TRUNC);
+// 		else if (tmp->type == APPEND)
+// 			redir_fd_helper(fd_out, tmp->file,
+// 				O_CREAT | O_WRONLY | O_APPEND);
+// 		tmp = tmp->next;
+// 	}
+// 	return ;
+// }
 
 void error_handling(int	err)
 {
@@ -227,58 +225,58 @@ void error_handling(int	err)
 	//if (err == EXEC_NO_PATH)
 }
 
-char *env_join(char *key, char *value)
-{
-	int len1;
-	int len2;
-	char *res;
-	int i;
-	int	j;
+// char *env_join(char *key, char *value)
+// {
+// 	int len1;
+// 	int len2;
+// 	char *res;
+// 	int i;
+// 	int	j;
 
-	len1 = strlen(key);
-	len2 = strlen(value);
-	res = malloc(len1 + len2 + 2);
-	i = 0;
-	j = 0;
-	if (!res)
-		return NULL;
-	while (key[j])
-		res[i++] = key[j++];
-	res[i++] = '=';
-	j = 0;
-	while (value[j])
-		res[i++] = value[j++];
-	res[i] = '\0';
-	return res;
-}
+// 	len1 = strlen(key);
+// 	len2 = strlen(value);
+// 	res = malloc(len1 + len2 + 2);
+// 	i = 0;
+// 	j = 0;
+// 	if (!res)
+// 		return NULL;
+// 	while (key[j])
+// 		res[i++] = key[j++];
+// 	res[i++] = '=';
+// 	j = 0;
+// 	while (value[j])
+// 		res[i++] = value[j++];
+// 	res[i] = '\0';
+// 	return res;
+// }
 
-t_error make_env_execve(t_env **envpc, char ***array)
-{
-	size_t		size;
-	size_t		i;
-	t_env	*tmp;
+// t_error make_env_execve(t_env **envpc, char ***array)
+// {
+// 	size_t		size;
+// 	size_t		i;
+// 	t_env	*tmp;
 
-	tmp = (*envpc)->next;
-	size = ft_lstsize(*envpc);
-	i = 0;
-	(*array) = malloc((size + 1) * sizeof(char *));
-	if (!(*array))
-		return (MALLOC);
-	(*array)[size] = NULL;
-	while (tmp)
-	{
-		if (tmp->value)
-			(*array)[i] = env_join(tmp->key, tmp->value);
-		else
-			(*array)[i] = ft_strdup(tmp->key);
-		if (!(*array)[i])
-			return (MALLOC);
-		i++;
-		tmp = tmp->next;
-	}
-	(*array)[i] = NULL;
-	return(OK);
-}
+// 	tmp = (*envpc);
+// 	size = ft_lstsize(*envpc);
+// 	i = 0;
+// 	(*array) = malloc((size + 1) * sizeof(char *));
+// 	if (!(*array))
+// 		return (MALLOC);
+// 	(*array)[size] = NULL;
+// 	while (tmp)
+// 	{
+// 		if (tmp->value)
+// 			(*array)[i] = env_join(tmp->key, tmp->value);
+// 		else
+// 			(*array)[i] = ft_strdup(tmp->key);
+// 		if (!(*array)[i])
+// 			return (MALLOC);
+// 		i++;
+// 		tmp = tmp->next;
+// 	}
+// 	(*array)[i] = NULL;
+// 	return(OK);
+// }
 
 static void child_exec(t_ast *node, char **argv, int fd_in, int fd_out, char *exec, char **arr)
 {
@@ -299,6 +297,11 @@ static void child_exec(t_ast *node, char **argv, int fd_in, int fd_out, char *ex
 	printf("CoolCustomShell: %s: %s\n", exec, strerror(errno));
 	free(exec);
 	exit(126);
+}
+
+int	builtin_exec()
+{
+
 }
 
 int execute_cmd(t_ast *node, char **argv, t_env **envp, int fd_in, int fd_out)
@@ -340,26 +343,7 @@ int execute_cmd(t_ast *node, char **argv, t_env **envp, int fd_in, int fd_out)
 	}
 	exec = fork();
 	if (exec == 0)
-	{
 		child_exec(node, argv, fd_in, fd_out, executable, envp_array);
-		// signal(SIGQUIT, SIG_DFL);
-		// signal(SIGINT, SIG_DFL);
-		// apply_redirects(node, &fd_in, &fd_out);
-		// if (fd_in != STDIN_FILENO)
-		// {
-		// 	dup2(fd_in, STDIN_FILENO);
-		// 	close(fd_in);
-		// }
-		// if (fd_out != STDOUT_FILENO)
-		// {
-		// 	dup2(fd_out, STDOUT_FILENO);
-		// 	close(fd_out);
-		// }
-		// execve(executable, argv, envp_array);
-		// printf("CoolCustomShell: %s: %s\n", executable, strerror(errno));
-		// free(executable);
-		// exit(126);
-	}
 	waitpid(exec, &status, 0);
 	free(executable);
 	free_array(envp_array);
