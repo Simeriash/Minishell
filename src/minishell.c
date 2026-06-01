@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/01 11:20:59 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/01 11:25:39 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		if (cmd_minishell(cmd, envc, &ast))
 			continue ;
-		execute_tree(ast, &envc + 1, STDIN_FILENO, STDOUT_FILENO);
+		execute_tree(ast, &envc, STDIN_FILENO, STDOUT_FILENO);
 		free_ast(ast);
 	}
 	rl_clear_history();
