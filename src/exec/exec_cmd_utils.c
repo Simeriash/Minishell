@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 18:41:01 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/31 13:25:08 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/01 14:57:25 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,17 @@ void redir_fd_helper(int *fd, char *path, int flags)
 	if (*fd != -1)
 		close(*fd);
 	*fd = open (path, flags, 0664);
+	if (*fd < 0)
+	return ;
 }
 
 void apply_redirects(t_ast *node, int *fd_in, int *fd_out)
 {
 	t_redir *tmp;
 
-	tmp = node->cmd->redir;
 	if (!node->cmd->redir || !node->cmd->redir->type)
 		return ;
+	tmp = node->cmd->redir;
 	while (tmp)
 	{
 		if (tmp->type == IN)
