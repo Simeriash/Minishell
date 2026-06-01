@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:04:33 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/01 11:08:04 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/01 15:57:08 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,20 +84,20 @@ int	wait_pids(pid_t last_pid)
 	return (0);
 }
 
-int execute_pipe(t_ast *node, t_env **envp, int in_fd, int out_fd)
+int execute_pipe(t_ast *node, t_env **envp, t_fds *fds)
 {
 	int		current_in;
 	pid_t	last_pid;
 	int		ret;
 	t_ast	*head;
 
-	current_in = in_fd;
+	current_in = fds->fd_in;
 	head = node;
 	node = build_pipe(node, envp, &current_in);
 	last_pid = fork();
 	if (last_pid == 0)
 	{
-		ret = execute_tree(node, envp, current_in, out_fd);
+		ret = execute_tree(node, envp, current_in, fds->fd_out);
 		if (current_in != STDIN_FILENO)
 			close(current_in);
 		free_ast(head);
@@ -120,18 +120,18 @@ int execute_pipe(t_ast *node, t_env **envp, int in_fd, int out_fd)
 int execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd)
 {
 	int ret;
-	t_fds fds;
+	t_fds fds_in_out;
 
-	fds.fd[0] = in_fd;
-	fds.fd[1] = out_fd;
+	fds_in_out.fd_in = in_fd;
+	fds_in_out.fd_out = out_fd;
 	if (node->type == PIPE)
 	{
-		ret = execute_pipe(node, envp, in_fd, out_fd);
+		ret = execute_pipe(node, envp, &fds_in_out);
 		return (ret);
 	}
 	if (node->type == CMD)
 	{
-		ret = execute_cmd(node, node->cmd->args, envp, in_fd, out_fd);
+		ret = execute_cmd(node, node->cmd->args, envp, &fds_in_out);
 		return (ret);
 	}
 	return (0);
