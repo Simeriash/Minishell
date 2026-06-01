@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 11:37:57 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/06 10:40:14 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/01 12:35:32 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	shell_space(char *str, int *i)
 
 int	end_condition(char c)
 {
-	if (c == '\0' || ft_isspace(c) || c == '<' || c == '>' || c == '|')
+	if (c == '\0' || ft_isspace(c) || c == '<' || c == '>'
+		|| (c == '|' && c != '|'))
 		return (1);
 	return (0);
 }
