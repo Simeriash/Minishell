@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 12:41:20 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/01 11:10:20 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/01 15:26:28 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,20 +278,20 @@ void error_handling(int	err)
 // 	return(OK);
 // }
 
-static void child_exec(t_ast *node, char **argv, int fd_in, int fd_out, char *exec, char **arr)
+static void child_exec(t_ast *node, char **argv, t_fds *fds, char *exec, char **arr)
 {
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
-	apply_redirects(node, &fd_in, &fd_out);
-	if (fd_in != STDIN_FILENO)
+	apply_redirects(node, &fds->fd_in, &fds->fd_out);
+	if (fds->fd_in != STDIN_FILENO)
 	{
-		dup2(fd_in, STDIN_FILENO);
-		close(fd_in);
+		dup2(fds->fd_in, STDIN_FILENO);
+		close(fds->fd_in);
 	}
-	if (fd_out != STDOUT_FILENO)
+	if (fds->fd_out != STDOUT_FILENO)
 	{
-		dup2(fd_out, STDOUT_FILENO);
-		close(fd_out);
+		dup2(fds->fd_out, STDOUT_FILENO);
+		close(fds->fd_out);
 	}
 	execve(exec, argv, arr);
 	printf("CoolCustomShell: %s: %s\n", exec, strerror(errno));
@@ -299,20 +299,67 @@ static void child_exec(t_ast *node, char **argv, int fd_in, int fd_out, char *ex
 	exit(126);
 }
 
-int	builtin_exec(builtin_func func, char **args, t_env **env, t_ast *node)
+void	error_helper(t_ast *node)
 {
-	t_error	error;
-
-	error = func(args, env);
-	if (ft_strcmp("exit", args[0]) == 0)
-	{
-		free_ast(node);
-		exit(error);
-	}
-	return (error);
+	write(2, "Ghost\\>: ", ft_strlen("Ghost\\>: "));
+	write(2, node->cmd->redir->file, ft_strlen(node->cmd->redir->file));
+	write(2, ": ", 2);
+	write(2, strerror(errno), ft_strlen(strerror(errno)));
+	write(2, "\n", 1);
 }
 
-int execute_cmd(t_ast *node, char **argv, t_env **envp, int fd_in, int fd_out)
+int	execute_builtin(char **args, t_env **env, t_ast *node, t_fds *fds)
+{
+	builtin_func	func;
+	int			error;
+	int			saved_fd_in;
+	int			saved_fd_out;
+
+	func = get_builtin(args, env);
+	if (func)
+	{
+		saved_fd_in = dup(fds->fd_in);
+		saved_fd_out = dup(fds->fd_out);
+		apply_redirects(node, &fds->fd_in, &fds->fd_out);
+		dup2(saved_fd_in, STDIN_FILENO);
+		close(saved_fd_in);
+		if (fds->fd_in < 0)
+		{
+			error_helper(node);
+			close(saved_fd_out);
+			return (1);
+		}
+		error = func(args, env);
+		dup2(saved_fd_out, STDOUT_FILENO);
+		close(saved_fd_out);
+		if (fds->fd_in != STDIN_FILENO)
+			close (fds->fd_in);
+		if (fds->fd_out != STDOUT_FILENO)
+			close (fds->fd_out);
+		if (ft_strcmp("exit", args[0]) == 0)
+		{
+			free_ast(node);
+			exit(error);
+		}
+		return (1);
+	}
+	return (0);
+}
+
+// if (func)
+// 	{
+// 		error = func(argv, envp);
+// 		if (ft_strcmp("exit", argv[0]) == 0)
+// 		{
+// 			free_ast(node);
+// 			free_array(envp_array);
+// 			exit(error);
+// 		}
+// 		free_array(envp_array);
+// 		return (error);
+// 	}
+
+int execute_cmd(t_ast *node, char **argv, t_env **envp, t_fds *fds)
 {
 	char	*cmd;
 	char	*executable;
@@ -321,21 +368,22 @@ int execute_cmd(t_ast *node, char **argv, t_env **envp, int fd_in, int fd_out)
 	pid_t	exec;
 	int		status;
 	char	**envp_array;
-	builtin_func	func;
 
 	if (!argv)
 		return (0);
 	cmd = argv[0];
-	func = get_builtin(argv, envp);
-	if (func)
-	{
-		error = builtin_exec(func, argv, envp, node);
-		if (fd_in != STDIN_FILENO)
-			close (fd_in);
-		if (fd_out != STDOUT_FILENO)
-			close (fd_out);
-		return (error);
-	}
+	if (execute_builtin(argv, envp, node, fds))
+		return (OK);
+	// func = get_builtin(argv, envp);
+	// if (func)
+	// {
+	// 	error = builtin_exec(func, argv, envp, node);
+	// 	if (fd_in != STDIN_FILENO)
+	// 		close (fd_in);
+	// 	if (fd_out != STDOUT_FILENO)
+	// 		close (fd_out);
+	// 	return (error);
+	// }
 	error = make_env_execve((*envp)->next, &envp_array);
 	executable = find_executable(cmd, &err);
 	if (!executable)
@@ -349,7 +397,7 @@ int execute_cmd(t_ast *node, char **argv, t_env **envp, int fd_in, int fd_out)
 	}
 	exec = fork();
 	if (exec == 0)
-		child_exec(node, argv, fd_in, fd_out, executable, envp_array);
+		child_exec(node, argv, fds, executable, envp_array);
 	waitpid(exec, &status, 0);
 	free(executable);
 	free_array(envp_array);

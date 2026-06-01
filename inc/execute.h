@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:46:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/01 11:07:13 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/01 13:20:07 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ typedef enum e_exec_err
 
 typedef struct s_fds
 {
-	int	fd[2];
+	int	fd_in;
+	int	fd_out;
 }	t_fds;
 
 
@@ -82,7 +83,7 @@ typedef struct s_fds
 // 	struct s_tree	*right;
 // } t_tree;
 
-int execute_cmd(t_ast *node, char **argv, t_env **envp, int fd_in, int fd_out);
+int execute_cmd(t_ast *node, char **argv, t_env **envp, t_fds *fds);
 int execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd);
 void free_array(char **array);
 builtin_func	get_builtin(char **args, t_env **envpcpy);
