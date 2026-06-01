@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:46:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 12:10:54 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/01 11:07:13 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../src/libft/libft.h"
 # include "minishell.h"
 # include "builtins.h"
+# include "error.h"
 //# include <readline/readline.h>
 //# include <readline/history.h>
 # include <stdlib.h>
@@ -35,6 +36,12 @@ typedef enum e_exec_err
 	EXEC_NO_PATH,
 	EXEC_MALLOC_FAIL
 } t_exec_err;
+
+typedef struct s_fds
+{
+	int	fd[2];
+}	t_fds;
+
 
 // typedef enum {
 //   PIPE,
@@ -81,5 +88,15 @@ void free_array(char **array);
 builtin_func	get_builtin(char **args, t_env **envpcpy);
 t_ast *makenode(char *value);
 void free_tree(t_ast *node);
+
+void free_array(char **array);
+void apply_redirects(t_ast *node, int *fd_in, int *fd_out);
+void	cleanup_helper(char *fallback);
+
+char *create_candidate(char *cmd, char **paths, t_exec_err *err);
+char *create_exec_path(char *path, char *cmd);
+char **create_paths(t_exec_err *err);
+
+t_error make_env_execve(t_env *envpc, char ***array);
 
 #endif

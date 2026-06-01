@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:04:33 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 15:47:56 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/01 11:08:04 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,13 @@ t_ast *build_pipe(t_ast *node, t_env **envp, int *current_in)
 		{
 			close(fd[0]);
 			execute_tree(node->left, envp, *current_in, fd[1]);
-			// if (*current_in != STDIN_FILENO)
-			// 	close(*current_in);
-			close(fd[1]);
+			if (*current_in > -1 && *current_in != STDIN_FILENO)
+				close(*current_in);
+			if (fd[1] > -1)
+				close(fd[1]);
 			free_ast(head);
 			ft_free_envc(*envp);
-			exit(1);
+			exit(0);
 		}
 		close(fd[1]);
 		if (*current_in != STDIN_FILENO)
@@ -119,7 +120,10 @@ int execute_pipe(t_ast *node, t_env **envp, int in_fd, int out_fd)
 int execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd)
 {
 	int ret;
+	t_fds fds;
 
+	fds.fd[0] = in_fd;
+	fds.fd[1] = out_fd;
 	if (node->type == PIPE)
 	{
 		ret = execute_pipe(node, envp, in_fd, out_fd);

@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 12:10:54 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/05/29 18:46:43 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,44 +70,45 @@ static int	cd_executor(char *cd_input, t_env **envpcpy)
 	return (ret_val);
 }
 
-static	int	cd_to_home(t_env **envpcpy)
-{
-	char	*new;
-	int		ret_val;
+// static	int	cd_to_home(t_env **envpcpy)
+// {
+// 	char	*new;
+// 	int		ret_val;
 
-	new = find_env_var("HOME", envpcpy);
-	if (!new)
-	{
-		write(2, "cd: no such file or directory: HOME is not set.\n", 49);
-		return (-1);
-	}
-	ret_val = cd_executor(new, envpcpy);
-	return (ret_val);
-}
+// 	new = find_env_var("HOME", envpcpy);
+// 	if (!new)
+// 	{
+// 		write(2, "cd: no such file or directory: HOME is not set.\n", 49);
+// 		return (-1);
+// 	}
+// 	ret_val = cd_executor(new, envpcpy);
+// 	return (ret_val);
+// }
 
 int	ft_cd(char **args, t_env **envpcpy)
 {
-	char	*new;
+	// char	*new;
 	int		ret_val;
 
-	if (!args[1] || (args[1][0] == '~' && args[1][1] == '\0'))
-	{
-		ret_val = cd_to_home(envpcpy);
-		return (ret_val);
-	}
-	if (args[1][0] == '-' && args[1][1] == '\0')
-	{
-		new = find_env_var("OLDPWD", envpcpy);
-		if (!new || new[0] == '\0')
-		{
-			printf("bash: cd: OLDPWD not set\n");
-			return (-1);
-		}
-		ret_val = cd_executor(new, envpcpy);
-		if (ret_val == 0)
-			ft_pwd(args, envpcpy);
-		return (ret_val);
-	}
+	printf("%s\n", args[1]);
+	// if (!args[1] || (args[1][0] == '~' && args[1][1] == '\0'))
+	// {
+	// 	ret_val = cd_to_home(envpcpy);
+	// 	return (ret_val);
+	// }
+	// if (args[1][0] == '-' && args[1][1] == '\0')
+	// {
+	// 	new = find_env_var("OLDPWD", envpcpy);
+	// 	if (!new || new[0] == '\0')
+	// 	{
+	// 		printf("bash: cd: OLDPWD not set\n");
+	// 		return (-1);
+	// 	}
+	// 	ret_val = cd_executor(new, envpcpy);
+	// 	if (ret_val == 0)
+	// 		ft_pwd(args, envpcpy);
+	// 	return (ret_val);
+	// }
 	ret_val = cd_executor(args[1], envpcpy);
 	return (ret_val);
 }
