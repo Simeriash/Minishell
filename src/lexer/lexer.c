@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 09:38:57 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/01 12:30:56 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/01 14:46:16 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	looking_for_string(char *str, char **s, int *i)
 
 	start = *i;
 	state = NORMAL;
-	while (str[*i] != '\0' && ((state == NORMAL && !end_condition(str[*i]))
+	while (str[*i] != '\0' && ((state == NORMAL && !end_condition(str, i))
 			|| state == SIMPLE_QUOTE || state == DOUBLE_QUOTE))
 		state_condition(str[(*i)++], &state);
 	if (state != NORMAL)
