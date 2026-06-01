@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 12:41:20 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/31 21:00:16 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/01 11:10:20 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,9 +299,17 @@ static void child_exec(t_ast *node, char **argv, int fd_in, int fd_out, char *ex
 	exit(126);
 }
 
-int	builtin_exec()
+int	builtin_exec(builtin_func func, char **args, t_env **env, t_ast *node)
 {
+	t_error	error;
 
+	error = func(args, env);
+	if (ft_strcmp("exit", args[0]) == 0)
+	{
+		free_ast(node);
+		exit(error);
+	}
+	return (error);
 }
 
 int execute_cmd(t_ast *node, char **argv, t_env **envp, int fd_in, int fd_out)
@@ -317,21 +325,18 @@ int execute_cmd(t_ast *node, char **argv, t_env **envp, int fd_in, int fd_out)
 
 	if (!argv)
 		return (0);
-	error = make_env_execve(envp, &envp_array);
 	cmd = argv[0];
 	func = get_builtin(argv, envp);
 	if (func)
 	{
-		error = func(argv, envp);
-		if (ft_strcmp("exit", argv[0]) == 0)
-		{
-			free_ast(node);
-			free_array(envp_array);
-			exit(error);
-		}
-		free_array(envp_array);
+		error = builtin_exec(func, argv, envp, node);
+		if (fd_in != STDIN_FILENO)
+			close (fd_in);
+		if (fd_out != STDOUT_FILENO)
+			close (fd_out);
 		return (error);
 	}
+	error = make_env_execve((*envp)->next, &envp_array);
 	executable = find_executable(cmd, &err);
 	if (!executable)
 	{
@@ -339,6 +344,7 @@ int execute_cmd(t_ast *node, char **argv, t_env **envp, int fd_in, int fd_out)
 		if (!cmd)
 			cmd = "";
 		printf("CoolCustomShell: %s: command not found\n", cmd);
+		free_array(envp_array);
 		return (127);
 	}
 	exec = fork();
