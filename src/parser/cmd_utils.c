@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 15:39:34 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/30 09:30:04 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/03 16:45:51 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,16 @@ int	add_redir(t_redir **redir, t_token **token)
 	new_redir = malloc (sizeof(*new_redir));
 	if (!new_redir)
 		return (1);
-	new_redir->next = NULL;
 	if (!(*redir))
+	{
+		new_redir->next = NULL;
 		*redir = new_redir;
+	}
 	else
+	{
+		new_redir->next = (*redir)->next;
 		(*redir)->next = new_redir;
+	}
 	new_redir->type = (*token)->type;
 	if ((*token)->next && (*token)->next->type == WORD)
 	{

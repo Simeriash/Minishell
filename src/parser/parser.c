@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 13:01:42 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 16:24:53 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/03 17:07:55 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	search_suite(t_token *token_list, t_token *token, t_env *envc)
 	return (0);
 }
 
-int	search_heredoc(t_token *token_list, t_env *envc)
+static int	search_heredoc(t_token *token_list, t_env *envc)
 {
 	t_token	*token;
 
@@ -71,5 +71,11 @@ t_ast	*parser(t_token *token_list, t_env *envc)
 		return (NULL);
 	}
 	ast->token = token_list;
+	set_to_null(&ast);
+	if (pipe_error(ast))
+	{
+		free_ast(ast);
+		return (NULL);
+	}
 	return (ast);
 }

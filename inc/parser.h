@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/01 13:10:29 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/03 17:04:30 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include "error.h"
 
 # include <stdlib.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <errno.h>
 
 typedef struct s_arg
 {
@@ -45,5 +48,7 @@ int		add_arg(t_arg **arg, char *str);
 int		free_ast(t_ast *ast);
 void	free_cmd(t_cmd *cmd);
 void	free_struct(t_arg *arg, t_redir *redir);
+void	set_to_null(t_ast **ast);
+int		pipe_error(t_ast *ast);
 
 #endif
