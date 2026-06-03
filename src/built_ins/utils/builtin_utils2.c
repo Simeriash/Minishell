@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:29:14 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 10:16:10 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 14:55:17 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_env	*get_env_node(char *key, t_env **envpcpy)
 	if (!key)
 		return (NULL);
 	len = ft_strlen(key);
-	tmp = *envpcpy;
+	tmp = (*envpcpy)->next;
 	if (!tmp)
 		return (NULL);
 	while (tmp)
