@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 09:40:34 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 15:22:43 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/01 14:44:57 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef enum e_ret
 }	t_ret;
 
 void	shell_space(char *str, int *i);
-int		end_condition(char c);
+int		end_condition(char *str, int *i);
 void	state_condition(char c, t_state *state);
 
 /*====================linked_list====================*/
