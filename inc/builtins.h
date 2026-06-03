@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:29:23 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 14:03:05 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 10:21:41 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct s_export_inputs
 {
 	char			*key;
 	char			*value;
-	t_env		*target_node;
+	t_env			*target_node;
 }	t_export_inputs;
 
 typedef enum e_env_mode
@@ -52,30 +52,30 @@ typedef enum e_env_mode
 	ENV_APPEND
 }	t_env_mode;
 
-typedef int (*builtin_func)(char **args, t_env **envpcpy);
+typedef int	(*t_builtin_func)(char **args, t_env **envpcpy);
 
 typedef struct s_builtins
 {
-	char 			*cmd;
-	builtin_func	function;
+	char			*cmd;
+	t_builtin_func	function;
 }	t_builtins;
 
 int			ft_cd(char **args, t_env **envpcpy);
 int			ft_echo(char **args, t_env **envpcpy);
 int			ft_env(char **args, t_env **envpcpy);
-int			ft_exit(char **args , t_env **delete);
+int			ft_exit(char **args, t_env **delete);
 int			ft_export(char **args, t_env **envpcpy);
 int			ft_pwd(char **args, t_env **envpcpy);
 int			ft_unset(char **args, t_env **envpcpy);
 
-t_env	*ft_lstnew(char *newkey, char *newvalue);
+t_env		*ft_lstnew(char *newkey, char *newvalue);
 void		ft_lstaddback(t_env **lst, t_env *new);
-t_env	*ft_lstlast(t_env *lst);
+t_env		*ft_lstlast(t_env *lst);
 int			ft_lstsize(t_env *lst);
 int			ft_strcmp(const char *s1, const char *s2);
 
 char		*find_env_var(char *key, t_env **envpcpy);
-t_env	*get_env_node(char *key, t_env **envpcpy);
+t_env		*get_env_node(char *key, t_env **envpcpy);
 // int			change_env_var(char *key, char *value, t_env **envpcpy);
 
 int			create_new_export(char *key, char *value, t_env **envpcpy);

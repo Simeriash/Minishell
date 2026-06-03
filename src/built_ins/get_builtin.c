@@ -6,13 +6,13 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 08:45:02 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 10:12:05 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 10:21:01 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/builtins.h"
 
-builtin_func	get_builtin(char **args, t_env **envpcpy)
+t_builtin_func	get_builtin(char **args, t_env **envpcpy)
 {
 	int					i;
 	static t_builtins	func_array[] = {

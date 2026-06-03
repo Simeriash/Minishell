@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:46:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/01 13:20:07 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 10:21:01 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # include <unistd.h>
 # include <errno.h>
 # include <sys/stat.h>
-#include <signal.h>
+# include <signal.h>
 
 typedef enum e_exec_err
 {
@@ -35,14 +35,13 @@ typedef enum e_exec_err
 	EXEC_NOT_FOUND,
 	EXEC_NO_PATH,
 	EXEC_MALLOC_FAIL
-} t_exec_err;
+}	t_exec_err;
 
 typedef struct s_fds
 {
 	int	fd_in;
 	int	fd_out;
 }	t_fds;
-
 
 // typedef enum {
 //   PIPE,
@@ -72,7 +71,6 @@ typedef struct s_fds
 
 // }	t_cmd;
 
-
 // typedef struct s_tree
 // {
 // 	struct s_tree *head;
@@ -83,21 +81,21 @@ typedef struct s_fds
 // 	struct s_tree	*right;
 // } t_tree;
 
-int execute_cmd(t_ast *node, char **argv, t_env **envp, t_fds *fds);
-int execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd);
-void free_array(char **array);
-builtin_func	get_builtin(char **args, t_env **envpcpy);
-t_ast *makenode(char *value);
-void free_tree(t_ast *node);
+int				execute_cmd(t_ast *node, char **argv, t_env **envp, t_fds *fds);
+int				execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd);
+void			free_array(char **array);
+t_builtin_func	get_builtin(char **args, t_env **envpcpy);
+t_ast			*makenode(char *value);
+void			free_tree(t_ast *node);
 
-void free_array(char **array);
-void apply_redirects(t_ast *node, int *fd_in, int *fd_out);
-void	cleanup_helper(char *fallback);
+void			free_array(char **array);
+void			apply_redirects(t_ast *node, int *fd_in, int *fd_out);
+void			cleanup_helper(char *fallback);
 
-char *create_candidate(char *cmd, char **paths, t_exec_err *err);
-char *create_exec_path(char *path, char *cmd);
-char **create_paths(t_exec_err *err);
+char			*create_candidate(char *cmd, char **paths, t_exec_err *err);
+char			*create_exec_path(char *path, char *cmd);
+char			**create_paths(t_exec_err *err);
 
-t_error make_env_execve(t_env *envpc, char ***array);
+t_error			make_env_execve(t_env *envpc, char ***array);
 
 #endif
