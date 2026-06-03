@@ -12,6 +12,8 @@ OBJ_DIR = obj
 # Executable
 NAME = minishell
 
+USRPATH = $(shell pwd)
+
 # Sources
 SRCS = $(SRC_DIR)/minishell.c \
 	   $(BUILTINS_DIR)/get_builtin.c \
@@ -65,6 +67,6 @@ fclean: clean
 re: fclean all
 
 valgrind:
-	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes --suppressions=readline.supp ./minishell
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --trace-children=yes --suppressions=$(USRPATH)/readline.supp ./minishell
 
 .PHONY: all clean fclean re valgrind
