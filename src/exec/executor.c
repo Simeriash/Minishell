@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:04:33 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/01 15:57:08 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 08:56:23 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_ast *build_pipe(t_ast *node, t_env **envp, int *current_in)
 				close(fd[1]);
 			free_ast(head);
 			ft_free_envc(*envp);
+			rl_clear_history();
 			exit(0);
 		}
 		close(fd[1]);
@@ -102,6 +103,7 @@ int execute_pipe(t_ast *node, t_env **envp, t_fds *fds)
 			close(current_in);
 		free_ast(head);
 		ft_free_envc(*envp);
+		rl_clear_history();
 		exit(ret);
 	}
 	if (current_in != STDIN_FILENO)
