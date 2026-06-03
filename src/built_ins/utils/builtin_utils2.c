@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:29:14 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/29 17:47:16 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 09:29:31 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*find_env_var(char *key, t_env **envpcpy)
 	if (!key)
 		return (NULL);
 	len = ft_strlen(key);
-	tmp = *envpcpy;
+	tmp = (*envpcpy)->next;
 	if (!tmp)
 		return (NULL);
 	while (tmp)
