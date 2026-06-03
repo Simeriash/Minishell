@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 12:41:20 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 13:21:07 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 15:47:07 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,6 +298,7 @@ static void	child_exec(t_ast *node, char **argv, t_fds *fds, char *exec,
 	rl_clear_history();
 	printf("CoolCustomShell: %s: %s\n", exec, strerror(errno));
 	free(exec);
+	free_array(arr);
 	exit(126);
 }
 
