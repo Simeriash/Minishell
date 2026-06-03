@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:29:14 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 09:29:31 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 10:16:10 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,9 @@
 
 char	*find_env_var(char *key, t_env **envpcpy)
 {
-	// int			i;
 	int			len;
-	t_env	*tmp;
+	t_env		*tmp;
 
-	// i = 0;
 	if (!key)
 		return (NULL);
 	len = ft_strlen(key);
@@ -36,11 +34,9 @@ char	*find_env_var(char *key, t_env **envpcpy)
 
 t_env	*get_env_node(char *key, t_env **envpcpy)
 {
-	// int			i;
 	int			len;
-	t_env	*tmp;
+	t_env		*tmp;
 
-	// i = 0;
 	if (!key)
 		return (NULL);
 	len = ft_strlen(key);
@@ -73,4 +69,3 @@ void	print_error(char *cmd, char *bad_input, int err)
 	write(2, "\n", 1);
 	return ;
 }
-

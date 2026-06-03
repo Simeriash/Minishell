@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 08:45:02 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 12:14:42 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 10:12:05 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,21 @@
 
 builtin_func	get_builtin(char **args, t_env **envpcpy)
 {
-	static t_builtins func_array[] =
-	{
-		{"cd", ft_cd},
-		{"echo", ft_echo},
-		{"env", ft_env},
-		{"exit", ft_exit},
-		{"export", ft_export},
-		{"pwd", ft_pwd},
-		{"unset", ft_unset},
-		{NULL, NULL}
+	int					i;
+	static t_builtins	func_array[] = {
+	{"cd", ft_cd},
+	{"echo", ft_echo},
+	{"env", ft_env},
+	{"exit", ft_exit},
+	{"export", ft_export},
+	{"pwd", ft_pwd},
+	{"unset", ft_unset},
+	{NULL, NULL}
 	};
-	int	i;
 
 	(void)envpcpy;
 	i = 0;
-	while(func_array[i].cmd)
+	while (func_array[i].cmd)
 	{
 		if (ft_strcmp(args[0], func_array[i].cmd) == 0)
 			return (func_array[i].function);
