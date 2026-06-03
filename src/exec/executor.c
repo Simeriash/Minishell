@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:04:33 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 11:10:55 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 15:00:08 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	execute_pipe(t_ast *node, t_env **envp, t_fds *fds)
 		ret_val = execute_tree(node, envp, current_in, fds->fd_out);
 		if (current_in != STDIN_FILENO)
 			close(current_in);
-		clean_exit(node, envp, ret_val);
+		clean_exit(head, envp, ret_val);
 	}
 	if (current_in != STDIN_FILENO)
 		close(current_in);
