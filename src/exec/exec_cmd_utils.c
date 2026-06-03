@@ -6,14 +6,14 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 18:41:01 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/01 14:57:25 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 13:43:10 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
 #include "../../inc/execute.h"
 
-void free_array(char **array) //util
+void	free_array(char **array) //util
 {
 	int	i;
 
@@ -48,18 +48,68 @@ void	cleanup_helper(char *fallback)
 	return ;
 }
 
-void redir_fd_helper(int *fd, char *path, int flags)
+void	redir_fd_helper(int *fd, char *path, int flags)
 {
+	int	new_fd;
+
+	new_fd = open (path, flags, 0664);
+	if (new_fd < 0)
+	{
+		*fd = -1;
+		return ;
+	}
 	if (*fd != -1)
 		close(*fd);
-	*fd = open (path, flags, 0664);
-	if (*fd < 0)
+	*fd = new_fd;
 	return ;
 }
 
-void apply_redirects(t_ast *node, int *fd_in, int *fd_out)
+/*
+	int apply_redirects(t_ast *node, int *fd_in, int *fd_out)
 {
-	t_redir *tmp;
+    t_redir *tmp;
+    int in;
+    int out;
+
+    if (!node->cmd->redir)
+        return (0);
+
+    in = STDIN_FILENO;
+    out = STDOUT_FILENO;
+
+    tmp = node->cmd->redir;
+    while (tmp)
+    {
+        if (tmp->type == IN)
+            redir_fd_helper(&in, tmp->file, O_RDONLY);
+        else if (tmp->type == OUT)
+            redir_fd_helper(&out, tmp->file,
+                O_CREAT | O_WRONLY | O_TRUNC);
+        else if (tmp->type == APPEND)
+            redir_fd_helper(&out, tmp->file,
+                O_CREAT | O_WRONLY | O_APPEND);
+
+        tmp = tmp->next;
+    }
+
+    if (in < 0 || out < 0)
+    {
+        if (in >= 0 && in != STDIN_FILENO)
+            close(in);
+        if (out >= 0 && out != STDOUT_FILENO)
+            close(out);
+        return (-1);
+    }
+
+    *fd_in = in;
+    *fd_out = out;
+    return (0);
+}
+*/
+
+void	apply_redirects(t_ast *node, int *fd_in, int *fd_out)
+{
+	t_redir	*tmp;
 
 	if (!node->cmd->redir || !node->cmd->redir->type)
 		return ;
