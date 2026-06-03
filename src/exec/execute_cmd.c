@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 12:41:20 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 08:55:27 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 11:11:03 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@
 // 	return (fallback);
 // }
 
-char *find_executable(char *cmd, t_exec_err *err)
+char	*find_executable(char *cmd, t_exec_err *err)
 {
 	char	**paths;
 	char	*ret;
@@ -174,8 +174,6 @@ char *find_executable(char *cmd, t_exec_err *err)
 	free_array(paths);
 	return (ret);
 }
-
-
 
 /*
 	Code below: Replace argv with node->args. Remove char **argv from the
@@ -215,14 +213,13 @@ char *find_executable(char *cmd, t_exec_err *err)
 // 	return ;
 // }
 
-void error_handling(int	err)
+void	error_handling(int err)
 {
 	if (err == EXEC_MALLOC_FAIL)
 	{
 		write(2, "Malloc error.", 13);
 		exit(-1);
 	}
-	//if (err == EXEC_NO_PATH)
 }
 
 // char *env_join(char *key, char *value)
@@ -278,7 +275,8 @@ void error_handling(int	err)
 // 	return(OK);
 // }
 
-static void child_exec(t_ast *node, char **argv, t_fds *fds, char *exec, char **arr)
+static void	child_exec(t_ast *node, char **argv, t_fds *fds, char *exec,
+																	char **arr)
 {
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
@@ -311,10 +309,10 @@ void	error_helper(t_ast *node)
 
 int	execute_builtin(char **args, t_env **env, t_ast *node, t_fds *fds)
 {
-	builtin_func	func;
-	int			error;
-	int			saved_fd_in;
-	int			saved_fd_out;
+	t_builtin_func	func;
+	int				error;
+	int				saved_fd_in;
+	int				saved_fd_out;
 
 	func = get_builtin(args, env);
 	if (func)
@@ -360,31 +358,21 @@ int	execute_builtin(char **args, t_env **env, t_ast *node, t_fds *fds)
 // 		return (error);
 // 	}
 
-int execute_cmd(t_ast *node, char **argv, t_env **envp, t_fds *fds)
+int	execute_cmd(t_ast *node, char **argv, t_env **envp, t_fds *fds)
 {
-	char	*cmd;
-	char	*executable;
+	char		*cmd;
+	char		*executable;
 	t_exec_err	err;
-	t_error	error;
-	pid_t	exec;
-	int		status;
-	char	**envp_array;
+	t_error		error;
+	pid_t		exec;
+	int			status;
+	char		**envp_array;
 
 	if (!argv)
 		return (0);
 	cmd = argv[0];
 	if (execute_builtin(argv, envp, node, fds))
 		return (OK);
-	// func = get_builtin(argv, envp);
-	// if (func)
-	// {
-	// 	error = builtin_exec(func, argv, envp, node);
-	// 	if (fd_in != STDIN_FILENO)
-	// 		close (fd_in);
-	// 	if (fd_out != STDOUT_FILENO)
-	// 		close (fd_out);
-	// 	return (error);
-	// }
 	error = make_env_execve((*envp)->next, &envp_array);
 	executable = find_executable(cmd, &err);
 	if (!executable)
@@ -405,6 +393,11 @@ int execute_cmd(t_ast *node, char **argv, t_env **envp, t_fds *fds)
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGQUIT)
+			write(2, "Quit", 4);
+		write(2, "\n", 1);
 		return (128 + WTERMSIG(status));
+	}
 	return (0);
 }

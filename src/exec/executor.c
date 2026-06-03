@@ -6,32 +6,27 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:04:33 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 08:56:23 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 11:10:55 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/execute.h"
 #include "../../inc/parser.h"
 
-// void free_tree(t_tree *node);
+void	clean_exit(t_ast *node, t_env **env, int ret)
+{
+	free_ast(node);
+	ft_free_envc(*env);
+	rl_clear_history();
+	exit(ret);
+}
 
-// int my_strcmp(const char *s1, const char *s2)
-// {
-//     int i = 0;
-
-//     while (s1[i] && s2[i] && s1[i] == s2[i])
-//         i++;
-
-//     return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-// }
-
-t_ast *build_pipe(t_ast *node, t_env **envp, int *current_in)
+t_ast	*build_pipe(t_ast *node, t_env **envp, int *current_in)
 {
 	int		fd[2];
+	int		ret;
 	pid_t	pid;
-	t_ast	*head;
 
-	head = node;
 	while (node->type == PIPE)
 	{
 		pipe(fd);
@@ -39,15 +34,12 @@ t_ast *build_pipe(t_ast *node, t_env **envp, int *current_in)
 		if (pid == 0)
 		{
 			close(fd[0]);
-			execute_tree(node->left, envp, *current_in, fd[1]);
+			ret = execute_tree(node->left, envp, *current_in, fd[1]);
 			if (*current_in > -1 && *current_in != STDIN_FILENO)
 				close(*current_in);
 			if (fd[1] > -1)
 				close(fd[1]);
-			free_ast(head);
-			ft_free_envc(*envp);
-			rl_clear_history();
-			exit(0);
+			clean_exit(node, envp, ret);
 		}
 		close(fd[1]);
 		if (*current_in != STDIN_FILENO)
@@ -69,7 +61,7 @@ int	wait_pids(pid_t last_pid)
 	{
 		pid = wait(&status);
 		if (pid <= 0)
-			break;
+			break ;
 		if (pid == last_pid)
 			ret_val = status;
 	}
@@ -78,18 +70,18 @@ int	wait_pids(pid_t last_pid)
 	if (WIFSIGNALED(ret_val))
 	{
 		if (WTERMSIG(ret_val) == SIGQUIT)
-			write(2, "Quit\n", 6);
-		dprintf(2 , "\n");
+			write(2, "Quit", 4);
+		write(2, "\n", 1);
 		return (128 + WTERMSIG(ret_val));
 	}
 	return (0);
 }
 
-int execute_pipe(t_ast *node, t_env **envp, t_fds *fds)
+int	execute_pipe(t_ast *node, t_env **envp, t_fds *fds)
 {
 	int		current_in;
 	pid_t	last_pid;
-	int		ret;
+	int		ret_val;
 	t_ast	*head;
 
 	current_in = fds->fd_in;
@@ -98,31 +90,28 @@ int execute_pipe(t_ast *node, t_env **envp, t_fds *fds)
 	last_pid = fork();
 	if (last_pid == 0)
 	{
-		ret = execute_tree(node, envp, current_in, fds->fd_out);
+		ret_val = execute_tree(node, envp, current_in, fds->fd_out);
 		if (current_in != STDIN_FILENO)
 			close(current_in);
-		free_ast(head);
-		ft_free_envc(*envp);
-		rl_clear_history();
-		exit(ret);
+		clean_exit(node, envp, ret_val);
 	}
 	if (current_in != STDIN_FILENO)
 		close(current_in);
-	ret = wait_pids(last_pid);
-	if (WIFSIGNALED(ret))
+	ret_val = wait_pids(last_pid);
+	if (WIFSIGNALED(ret_val))
 	{
-		if (WTERMSIG(ret) == SIGQUIT)
-			dprintf(2, "Quit");
-		dprintf(2, "\n");
-		return (128 + WTERMSIG(ret));
+		if (WTERMSIG(ret_val) == SIGQUIT)
+			write(2, "Quit", 4);
+		write(2, "\n", 1);
+		return (128 + WTERMSIG(ret_val));
 	}
-	return (ret);
+	return (ret_val);
 }
 
-int execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd)
+int	execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd)
 {
-	int ret;
-	t_fds fds_in_out;
+	int		ret;
+	t_fds	fds_in_out;
 
 	fds_in_out.fd_in = in_fd;
 	fds_in_out.fd_out = out_fd;
