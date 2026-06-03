@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/29 18:46:43 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 09:47:32 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,27 +70,35 @@ static int	cd_executor(char *cd_input, t_env **envpcpy)
 	return (ret_val);
 }
 
-// static	int	cd_to_home(t_env **envpcpy)
-// {
-// 	char	*new;
-// 	int		ret_val;
+static	int	cd_to_home(t_env **envpcpy)
+{
+	char	*new;
+	int		ret_val;
 
-// 	new = find_env_var("HOME", envpcpy);
-// 	if (!new)
-// 	{
-// 		write(2, "cd: no such file or directory: HOME is not set.\n", 49);
-// 		return (-1);
-// 	}
-// 	ret_val = cd_executor(new, envpcpy);
-// 	return (ret_val);
-// }
+	new = find_env_var("HOME", envpcpy);
+	if (!new)
+	{
+		write(2, "Ghost\\>: ", ft_strlen("Ghost\\>: "));
+		write(2, "cd", ft_strlen("cd"));
+		write(2, ": ", 2);
+		write(2, "HOME not set", ft_strlen("HOME not set"));
+		write(2, "\n", 1);
+		return (0);
+	}
+	ret_val = cd_executor(new, envpcpy);
+	return (ret_val);
+}
 
 int	ft_cd(char **args, t_env **envpcpy)
 {
 	// char	*new;
 	int		ret_val;
 
-	printf("%s\n", args[1]);
+	if (!args[1])
+	{
+		ret_val = cd_to_home(envpcpy);
+		return (ret_val);
+	}
 	// if (!args[1] || (args[1][0] == '~' && args[1][1] == '\0'))
 	// {
 	// 	ret_val = cd_to_home(envpcpy);
