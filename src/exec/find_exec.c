@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/31 13:20:21 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/31 13:26:55 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/03 15:32:37 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	get_candidate_type(struct stat *st)
 	return (2);
 }
 
-char **create_paths(t_exec_err *err)
+char	**create_paths(t_exec_err *err)
 {
 	char	*path;
 	char	**ret;
@@ -42,10 +42,10 @@ char **create_paths(t_exec_err *err)
 	return (ret);
 }
 
-char *create_exec_path(char *path, char *cmd)
+char	*create_exec_path(char *path, char *cmd)
 {
-	char *tmp;
-	char *ret;
+	char	*tmp;
+	char	*ret;
 
 	tmp = ft_strjoin(path, "/");
 	if (!tmp)
@@ -57,7 +57,7 @@ char *create_exec_path(char *path, char *cmd)
 	return (ret);
 }
 
-char *handle_candidate(char *path, char *cmd, char *f_b, t_exec_err *err)
+char	*handle_candidate(char *path, char *cmd, char *f_b, t_exec_err *err)
 {
 	char	*ret;
 
@@ -71,31 +71,30 @@ char *handle_candidate(char *path, char *cmd, char *f_b, t_exec_err *err)
 	return (ret);
 }
 
-char *set_fallback_path(int type, char *candidate, char *fallback)
+char	*set_fallback_path(int type, char *candidate, char *fallback)
 {
-	struct stat st;
-	int fallback_type;
+	struct stat	st;
+	int			fallback_type;
 
 	if (!fallback)
-		return candidate;
+		return (candidate);
 	if (stat(fallback, &st) == 0)
 		fallback_type = get_candidate_type(&st);
 	else
 	{
 		free(fallback);
-		return candidate;
+		return (candidate);
 	}
 	if (type < fallback_type)
 	{
 		free(fallback);
-		return candidate;
+		return (candidate);
 	}
-
 	free(candidate);
-	return fallback;
+	return (fallback);
 }
 
-char *create_candidate(char *cmd, char **paths, t_exec_err *err)
+char	*create_candidate(char *cmd, char **paths, t_exec_err *err)
 {
 	struct stat	st;
 	char		*candidate;
