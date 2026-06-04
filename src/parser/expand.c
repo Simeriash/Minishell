@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/04 11:43:47 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/04 17:46:44 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,11 @@ char	*check_new_value(char *value, t_env *envc, int i, int *j)
 	new_value = NULL;
 	if (value[i] == '?')
 	{
-		// new_value = retour du status de la dernière cmd;
+		new_value = check_key("___status", envc);
+		if (!new_value)
+			return (NULL);
 	}
-	else if ((value[i] == '_' && (ft_isspace(value[*j])
-				|| value[*j] == '\0'))
+	else if ((value[i] == '_' && (ft_isspace(value[*j]) || value[*j] == '\0'))
 		|| (!ft_isalpha(value[i]) && value[i] != '_'))
 	{
 		new_value = malloc(sizeof(*new_value));
@@ -67,7 +68,7 @@ static	int	next_expander(t_token *token, t_env *envc, int *i, int *j)
 	int		len;
 
 	new_value = check_new_value(token->value, envc, *i, j);
-	if (new_value && change_value(&token->value, new_value, *i, *j))
+	if (!new_value || change_value(&token->value, new_value, *i, *j))
 		return (1);
 	token->type = EXPAND;
 	len = ft_strlen(new_value);

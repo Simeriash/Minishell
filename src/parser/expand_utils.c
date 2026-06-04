@@ -6,13 +6,13 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 16:46:10 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/16 09:39:23 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/04 17:41:24 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
 
-static char	*check_key(char *key, t_env *envc)
+char	*check_key(char *key, t_env *envc)
 {
 	t_env	*tmp;
 	char	*str;

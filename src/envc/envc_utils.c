@@ -6,13 +6,13 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 14:46:00 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/28 15:42:20 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/04 17:49:48 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/envc.h"
 
-static t_env	*check_value(t_env *envc, char *key)
+static t_env	*check_key(t_env *envc, char *key)
 {
 	t_env	*tmp;
 
@@ -43,7 +43,7 @@ static int	init_env_node(t_env *envc, char *var, char *value)
 	char	*new_value;
 	char	*key;
 
-	tmp = check_value(envc, var);
+	tmp = check_key(envc, var);
 	new_value = ft_strdup(value);
 	if (!(new_value))
 		return (1);
@@ -66,6 +66,25 @@ static int	init_env_node(t_env *envc, char *var, char *value)
 	return (0);
 }
 
+static int	init_status(t_env *envc)
+{
+	char	*key;
+	char	*value;
+
+	key = ft_strdup("___status");
+	if (!key)
+		return (1);
+	value = ft_strdup("");
+	if (!value)
+	{
+		free(key);
+		return (1);
+	}
+	if (add_after_envc(envc, key, value))
+		return (1);
+	return (0);
+}
+
 int	init_envc(t_env *envc)
 {
 	t_env	*tmp;
@@ -80,8 +99,10 @@ int	init_envc(t_env *envc)
 		return (1);
 	}
 	free(new_pwd);
-	tmp = check_value(envc, "SHLVL");
+	tmp = check_key(envc, "SHLVL");
 	if (tmp)
 		(tmp->value[0])++;
+	if (init_status(envc))
+		return (1);
 	return (0);
 }

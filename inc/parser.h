@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/04 15:19:28 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/04 17:37:01 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int		expand(t_token *token_list, t_env *envc);
 char	*check_new_value(char *value, t_env *envc, int i, int *j);
 int		change_value(char **value, char *new_value, int start, int end);
 char	*check_env(char *value, t_env *envc, int i, int *j);
+char	*check_key(char *key, t_env *envc);
 int		more_token(t_token **token);
 void	delete_quotes(t_token *token_list);
 
