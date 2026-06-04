@@ -6,24 +6,25 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 13:42:36 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/03 16:31:40 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/04 15:24:24 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
 
-void	set_to_null(t_ast **ast)
+void	ast_init(t_ast **ast, t_ast *init_ast)
 {
 	if ((*ast)->left)
-		set_to_null(&(*ast)->left);
+		ast_init(&(*ast)->left, init_ast);
 	if ((*ast)->cmd && !(*ast)->cmd->args && !(*ast)->cmd->redir)
 	{
 		free((*ast)->cmd);
 		free(*ast);
 		*ast = NULL;
 	}
+	(*ast)->ast = init_ast;
 	if ((*ast)->right)
-		set_to_null(&(*ast)->right);
+		ast_init(&(*ast)->right, init_ast);
 }
 
 static int	redir_out(t_ast *ast, t_redir *redir)

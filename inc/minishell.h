@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/14 13:43:26 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 16:25:11 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/04 15:20:51 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_cmd
 typedef struct s_ast
 {
 	t_token			*token;
+	struct s_ast	*ast;
 	t_type			type;
 	t_cmd			*cmd;
 	struct s_ast	*left;

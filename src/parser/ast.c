@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 14:51:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 15:24:44 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/04 15:22:50 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_ast	*init_ast(t_type type, t_cmd *cmd, t_ast *left, t_ast *right)
 		return (NULL);
 	}
 	ast->token = NULL;
+	ast->ast = NULL;
 	ast->type = type;
 	ast->cmd = cmd;
 	ast->left = left;
