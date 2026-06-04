@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/31 13:20:21 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 15:32:37 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/04 11:26:01 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,24 @@ char	*set_fallback_path(int type, char *candidate, char *fallback)
 	free(candidate);
 	return (fallback);
 }
+
+// char	*process_candidate(char *candidate, char *fallback, t_exec_err *err)
+// {
+// 	struct stat	st;
+// 	int		type;
+
+// 	if (stat(candidate, &st) != 0)
+// 	{
+// 		free(candidate);
+// 		return (fallback);
+// 	}
+// 	type = get_candidate_type(&st);
+// 	if (type == 0)
+// 	{
+// 		cleanup_helper(fallback);
+// 		return (candidate);
+// 	}
+// }
 
 char	*create_candidate(char *cmd, char **paths, t_exec_err *err)
 {
