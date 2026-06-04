@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 12:41:20 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 15:47:07 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/04 11:26:28 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,15 +324,19 @@ int	execute_builtin(char **args, t_env **env, t_ast *node, t_fds *fds)
 		saved_fd_in = dup(fds->fd_in);
 		saved_fd_out = dup(fds->fd_out);
 		apply_redirects(node, &fds->fd_in, &fds->fd_out);
-		dup2(saved_fd_in, STDIN_FILENO);
-		close(saved_fd_in);
 		if (fds->fd_in < 0)
 		{
 			error_helper(node);
 			close(saved_fd_out);
 			return (1);
 		}
+		if (fds->fd_in != STDIN_FILENO)
+			dup2(fds->fd_in, STDIN_FILENO);
+		if (fds->fd_out != STDOUT_FILENO)
+			dup2(fds->fd_out, STDOUT_FILENO);
 		error = func(args, env);
+		dup2(saved_fd_in, STDIN_FILENO);
+		close(saved_fd_in);
 		dup2(saved_fd_out, STDOUT_FILENO);
 		close(saved_fd_out);
 		if (fds->fd_in != STDIN_FILENO)

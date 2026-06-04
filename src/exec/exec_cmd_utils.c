@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 18:41:01 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 13:43:10 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/04 10:05:03 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	redir_fd_helper(int *fd, char *path, int flags)
 		*fd = -1;
 		return ;
 	}
-	if (*fd != -1)
+	if (*fd > STDERR_FILENO)
 		close(*fd);
 	*fd = new_fd;
 	return ;
@@ -124,6 +124,8 @@ void	apply_redirects(t_ast *node, int *fd_in, int *fd_out)
 		else if (tmp->type == APPEND)
 			redir_fd_helper(fd_out, tmp->file,
 				O_CREAT | O_WRONLY | O_APPEND);
+		else if (tmp->type == HEREDOC)
+			redir_fd_helper(fd_in, tmp->file, O_RDONLY);
 		tmp = tmp->next;
 	}
 	return ;
