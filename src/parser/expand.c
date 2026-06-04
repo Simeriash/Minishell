@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 15:24:56 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/04 11:43:47 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,14 +111,13 @@ int	expand(t_token *token_list, t_env *envc)
 	tmp = token_list->next;
 	while (tmp != NULL)
 	{
-		if (tmp->type == WORD)
+		if (tmp->type == HEREDOC && tmp->next)
+			tmp = tmp->next;
+		else if ((tmp->type == WORD) && (expander(tmp, envc)
+				|| (tmp->type == EXPAND && more_token(&tmp))))
 		{
-			if (expander(tmp, envc)
-				|| (tmp->type == EXPAND && more_token(&tmp)))
-			{
-				error_parser(token_list, MALLOC);
-				return (1);
-			}
+			error_parser(token_list, MALLOC);
+			return (1);
 		}
 		tmp = tmp->next;
 	}
