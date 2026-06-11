@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 15:22:13 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 12:33:33 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/11 08:48:33 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ static t_env	**create_env_array(int size, t_env **envpcpy)
 {
 	t_env	**array;
 	t_env	*tmp;
-	int			i;
+	int		i;
 
 	i = 0;
-	tmp = *envpcpy;
+	tmp = (*envpcpy)->next;
 	array = malloc(((size + 1) * sizeof(t_env *)));
 	if (!array)
 		return (NULL);
@@ -35,9 +35,9 @@ static t_env	**create_env_array(int size, t_env **envpcpy)
 
 static void	sort_env_array(t_env **arr, int size)
 {
-	int			i;
-	int			min_index;
-	int			j;
+	int		i;
+	int		min_index;
+	int		j;
 	t_env	*tmp;
 
 	i = 0;
@@ -61,46 +61,49 @@ static void	sort_env_array(t_env **arr, int size)
 	}
 }
 
-static void	print_env_array(t_env **array, int size) // FROM VOID TO T_ERRORS
+static int	print_env_array(t_env **array, int size)
 {
 	int	i;
-	//INT ERROR;
+	int	error;
 
 	i = 0;
 	while (i < size)
 	{
-		printf("declare -x %s", array[i]->key); // ADD ERROR =
-		// IF (ERROR < 0)
-		//	RETURN (WRITE_ERROR);
+		error = printf("declare -x %s", array[i]->key);
+		if (error < 0)
+			return (1);
 		if (array[i]->value)
-		//{
-			printf("=\"%s\"", array[i]->value); // ADD ERROR =
-			// IF (ERROR < 0)
-			//	RETURN (WRITE_ERROR);
-		//}
-		printf("\n"); // ADD ERROR =
-		//IF (ERROR < 0)
-		//	RETURN (WRITE_ERROR);
+		{
+			error = printf("=\"%s\"", array[i]->value);
+			if (error < 0)
+				return (1);
+		}
+		error = printf("\n");
+		if (error < 0)
+			return (1);
 		i++;
 	}
-	//RETURN (SUCCESS);
+	return (0);
 }
 
-int	print_env_in_alpha_order(t_env **envpcpy) // FROM INT TO T_ERRORS
+int	print_env_in_alpha_order(t_env **envpcpy)
 {
 	t_env	**env_array;
-	int			size;
-	//T_ERRORS ERROR;
+	int		size;
+	int		error;
+	t_env	*start;
 
-	// ERROR = SUCCESS;
-	size = ft_lstsize(*envpcpy);
+	start = (*envpcpy)->next;
+	size = ft_lstsize(start);
 	if (size == 0)
-		return (0); // NULL ARG
+		return (1);
 	env_array = create_env_array(size, envpcpy);
 	if (!env_array)
-		return (-1); // MALLOC FAIL
+		return (1);
 	sort_env_array(env_array, size);
-	print_env_array(env_array, size); // ADD ERROR =
+	error = print_env_array(env_array, size);
+	if (error != 0)
+		return (error);
 	free(env_array);
-	return (0); // RETURN (ERROR);
+	return (0);
 }

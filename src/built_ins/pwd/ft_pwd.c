@@ -6,13 +6,13 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 12:59:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 12:10:54 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/11 08:48:09 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	ft_pwd(char **args, t_env **envpcpy) // FROM INT TO T_ERRORS
+int	ft_pwd(char **args, t_env **envpcpy)
 {
 	char	*cwd;
 	char	*w_dir;
@@ -26,18 +26,16 @@ int	ft_pwd(char **args, t_env **envpcpy) // FROM INT TO T_ERRORS
 		if (!w_dir)
 		{
 			ret_val = write(2, "PWD is unset\n", 14);
-			if (ret_val < 0)
-				return (ret_val); // WRITE FAIL
-			return (-1); // UNSET ENV
+			return (1);
 		}
 		ret_val = printf("%s\n", w_dir);
 		if (ret_val < 0)
-			return (ret_val); // WRITE FAIL
-		return (0); // SUCCESS
+			return (1);
+		return (0);
 	}
 	ret_val = printf("%s\n", cwd);
 	if (ret_val < 0)
-		return (ret_val); // WRITE FAIL
+		return (1);
 	free(cwd);
-	return (0); // SUCCESS
+	return (0);
 }

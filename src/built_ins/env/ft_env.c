@@ -6,20 +6,20 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 15:10:38 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 12:10:54 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/11 08:49:03 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	ft_env(char **args, t_env **envpcpy) // FROM INT TO T_ERRORS
+int	ft_env(char **args, t_env **envpcpy)
 {
 	t_env	*tmp;
-	int			ret_val;
+	int		ret_val;
 
 	(void)args;
 	if (!envpcpy)
-		return (1); // NULL_ARG
+		return (1);
 	tmp = *envpcpy;
 	while (tmp)
 	{
@@ -27,9 +27,9 @@ int	ft_env(char **args, t_env **envpcpy) // FROM INT TO T_ERRORS
 		{
 			ret_val = printf("%s=%s\n", tmp->key, tmp->value);
 			if (ret_val < 0)
-				return (-1); // WRITE ERROR
+				return (1);
 		}
 		tmp = tmp->next;
 	}
-	return (0); // SUCCESS
+	return (0);
 }
