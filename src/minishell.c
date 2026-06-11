@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/03 11:15:22 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/11 14:36:43 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	set_signal_action(int i)
 	sigaction(SIGINT, &act, NULL);
 }
 
-static int	cmd_minishell(char *cmd, t_env *envc, t_ast **ast)
+static int	cmd_minishell(char *cmd, t_env *envc, t_ast **ast, int status)
 {
 	t_token	*token;
 
@@ -53,7 +53,7 @@ static int	cmd_minishell(char *cmd, t_env *envc, t_ast **ast)
 	free(cmd);
 	if (!token)
 		return (1);
-	*ast = parser(token, envc);
+	*ast = parser(token, envc, status);
 	if (!(*ast))
 		return (1);
 	return (0);
@@ -76,9 +76,11 @@ int	main(int argc, char **argv, char **envp)
 	char	*cmd;
 	t_env	*envc;
 	t_ast	*ast;
+	int		status;
 
 	(void)argc;
 	(void)argv;
+	status = 0;
 	envc = env_copy(envp);
 	if (!envc)
 		return (1);
@@ -87,9 +89,9 @@ int	main(int argc, char **argv, char **envp)
 		cmd = ft_readline();
 		if (!cmd)
 			break ;
-		if (cmd_minishell(cmd, envc, &ast))
+		if (cmd_minishell(cmd, envc, &ast, status))
 			continue ;
-		execute_tree(ast, &envc, STDIN_FILENO, STDOUT_FILENO);
+		status = execute_tree(ast, &envc, STDIN_FILENO, STDOUT_FILENO);
 		free_ast(ast);
 	}
 	write(1, "exit\n", 5);

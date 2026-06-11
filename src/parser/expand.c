@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/04 17:46:44 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/11 15:05:37 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,78 +34,72 @@ int	change_value(char **value, char *new_value, int start, int end)
 	return (0);
 }
 
-char	*check_new_value(char *value, t_env *envc, int i, int *j)
+char	*check_new_value(char *value, t_env *envc, t_index *index, int status)
 {
 	char	*new_value;
 
 	new_value = NULL;
-	if (value[i] == '?')
-	{
-		new_value = check_key("___status", envc);
-		if (!new_value)
-			return (NULL);
-	}
-	else if ((value[i] == '_' && (ft_isspace(value[*j]) || value[*j] == '\0'))
-		|| (!ft_isalpha(value[i]) && value[i] != '_'))
+	if (value[(*index).i] == '?')
+		new_value = ft_itoa(status);
+	else if ((value[(*index).i] == '_' && (ft_isspace(value[(*index).j])
+				|| value[(*index).j] == '\0'))
+		|| (!ft_isalpha(value[(*index).i]) && value[(*index).i] != '_'))
 	{
 		new_value = malloc(sizeof(*new_value));
 		if (!new_value)
 			return (NULL);
 		new_value[0] = '\0';
 	}
-	else if (ft_isalpha(value[i]) || value[i] == '_')
-	{
-		new_value = check_env(value, envc, i, j);
-		if (!new_value)
-			return (NULL);
-	}
+	else if (ft_isalpha(value[(*index).i]) || value[(*index).i] == '_')
+		new_value = check_env(value, envc, (*index).i, &(index->j));
 	return (new_value);
 }
 
-static	int	next_expander(t_token *token, t_env *envc, int *i, int *j)
+static	int	next_expander(t_token *token, t_env *envc, t_index *index, \
+int status)
 {
 	char	*new_value;
 	int		len;
 
-	new_value = check_new_value(token->value, envc, *i, j);
-	if (!new_value || change_value(&token->value, new_value, *i, *j))
+	new_value = check_new_value(token->value, envc, index, status);
+	if (!new_value
+		|| change_value(&token->value, new_value, index->i, index->j))
 		return (1);
 	token->type = EXPAND;
 	len = ft_strlen(new_value);
 	free(new_value);
-	*i = *i + len - 1;
+	index->i = index->i + len - 1;
 	return (0);
 }
 
-static int	expander(t_token *token, t_env *envc)
+static int	expander(t_token *token, t_env *envc, int status)
 {
-	int		i;
-	int		j;
+	t_index	index;
 	t_state	state;
 
-	i = 0;
+	index.i = 0;
 	state = NORMAL;
-	while (token->value[i] != '\0')
+	while (token->value[index.i] != '\0')
 	{
-		state_condition(token->value[i], &state);
-		if (state != SIMPLE_QUOTE && token->value[i] == '$')
+		state_condition(token->value[index.i], &state);
+		if (state != SIMPLE_QUOTE && token->value[index.i] == '$')
 		{
-			i++;
-			if (token->value[i] == '\0')
+			(index.i)++;
+			if (token->value[index.i] == '\0')
 				return (0);
-			if (ft_isspace(token->value[i]))
+			if (ft_isspace(token->value[index.i]))
 				continue ;
-			j = i + 1;
-			if (next_expander(token, envc, &i, &j))
+			index.j = index.i + 1;
+			if (next_expander(token, envc, &index, status))
 				return (1);
 		}
 		else
-			i++;
+			(index.i)++;
 	}
 	return (0);
 }
 
-int	expand(t_token *token_list, t_env *envc)
+int	expand(t_token *token_list, t_env *envc, int status)
 {
 	t_token	*tmp;
 
@@ -114,7 +108,7 @@ int	expand(t_token *token_list, t_env *envc)
 	{
 		if (tmp->type == HEREDOC && tmp->next)
 			tmp = tmp->next;
-		else if ((tmp->type == WORD) && (expander(tmp, envc)
+		else if ((tmp->type == WORD) && (expander(tmp, envc, status)
 				|| (tmp->type == EXPAND && more_token(&tmp))))
 		{
 			error_parser(token_list, MALLOC);

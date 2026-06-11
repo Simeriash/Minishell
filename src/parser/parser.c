@@ -6,15 +6,16 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 13:01:42 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/04 15:19:38 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/11 15:06:42 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
 
-static int	search_suite(t_token *token_list, t_token *token, t_env *envc)
+static int	search_suite(t_token *token_list, t_token *token, t_env *envc, \
+int status)
 {
-	if (heredoc(token->next->value, token_list, envc))
+	if (heredoc(token->next->value, token_list, envc, status))
 	{
 		free_token(token_list);
 		return (1);
@@ -32,7 +33,7 @@ static int	search_suite(t_token *token_list, t_token *token, t_env *envc)
 	return (0);
 }
 
-static int	search_heredoc(t_token *token_list, t_env *envc)
+static int	search_heredoc(t_token *token_list, t_env *envc, int status)
 {
 	t_token	*token;
 
@@ -47,7 +48,7 @@ static int	search_heredoc(t_token *token_list, t_env *envc)
 				error_heredoc(INVALID_LIMITER);
 				return (1);
 			}
-			if (search_suite(token_list, token, envc))
+			if (search_suite(token_list, token, envc, status))
 				return (1);
 			token = token->next;
 		}
@@ -56,13 +57,12 @@ static int	search_heredoc(t_token *token_list, t_env *envc)
 	return (0);
 }
 
-t_ast	*parser(t_token *token_list, t_env *envc)
+t_ast	*parser(t_token *token_list, t_env *envc, int status)
 {
 	t_ast	*ast;
 
-	if (expand(token_list, envc))
-		return (NULL);
-	if (search_heredoc(token_list, envc))
+	if (expand(token_list, envc, status)
+		|| search_heredoc(token_list, envc, status))
 		return (NULL);
 	ast = ast_creation(token_list, NULL, PIPE);
 	if (!ast)

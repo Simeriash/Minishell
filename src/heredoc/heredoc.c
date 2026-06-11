@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 12:30:30 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/29 08:42:17 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/11 14:57:30 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,12 @@ by end-of-file (wanted `eof')", 2);
 	return (0);
 }
 
-static int	heredoc_suite(char **cmd, t_token *token_list, t_env *envc, int fd)
+static int	heredoc_suite(char **cmd, t_token *token_list, t_env *envc, \
+t_var var)
 {
-	if (heredoc_expander(cmd, envc))
+	if (heredoc_expander(cmd, envc, var.status))
 	{
-		free_heredoc(token_list, envc, *cmd, fd);
+		free_heredoc(token_list, envc, *cmd, var.fd);
 		return (1);
 	}
 	return (0);
@@ -63,15 +64,15 @@ static void	printline(char *cmd, int fd)
 	free(cmd);
 }
 
-int	heredoc(char *eof, t_token *token_list, t_env *envc)
+int	heredoc(char *eof, t_token *token_list, t_env *envc, int status)
 {
 	char	*cmd;
-	int		fd;
-	int		limiter;
 	pid_t	pid;
-	int		status;
+	int		pid_status;
+	t_var	var;
 
-	if (init_heredoc(eof, &limiter, &fd, &pid))
+	var.status = status;
+	if (init_heredoc(eof, &(var.limiter), &(var.fd), &pid))
 		return (1);
 	if (pid == 0)
 	{
@@ -79,15 +80,15 @@ int	heredoc(char *eof, t_token *token_list, t_env *envc)
 		{
 			if (cmd_heredoc(&cmd, eof))
 				break ;
-			if (limiter && heredoc_suite(&cmd, token_list, envc, fd))
+			if (var.limiter && heredoc_suite(&cmd, token_list, envc, var))
 				exit (1);
-			printline(cmd, fd);
+			printline(cmd, var.fd);
 		}
-		free_heredoc(token_list, envc, cmd, fd);
+		free_heredoc(token_list, envc, cmd, var.fd);
 		exit(0);
 	}
 	else
-		wait(&status);
-	close(fd);
+		wait(&pid_status);
+	close(var.fd);
 	return (0);
 }

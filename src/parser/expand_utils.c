@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 16:46:10 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/04 17:41:24 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/11 15:06:12 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ char	*check_key(char *key, t_env *envc)
 		if (ft_strcmp(key, tmp->key) == 0)
 		{
 			str = ft_strdup(tmp->value);
-			if (!str)
-				return (NULL);
 			return (str);
 		}
 		tmp = tmp->next;
@@ -48,7 +46,5 @@ char	*check_env(char *value, t_env *envc, int i, int *j)
 		return (NULL);
 	new_value = check_key(key, envc);
 	free(key);
-	if (!new_value)
-		return (NULL);
 	return (new_value);
 }
