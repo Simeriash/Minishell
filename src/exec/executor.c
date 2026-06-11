@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:04:33 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/04 15:14:17 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/11 08:47:45 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_ast	*build_pipe(t_ast *node, t_env **envp, int *current_in)
 				close(*current_in);
 			if (fd[1] > -1)
 				close(fd[1]);
-			clean_exit(node, envp, ret);
+			clean_exit(node->ast, envp, ret);
 		}
 		close(fd[1]);
 		if (*current_in != STDIN_FILENO)
@@ -69,9 +69,9 @@ int	wait_pids(pid_t last_pid)
 		return (WEXITSTATUS(ret_val));
 	if (WIFSIGNALED(ret_val))
 	{
-		if (WTERMSIG(ret_val) == SIGQUIT)
-			write(2, "Quit", 4);
-		write(2, "\n", 1);
+		// if (WTERMSIG(ret_val) == SIGQUIT)
+		// 	write(2, "Quit", 4);
+		// write(2, "\n", 1);
 		return (128 + WTERMSIG(ret_val));
 	}
 	return (0);
@@ -85,7 +85,7 @@ int	execute_pipe(t_ast *node, t_env **envp, t_fds *fds)
 	t_ast	*head;
 
 	current_in = fds->fd_in;
-	head = node;
+	head = node->ast;
 	node = build_pipe(node, envp, &current_in);
 	last_pid = fork();
 	if (last_pid == 0)
@@ -98,15 +98,15 @@ int	execute_pipe(t_ast *node, t_env **envp, t_fds *fds)
 	if (current_in != STDIN_FILENO)
 		close(current_in);
 	ret_val = wait_pids(last_pid);
-	if (WIFSIGNALED(ret_val))
-	{
-		if (WTERMSIG(ret_val) == SIGQUIT)
-			write(2, "Quit", 4);
-		write(2, "\n", 1);
-		return (128 + WTERMSIG(ret_val));
-	}
 	return (ret_val);
 }
+	// if (WIFSIGNALED(ret_val))
+	// {
+	// 	if (WTERMSIG(ret_val) == SIGQUIT)
+	// 		write(2, "Quit", 4);
+	// 	write(2, "\n", 1);
+	// 	return (128 + WTERMSIG(ret_val));
+	// }
 
 int	execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd)
 {
