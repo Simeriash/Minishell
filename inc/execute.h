@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:46:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 10:21:01 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/11 08:49:14 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,12 @@ char			*create_exec_path(char *path, char *cmd);
 char			**create_paths(t_exec_err *err);
 
 t_error			make_env_execve(t_env *envpc, char ***array);
+
+// find_exec_helpers.c
+
+char			*set_fallback_path(int type, char *candidate, char *fallback);
+int				get_candidate_type(struct stat *st);
+char			**create_paths(t_exec_err *err);
+char			*create_exec_path(char *path, char *cmd);
 
 #endif
