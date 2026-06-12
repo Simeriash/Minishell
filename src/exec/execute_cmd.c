@@ -6,152 +6,19 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 12:41:20 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/04 11:26:28 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/12 08:51:22 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
 #include "../../inc/execute.h"
 
-// void free_array(char **array) //util
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (array[i])
-// 	{
-// 		free(array[i]);
-// 		i++;
-// 	}
-// 	free(array);
-// }
-
-// char *create_exec_path(char *path, char *cmd) //cmd util
-// {
-// 	char *tmp;
-// 	char *ret;
-
-// 	tmp = ft_strjoin(path, "/");
-// 	if (!tmp)
-// 		return (NULL);
-// 	ret = ft_strjoin(tmp, cmd);
-// 	free(tmp);
-// 	if (!ret)
-// 		return (NULL);
-// 	return (ret);
-// }
-
-// char **create_paths(t_exec_err *err) //cmd util
-// {
-// 	char	*path;
-// 	char	**ret;
-
-// 	path = getenv("PATH");
-// 	if (!path)
-// 	{
-// 		*err = EXEC_NO_PATH;
-// 		return (NULL);
-// 	}
-// 	ret = ft_split(path, ':');
-// 	if (!ret)
-// 	{
-// 		*err = EXEC_MALLOC_FAIL;
-// 		return (NULL);
-// 	}
-// 	return (ret);
-// }
-
-// void	cleanup_helper(char *fallback)
-// {
-// 	if (fallback)
-// 		free(fallback);
-// 	return ;
-// }
-
-// int	get_candidate_type(struct stat *st)
-// {
-// 	if (!S_ISDIR(st->st_mode) && (st->st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)))
-// 		return (0);
-// 	if (!S_ISDIR(st->st_mode))
-// 		return (1);
-// 	return (2);
-// }
-
-// char *set_fallback_path(int type, char *candidate, char *fallback)
-// {
-// 	struct stat st;
-// 	int fallback_type;
-
-// 	if (!fallback)
-// 		return candidate;
-// 	if (stat(fallback, &st) == 0)
-// 		fallback_type = get_candidate_type(&st);
-// 	else
-// 	{
-// 		free(fallback);
-// 		return candidate;
-// 	}
-// 	if (type < fallback_type)
-// 	{
-// 		free(fallback);
-// 		return candidate;
-// 	}
-
-// 	free(candidate);
-// 	return fallback;
-// }
-
-// char *handle_candidate(char *path, char *cmd, char *f_b, t_exec_err *err)
-// {
-// 	char	*ret;
-
-// 	ret = create_exec_path(path, cmd);
-// 	if (!ret)
-// 	{
-// 		cleanup_helper(f_b);
-// 		*err = EXEC_MALLOC_FAIL;
-// 		return (NULL);
-// 	}
-// 	return (ret);
-// }
-
-// char *create_candidate(char *cmd, char **paths, t_exec_err *err)
-// {
-// 	struct stat	st;
-// 	char		*candidate;
-// 	char		*fallback;
-// 	int			type;
-// 	int			i;
-
-// 	i = 0;
-// 	fallback = NULL;
-// 	while (paths[i])
-// 	{
-// 		candidate = handle_candidate(paths[i], cmd, fallback, err);
-// 		if (!candidate && *err == EXEC_MALLOC_FAIL)
-// 			return (NULL);
-// 		if (stat(candidate, &st) == 0)
-// 		{
-// 			type = get_candidate_type(&st);
-// 			if (type == 0)
-// 			{
-// 				cleanup_helper(fallback);
-// 				return (candidate);
-// 			}
-// 			fallback = set_fallback_path(type, candidate, fallback);
-// 		}
-// 		else
-// 			free(candidate);
-// 		i++;
-// 	}
-// 	return (fallback);
-// }
-
 char	*find_executable(char *cmd, t_exec_err *err)
 {
 	char	**paths;
 	char	*ret;
 
+	*err = EXEC_OK;
 	if (!cmd || !*cmd)
 	{
 		*err = EXEC_NOT_FOUND;
@@ -275,8 +142,7 @@ void	error_handling(int err)
 // 	return(OK);
 // }
 
-static void	child_exec(t_ast *node, char **argv, t_fds *fds, char *exec,
-																	char **arr)
+static void	child_exec(t_ast *node, t_fds *fds, char *exec,	char **arr)
 {
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
@@ -293,9 +159,9 @@ static void	child_exec(t_ast *node, char **argv, t_fds *fds, char *exec,
 			dup2(fds->fd_out, STDOUT_FILENO);
 			close(fds->fd_out);
 		}
-		execve(exec, argv, arr);
+		execve(exec, node->cmd->args, arr);
 	}
-	rl_clear_history();
+	rl_clear_history(); //after this line, check stat to see what type the executable was so we can create the appropriate erorr msg
 	printf("CoolCustomShell: %s: %s\n", exec, strerror(errno));
 	free(exec);
 	free_array(arr);
@@ -311,14 +177,14 @@ void	error_helper(t_ast *node)
 	write(2, "\n", 1);
 }
 
-int	execute_builtin(char **args, t_env **env, t_ast *node, t_fds *fds)
+int	execute_builtin(t_env **env, t_ast *node, t_fds *fds)
 {
 	t_builtin_func	func;
 	int				error;
 	int				saved_fd_in;
 	int				saved_fd_out;
 
-	func = get_builtin(args, env);
+	func = get_builtin(node->cmd->args, env);
 	if (func)
 	{
 		saved_fd_in = dup(fds->fd_in);
@@ -334,7 +200,7 @@ int	execute_builtin(char **args, t_env **env, t_ast *node, t_fds *fds)
 			dup2(fds->fd_in, STDIN_FILENO);
 		if (fds->fd_out != STDOUT_FILENO)
 			dup2(fds->fd_out, STDOUT_FILENO);
-		error = func(args, env);
+		error = func(node->cmd->args, env);
 		dup2(saved_fd_in, STDIN_FILENO);
 		close(saved_fd_in);
 		dup2(saved_fd_out, STDOUT_FILENO);
@@ -343,7 +209,7 @@ int	execute_builtin(char **args, t_env **env, t_ast *node, t_fds *fds)
 			close (fds->fd_in);
 		if (fds->fd_out != STDOUT_FILENO)
 			close (fds->fd_out);
-		if (ft_strcmp("exit", args[0]) == 0)
+		if (ft_strcmp("exit", node->cmd->args[0]) == 0)
 		{
 			free_ast(node);
 			exit(error);
@@ -366,9 +232,10 @@ int	execute_builtin(char **args, t_env **env, t_ast *node, t_fds *fds)
 // 		return (error);
 // 	}
 
-int	execute_cmd(t_ast *node, char **argv, t_env **envp, t_fds *fds)
+// int	command_handling
+
+int	execute_cmd(t_ast *node, t_env **envp, t_fds *fds)
 {
-	char		*cmd;
 	char		*executable;
 	t_exec_err	err;
 	t_error		error;
@@ -376,36 +243,29 @@ int	execute_cmd(t_ast *node, char **argv, t_env **envp, t_fds *fds)
 	int			status;
 	char		**envp_array;
 
-	if (!argv)
+	if (!node->cmd->args)
 		return (0);
-	cmd = argv[0];
-	if (execute_builtin(argv, envp, node, fds))
+	if (execute_builtin(envp, node, fds))
 		return (OK);
-	error = make_env_execve((*envp)->next, &envp_array);
-	executable = find_executable(cmd, &err);
+	executable = find_executable(node->cmd->args[0], &err);
 	if (!executable)
 	{
 		//check err;
-		if (!cmd)
-			cmd = "";
-		printf("CoolCustomShell: %s: command not found\n", cmd);
-		free_array(envp_array);
+		if (!node->cmd->args[0])
+			return (1);
+		printf("CoolCustomShell: %s: command not found\n", node->cmd->args[0]);
 		return (127);
 	}
+	error = make_env_execve((*envp)->next, &envp_array);
 	exec = fork();
 	if (exec == 0)
-		child_exec(node, argv, fds, executable, envp_array);
+		child_exec(node, fds, executable, envp_array);
 	waitpid(exec, &status, 0);
 	free(executable);
 	free_array(envp_array);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGQUIT)
-			write(2, "Quit", 4);
-		write(2, "\n", 1);
 		return (128 + WTERMSIG(status));
-	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:04:33 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/11 08:47:45 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/11 10:55:29 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int	execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd)
 	}
 	if (node->type == CMD)
 	{
-		ret = execute_cmd(node, node->cmd->args, envp, &fds_in_out);
+		ret = execute_cmd(node, envp, &fds_in_out);
 		if (access("minishell_heredoc", F_OK) == 0)
 			unlink("minishell_heredoc");
 		return (ret);
