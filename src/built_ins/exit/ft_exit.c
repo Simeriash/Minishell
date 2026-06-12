@@ -6,43 +6,15 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:50:55 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/12 09:45:25 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/12 10:06:22 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static int	ft_longatoi(const char *str, int *ctrl)
-{
-	int					i;
-	unsigned long long	num;
-	int					sign;
-	unsigned long long	limit;
-
-	i = 0;
-	num = 0;
-	sign = 1;
-	if (str[i] == '-')
-		sign = -sign;
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	if (sign == 1)
-		limit = LLONG_MAX;
-	else
-		limit = LLONG_MIN;
-	while (ft_isdigit(str[i]))
-	{
-		if (num > ((limit - (str[i] - '0')) / 10))
-		{
-			num = 0;
-			*ctrl = 1;
-			break ;
-		}
-		num = num * 10 + str[i] - 48;
-		i++;
-	}
-	return (sign * num);
-}
+// static int	ft_longatoi(const char *str, int *ctrl)
+// {
+// }
 
 static void	free_env(t_env **delete)
 {
@@ -105,7 +77,7 @@ int	ft_exit(char **args, t_env **delete)
 		if (check_alpha(args[1]))
 			exit_value = 2;
 		else
-			exit_value = ft_longatoi(args[1], &ctrl);
+			exit_value = ft_atoi(args[1], &ctrl);
 	}
 	if (ctrl != 0)
 		exit_value = 2;

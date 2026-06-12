@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 12:41:20 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/12 08:51:22 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/12 11:31:56 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,56 +168,43 @@ static void	child_exec(t_ast *node, t_fds *fds, char *exec,	char **arr)
 	exit(126);
 }
 
-void	error_helper(t_ast *node)
-{
-	write(2, "Ghost\\>: ", ft_strlen("Ghost\\>: "));
-	write(2, node->cmd->redir->file, ft_strlen(node->cmd->redir->file));
-	write(2, ": ", 2);
-	write(2, strerror(errno), ft_strlen(strerror(errno)));
-	write(2, "\n", 1);
-}
+// int	execute_builtin(t_env **env, t_ast *node, t_fds *fds, t_builtin_func func)
+// {
+// 	// t_builtin_func	func;
+// 	int				error;
+// 	int				saved_fd_in;
+// 	int				saved_fd_out;
 
-int	execute_builtin(t_env **env, t_ast *node, t_fds *fds)
-{
-	t_builtin_func	func;
-	int				error;
-	int				saved_fd_in;
-	int				saved_fd_out;
-
-	func = get_builtin(node->cmd->args, env);
-	if (func)
-	{
-		saved_fd_in = dup(fds->fd_in);
-		saved_fd_out = dup(fds->fd_out);
-		apply_redirects(node, &fds->fd_in, &fds->fd_out);
-		if (fds->fd_in < 0)
-		{
-			error_helper(node);
-			close(saved_fd_out);
-			return (1);
-		}
-		if (fds->fd_in != STDIN_FILENO)
-			dup2(fds->fd_in, STDIN_FILENO);
-		if (fds->fd_out != STDOUT_FILENO)
-			dup2(fds->fd_out, STDOUT_FILENO);
-		error = func(node->cmd->args, env);
-		dup2(saved_fd_in, STDIN_FILENO);
-		close(saved_fd_in);
-		dup2(saved_fd_out, STDOUT_FILENO);
-		close(saved_fd_out);
-		if (fds->fd_in != STDIN_FILENO)
-			close (fds->fd_in);
-		if (fds->fd_out != STDOUT_FILENO)
-			close (fds->fd_out);
-		if (ft_strcmp("exit", node->cmd->args[0]) == 0)
-		{
-			free_ast(node);
-			exit(error);
-		}
-		return (1);
-	}
-	return (0);
-}
+// 	// func = get_builtin(node->cmd->args, env);
+// 	saved_fd_in = dup(fds->fd_in);
+// 	saved_fd_out = dup(fds->fd_out);
+// 	apply_redirects(node, &fds->fd_in, &fds->fd_out);
+// 	if (fds->fd_in < 0)
+// 	{
+// 		error_helper(node);
+// 		close(saved_fd_out);
+// 		return (1);
+// 	}
+// 	if (fds->fd_in != STDIN_FILENO)
+// 		dup2(fds->fd_in, STDIN_FILENO);
+// 	if (fds->fd_out != STDOUT_FILENO)
+// 		dup2(fds->fd_out, STDOUT_FILENO);
+// 	error = func(node->cmd->args, env);
+// 	dup2(saved_fd_in, STDIN_FILENO);
+// 	close(saved_fd_in);
+// 	dup2(saved_fd_out, STDOUT_FILENO);
+// 	close(saved_fd_out);
+// 	if (fds->fd_in != STDIN_FILENO)
+// 		close (fds->fd_in);
+// 	if (fds->fd_out != STDOUT_FILENO)
+// 		close (fds->fd_out);
+// 	if (ft_strcmp("exit", node->cmd->args[0]) == 0)
+// 	{
+// 		free_ast(node);
+// 		exit(error);
+// 	}
+// 	return (error);
+// }
 
 // if (func)
 // 	{
@@ -234,38 +221,93 @@ int	execute_builtin(t_env **env, t_ast *node, t_fds *fds)
 
 // int	command_handling
 
-int	execute_cmd(t_ast *node, t_env **envp, t_fds *fds)
+char *handle_executable(t_ast *node)
 {
-	char		*executable;
 	t_exec_err	err;
-	t_error		error;
-	pid_t		exec;
-	int			status;
-	char		**envp_array;
+	char		*exe;
 
-	if (!node->cmd->args)
-		return (0);
-	if (execute_builtin(envp, node, fds))
-		return (OK);
-	executable = find_executable(node->cmd->args[0], &err);
-	if (!executable)
+	exe = find_executable(node->cmd->args[0], &err);
+	if (!exe)
 	{
-		//check err;
-		if (!node->cmd->args[0])
-			return (1);
-		printf("CoolCustomShell: %s: command not found\n", node->cmd->args[0]);
-		return (127);
+		ft_printf_fd(2, "Ghost: %s: command not found\n", node->cmd->args[0]);
+		return (NULL);
 	}
-	error = make_env_execve((*envp)->next, &envp_array);
-	exec = fork();
-	if (exec == 0)
-		child_exec(node, fds, executable, envp_array);
-	waitpid(exec, &status, 0);
-	free(executable);
-	free_array(envp_array);
+	return (exe);
+}
+
+int	handle_builtin(t_ast *node, t_env **env, t_fds *fds)
+{
+	t_builtin_func	func;
+	int				ret_stat;
+
+	func = get_builtin(node->cmd->args, env);
+	if (func)
+	{
+		ret_stat = execute_builtin(env, node, fds, func);
+		return (ret_stat);
+	}
+	return (-1);
+}
+
+int	reap_child_process(pid_t child_process)
+{
+	int	status;
+
+	waitpid(child_process, &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
 		return (128 + WTERMSIG(status));
 	return (0);
+}
+
+int	prep_for_execve(t_ast *node, t_env **env, char **exec, char ***env_array)
+{
+	*exec = handle_executable(node);
+	if (!exec)
+		return (127);
+	*env_array = make_env_execve((*env)->next);
+	if (!env_array)
+	{
+		free (exec);
+		return (1);
+	}
+	return (0);
+}
+
+int	run_command(t_ast *node, t_fds *fds, char *exec,	char **env_array)
+{
+	pid_t	child_proc;
+	int		ret_stat;
+
+	child_proc = fork();
+	if (child_proc == -1)
+	{
+		free (exec);
+		free_array (env_array);
+		return (1);
+	}
+	if (child_proc == 0)
+		child_exec(node, fds, exec, env_array);
+	ret_stat = reap_child_process(child_proc);
+	return (ret_stat);
+}
+
+int	execute_cmd(t_ast *node, t_env **envp, t_fds *fds)
+{
+	char	*executable;
+	int		error;
+	int		status;
+	char	**env_array;
+
+	if (!node->cmd->args)
+		return (0);
+	error = handle_builtin(node, envp, fds);
+	if (error != -1)
+		return (error);
+	error = prep_for_execve(node, envp, &executable, &env_array);
+	if (error)
+		return (error);
+	status = run_command(node, fds, executable, env_array);
+	return (status);
 }

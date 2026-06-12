@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:00 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/11 09:57:35 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/12 10:07:46 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,15 +91,17 @@ int	ft_export(char **args, t_env **envpcpy)
 	}
 	while (args[i])
 	{
-		if (check_valid_input(args[i]) != 0)
+		error = check_valid_input(args[i]);
+		if (error != 0)
 		{
 			i++;
 			continue ;
 		}
+		printf("why are we here\n");
 		error = process_input(args[i], envpcpy);
 		if (error != 0)
 			return (1);
 		i++;
 	}
-	return (0);
+	return (error);
 }

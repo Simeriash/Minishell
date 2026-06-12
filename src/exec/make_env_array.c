@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/31 13:31:31 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/04 10:29:10 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/12 10:48:05 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,28 +31,29 @@ char	*env_join(char *key, char *value)
 	return (res);
 }
 
-t_error	make_env_execve(t_env *envpc, char ***array)
+char	**make_env_execve(t_env *envpc)
 {
-	size_t		size;
-	size_t		i;
-	t_env		*tmp;
+	size_t	size;
+	size_t	i;
+	t_env	*tmp;
+	char	**env_array;
 
 	tmp = envpc;
 	size = ft_lstsize(envpc);
 	i = 0;
-	(*array) = ft_calloc((size + 1), sizeof(char *));
-	if (!(*array))
-		return (MALLOC);
+	env_array = ft_calloc((size + 1), sizeof(char *));
+	if (!env_array)
+		return (NULL);
 	while (tmp)
 	{
 		if (tmp->key && tmp->value)
-			(*array)[i] = env_join(tmp->key, tmp->value);
+			env_array[i] = env_join(tmp->key, tmp->value);
 		else if (tmp->key)
-			(*array)[i] = ft_strdup(tmp->key);
-		if (!(*array)[i])
-			return (MALLOC);
+			env_array[i] = ft_strdup(tmp->key);
+		if (!env_array[i])
+			return (NULL);
 		i++;
 		tmp = tmp->next;
 	}
-	return (OK);
+	return (env_array);
 }
