@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 14:46:00 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/04 17:49:48 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/12 09:25:19 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,25 +66,6 @@ static int	init_env_node(t_env *envc, char *var, char *value)
 	return (0);
 }
 
-static int	init_status(t_env *envc)
-{
-	char	*key;
-	char	*value;
-
-	key = ft_strdup("___status");
-	if (!key)
-		return (1);
-	value = ft_strdup("");
-	if (!value)
-	{
-		free(key);
-		return (1);
-	}
-	if (add_after_envc(envc, key, value))
-		return (1);
-	return (0);
-}
-
 int	init_envc(t_env *envc)
 {
 	t_env	*tmp;
@@ -102,7 +83,5 @@ int	init_envc(t_env *envc)
 	tmp = check_key(envc, "SHLVL");
 	if (tmp)
 		(tmp->value[0])++;
-	if (init_status(envc))
-		return (1);
 	return (0);
 }

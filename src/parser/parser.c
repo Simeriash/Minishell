@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 13:01:42 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/11 15:06:42 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/12 11:14:11 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,16 @@ static int	search_heredoc(t_token *token_list, t_env *envc, int status)
 	return (0);
 }
 
-t_ast	*parser(t_token *token_list, t_env *envc, int status)
+int	print_token(t_token *token);
+
+t_ast	*parser(t_token *token_list, t_env *envc, int *status)
 {
 	t_ast	*ast;
 
-	if (expand(token_list, envc, status)
-		|| search_heredoc(token_list, envc, status))
+	if (expand(token_list, envc, *status)
+		|| search_heredoc(token_list, envc, *status))
 		return (NULL);
+	// print_token(token_list);
 	ast = ast_creation(token_list, NULL, PIPE);
 	if (!ast)
 	{
@@ -75,6 +78,7 @@ t_ast	*parser(t_token *token_list, t_env *envc, int status)
 	if (pipe_error(ast))
 	{
 		free_ast(ast);
+		*status = 2;
 		return (NULL);
 	}
 	return (ast);

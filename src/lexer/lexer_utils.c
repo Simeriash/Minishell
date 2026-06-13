@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 11:37:57 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/01 14:54:32 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/12 17:00:31 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 void	shell_space(char *str, int *i)
 {
 	while (str[*i] == 9 || (str[*i] >= 11 && str[*i] <= 13) || str[*i] == 32)
+	{
+		if (str[*i] == '\'' || str[*i] == '"')
+			return ;
 		(*i)++;
+	}
 }
 
 int	end_condition(char *str, int *i)
@@ -23,12 +27,14 @@ int	end_condition(char *str, int *i)
 	if (str[*i] == '\0' || ft_isspace(str[*i]) || str[*i] == '<'
 		|| str[*i] == '>')
 		return (1);
-	if (str[*i] == '|' && str[*i + 1] == '|')
-	{
-		(*i)++;
-		return (0);
-	}
-	if (str[*i] == '|' && str[*i + 1] != '|')
+	// if (str[*i] == '|' && str[*i + 1] == '|')
+	// {
+	// 	(*i)++;
+	// 	return (0);
+	// }
+	// if (str[*i] == '|' && str[*i + 1] != '|')
+	// 	return (1);
+	if (str[*i] == '|')
 		return (1);
 	return (0);
 }

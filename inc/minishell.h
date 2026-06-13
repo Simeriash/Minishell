@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/14 13:43:26 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/11 13:27:08 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/13 09:52:20 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ typedef struct s_ast
 	struct s_ast	*right;
 }	t_ast;
 
-t_token	*lexer(char *str);
-t_ast	*parser(t_token *token_list, t_env *envc, int status);
+t_token	*lexer(char *str, int *status);
+t_ast	*parser(t_token *token_list, t_env *envc, int *status);
 int		heredoc(char *eof, t_token *token_list, t_env *envc, int status);
 t_env	*env_copy(char **envp);
 
