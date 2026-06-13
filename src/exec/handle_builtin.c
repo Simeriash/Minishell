@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 11:17:30 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/12 15:58:23 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/12 16:29:04 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,20 +108,20 @@ void	close_redirects(t_fds *fds)
 		close (fds->fd_out);
 }
 
-int	builtin_setup(t_ast *node, t_fds *fds, int *saved_in, int *saved_out)
-{
-	int	error;
+// int	builtin_setup(t_ast *node, t_fds *fds, int *saved_in, int *saved_out)
+// {
+// 	int	error;
 
-	error = save_fds(fds, saved_in, saved_out);
-	if (error == 1)
-		return (1);
-	apply_redirects(node, &fds->fd_in, &fds->fd_out);
-	if (fds->fd_in < 0)
-		return (1);
-	error = redirect_builtin_fds(fds)
-	if (error == 1)
-		return (1);
-}
+// 	error = save_fds(fds, saved_in, saved_out);
+// 	if (error == 1)
+// 		return (1);
+// 	apply_redirects(node, &fds->fd_in, &fds->fd_out);
+// 	if (fds->fd_in < 0)
+// 		return (1);
+// 	error = redirect_builtin_fds(fds);
+// 	if (error == 1)
+// 		return (1);
+// }
 
 int	execute_builtin(t_env **env, t_ast *node, t_fds *fds, t_builtin_func func)
 {

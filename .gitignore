@@ -1,4 +1,5 @@
 obj/
+minishell_tester-master/
 *.out
 *.a
 *.o
@@ -7,3 +8,5 @@ obj/
 *.txt
 main.c
 minishell
+print_ast.c
+print_token.c
