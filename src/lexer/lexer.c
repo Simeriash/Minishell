@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 09:38:57 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/13 09:56:58 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/13 10:13:04 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ static int	create_token(char *str, t_token **last, int *i, int *status)
 	t_error	error;
 	char	*s;
 
-	if (str[*i] == '<' || str[*i] == '>' || (str[*i] == '|'
-			/*&& str[*i + 1] != '|'*/) || str[*i] == '\n')
+	if (str[*i] == '<' || str[*i] == '>' || str[*i] == '|' || str[*i] == '\n')
 	{
 		error = meta_token(str, *last, i);
 		if (error)

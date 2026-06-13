@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 13:42:36 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/12 14:53:32 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/13 10:58:38 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,24 +68,10 @@ token `newline'", 2);
 	return (0);
 }
 
-int	pipe_error(t_ast *ast)
+int	next_pipe(t_ast *ast)
 {
 	t_redir	*tmp;
-	int		i;
 
-	i = 0;
-	if (ast->left && pipe_error(ast->left))
-		i++;
-	if (ast->type == PIPE)
-	{
-		if ((!ast->left || !ast->right)
-			|| (ast->left && ast->left->type != PIPE && !ast->left->cmd) || (ast->right && ast->right->type != PIPE && !ast->right->cmd))
-		{
-			ft_putendl_fd("bash: syntax error near unexpected \
-token `|'", 2);
-			return (2);
-		}
-	}
 	if (ast->cmd)
 	{
 		if (ast->cmd->redir)
@@ -94,11 +80,34 @@ token `|'", 2);
 			while (tmp)
 			{
 				if (redir_in(tmp) || redir_out(ast, tmp))
-					return (2);
+					return (1);
 				tmp = tmp->next;
 			}
 		}
 	}
+	return (0);
+}
+
+int	pipe_error(t_ast *ast)
+{
+	int		i;
+
+	i = 0;
+	if (ast->left && pipe_error(ast->left))
+		i++;
+	if (ast->type == PIPE)
+	{
+		if ((!ast->left || !ast->right)
+			|| (ast->left && ast->left->type != PIPE && !ast->left->cmd)
+			|| (ast->right && ast->right->type != PIPE && !ast->right->cmd))
+		{
+			ft_putendl_fd("bash: syntax error near unexpected \
+token `|'", 2);
+			return (2);
+		}
+	}
+	if (next_pipe(ast))
+		return (2);
 	if (ast->right && pipe_error(ast->right))
 		i++;
 	if (i)

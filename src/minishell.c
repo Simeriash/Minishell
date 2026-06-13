@@ -6,16 +6,14 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/13 09:52:07 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/13 11:16:04 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 #include "../inc/execute.h"
 #include "../inc/parser.h"
-
-int	print_ast(t_ast *ast);
-int	print_token(t_token *token);
+#include "libft/libft.h"
 
 static void	handler(int signum)
 {
@@ -56,7 +54,6 @@ static int	cmd_minishell(char *cmd, t_env *envc, t_ast **ast, int *status)
 	free(cmd);
 	if (!token)
 		return (1);
-	// print_token(token);
 	*ast = parser(token, envc, status);
 	if (!(*ast))
 		return (1);
@@ -95,11 +92,10 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		if (cmd_minishell(cmd, envc, &ast, &status))
 			continue ;
-		// print_ast(ast);
 		status = execute_tree(ast, &envc, STDIN_FILENO, STDOUT_FILENO);
 		free_ast(ast);
 	}
-	write(1, "exit\n", 5);
+	ft_putendl_fd("exit", 1);
 	rl_clear_history();
 	ft_free_envc(envc);
 	return (0);

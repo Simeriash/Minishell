@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/12 15:35:39 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/13 10:42:01 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,12 @@ int status)
 	char	*new_value;
 	int		len;
 
-	if (token->value[index->i] == '"' || token->value[index->i] == '\''/*&& token->value[index->j] == '\0'*/)
+	if (token->value[index->i] == '"' || token->value[index->i] == '\'')
 		return (0);
 	new_value = check_new_value(token->value, envc, index, status);
 	if (!new_value
 		|| change_value(&token->value, new_value, index->i, index->j))
 		return (1);
-	// token->type = EXPAND;
 	len = ft_strlen(new_value);
 	free(new_value);
 	index->i = index->i + len - 1;
@@ -83,7 +82,6 @@ static int	expander(t_token *token, t_env *envc, int status)
 	state = NORMAL;
 	while (token->value[index.i] != '\0')
 	{
-		// printf("%s\n", token->value);
 		state_condition(token->value[index.i], &state);
 		if (state != SIMPLE_QUOTE && token->value[index.i] == '$')
 		{
@@ -104,8 +102,6 @@ static int	expander(t_token *token, t_env *envc, int status)
 	return (0);
 }
 
-int	print_token(t_token *token);
-
 int	expand(t_token *token_list, t_env *envc, int status)
 {
 	t_token	*tmp;
@@ -123,7 +119,6 @@ int	expand(t_token *token_list, t_env *envc, int status)
 		}
 		tmp = tmp->next;
 	}
-	// print_token(token_list);
 	delete_quotes(token_list);
 	if (token_list->next == NULL)
 	{
