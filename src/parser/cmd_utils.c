@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/12 15:39:34 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/03 16:45:51 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/15 17:30:29 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,20 @@
 int	add_redir(t_redir **redir, t_token **token)
 {
 	t_redir	*new_redir;
+	t_redir	*tmp;
 
 	new_redir = malloc (sizeof(*new_redir));
 	if (!new_redir)
 		return (1);
+	new_redir->next = NULL;
 	if (!(*redir))
-	{
-		new_redir->next = NULL;
 		*redir = new_redir;
-	}
 	else
 	{
-		new_redir->next = (*redir)->next;
-		(*redir)->next = new_redir;
+		tmp = *redir;
+		while (tmp->next != NULL)
+			tmp = tmp->next;
+		tmp->next = new_redir;
 	}
 	new_redir->type = (*token)->type;
 	if ((*token)->next && (*token)->next->type == WORD)
@@ -62,7 +63,7 @@ int	add_arg(t_arg **arg, char *str)
 	return (0);
 }
 
-void	free_struct(t_arg *arg, t_redir *redir)
+void	free_struct(t_arg *arg, t_redir *redir, t_cmd *cmd)
 {
 	t_arg	*tmp_arg;
 	t_redir	*tmp_redir;
@@ -79,4 +80,6 @@ void	free_struct(t_arg *arg, t_redir *redir)
 		free(redir);
 		redir = tmp_redir;
 	}
+	if (cmd)
+		free(cmd);
 }

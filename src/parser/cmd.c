@@ -6,45 +6,18 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 14:06:30 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 14:47:47 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/15 17:18:53 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
 
-static char	**struct_to_tab(t_arg *arg, int i)
+static char	**struct_to_tab(t_arg *arg)
 {
 	char	**tab;
-	int		j;
-	t_arg	*tmp;
-
-	tab = malloc(sizeof(*tab) * (i + 1));
-	if (!tab)
-		return (NULL);
-	tmp = arg;
-	j = 0;
-	while (tmp != NULL)
-	{
-		tab[j] = tmp->str;
-		tmp = tmp->next;
-		j++;
-	}
-	tab[j] = NULL;
-	free_struct(arg, NULL);
-	return (tab);
-}
-
-static int	cmd_struct(t_cmd *cmd, t_arg *arg, t_redir *redir)
-{
 	int		i;
 	t_arg	*tmp;
 
-	cmd->redir = redir;
-	if (!arg)
-	{
-		cmd->args = NULL;
-		return (0);
-	}
 	i = 1;
 	tmp = arg;
 	while (tmp->next != NULL)
@@ -52,13 +25,45 @@ static int	cmd_struct(t_cmd *cmd, t_arg *arg, t_redir *redir)
 		i++;
 		tmp = tmp->next;
 	}
-	cmd->args = struct_to_tab(arg, i);
+	tab = malloc(sizeof(*tab) * (i + 1));
+	if (!tab)
+		return (NULL);
+	tmp = arg;
+	i = 0;
+	while (tmp != NULL)
+	{
+		tab[i] = tmp->str;
+		tmp = tmp->next;
+		i++;
+	}
+	tab[i] = NULL;
+	free_struct(arg, NULL, NULL);
+	return (tab);
+}
+
+static t_cmd	*cmd_struct(t_arg *arg, t_redir *redir)
+{
+	t_cmd	*cmd;
+
+	cmd = malloc(sizeof(*cmd));
+	if (!cmd)
+	{
+		free_struct(arg, redir, NULL);
+		return (NULL);
+	}
+	cmd->redir = redir;
+	if (!arg)
+	{
+		cmd->args = NULL;
+		return (cmd);
+	}
+	cmd->args = struct_to_tab(arg);
 	if (!(cmd->args))
 	{
-		free(cmd);
-		return (1);
+		free_struct(arg, redir, cmd);
+		return (NULL);
 	}
-	return (0);
+	return (cmd);
 }
 
 static int	loop(t_token **token, t_arg **arg, t_redir **redir)
@@ -67,7 +72,7 @@ static int	loop(t_token **token, t_arg **arg, t_redir **redir)
 	{
 		if (add_arg(arg, (*token)->value))
 		{
-			free_struct(*arg, *redir);
+			free_struct(*arg, *redir, NULL);
 			return (1);
 		}
 	}
@@ -76,7 +81,7 @@ static int	loop(t_token **token, t_arg **arg, t_redir **redir)
 	{
 		if (add_redir(redir, token))
 		{
-			free_struct(*arg, *redir);
+			free_struct(*arg, *redir, NULL);
 			return (1);
 		}
 	}
@@ -100,12 +105,9 @@ t_ast	*cmd_node(t_token *token, t_token *stop)
 			return (NULL);
 		new_token = new_token->next;
 	}
-	cmd = malloc(sizeof(*cmd));
-	if (!cmd || cmd_struct(cmd, arg, redir))
-	{
-		free_struct(arg, redir);
+	cmd = cmd_struct(arg, redir);
+	if (!cmd)
 		return (NULL);
-	}
 	ast = init_ast(CMD, cmd, NULL, NULL);
 	return (ast);
 }
