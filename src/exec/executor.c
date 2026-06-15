@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:04:33 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/12 10:27:31 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:06:32 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,7 @@ int	wait_pids(pid_t last_pid)
 	if (WIFEXITED(ret_val))
 		return (WEXITSTATUS(ret_val));
 	if (WIFSIGNALED(ret_val))
-	{
-		// if (WTERMSIG(ret_val) == SIGQUIT)
-		// 	write(2, "Quit", 4);
-		// write(2, "\n", 1);
 		return (128 + WTERMSIG(ret_val));
-	}
 	return (0);
 }
 
@@ -100,13 +95,6 @@ int	execute_pipe(t_ast *node, t_env **envp, t_fds *fds)
 	ret_val = wait_pids(last_pid);
 	return (ret_val);
 }
-	// if (WIFSIGNALED(ret_val))
-	// {
-	// 	if (WTERMSIG(ret_val) == SIGQUIT)
-	// 		write(2, "Quit", 4);
-	// 	write(2, "\n", 1);
-	// 	return (128 + WTERMSIG(ret_val));
-	// }
 
 int	execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd)
 {
@@ -115,6 +103,8 @@ int	execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd)
 
 	fds_in_out.fd_in = in_fd;
 	fds_in_out.fd_out = out_fd;
+	fds_in_out.redir_in = 0;
+	fds_in_out.redir_out = 0;
 	if (node->type == PIPE)
 	{
 		ret = execute_pipe(node, envp, &fds_in_out);

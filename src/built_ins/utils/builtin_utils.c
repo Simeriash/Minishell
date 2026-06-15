@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 09:05:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/29 18:56:08 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:57:11 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../../inc/builtins.h"
 
 t_env	*ft_lstnew(char *newkey, char *newvalue)
 {

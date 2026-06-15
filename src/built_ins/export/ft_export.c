@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:00 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/12 10:07:46 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:52:26 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../../inc/builtins.h"
 
 int	check_valid_input(char *in)
 {
@@ -97,7 +97,6 @@ int	ft_export(char **args, t_env **envpcpy)
 			i++;
 			continue ;
 		}
-		printf("why are we here\n");
 		error = process_input(args[i], envpcpy);
 		if (error != 0)
 			return (1);

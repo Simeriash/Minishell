@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/11 13:16:50 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/15 11:25:02 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,6 @@ int		free_ast(t_ast *ast);
 void	free_cmd(t_cmd *cmd);
 void	free_struct(t_arg *arg, t_redir *redir);
 void	ast_init(t_ast **ast, t_ast *init_ast);
-int		pipe_error(t_ast *ast);
+int		pipe_error(t_ast *ast, int *status);
 
 #endif

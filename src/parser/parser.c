@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 13:01:42 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/13 11:05:26 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/15 12:03:11 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,9 @@ t_ast	*parser(t_token *token_list, t_env *envc, int *status)
 	}
 	ast->token = token_list;
 	ast_init(&ast, ast);
-	if (pipe_error(ast))
+	if (pipe_error(ast, status))
 	{
 		free_ast(ast);
-		*status = 2;
 		return (NULL);
 	}
 	return (ast);

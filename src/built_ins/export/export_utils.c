@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/18 13:37:26 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/11 08:48:41 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:50:33 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../../inc/builtins.h"
 
 static int	copy_export_data(char **kdup, char **vdup, char *key, char *value)
 {
@@ -78,12 +78,6 @@ int	set_value(t_env *node, char *value)
 
 	if (!value)
 		return (0);
-	// if (!value)
-	// {
-	// 	free (node->value);
-	// 	node->value = NULL;
-	// 	return (0);
-	// }
 	dup = ft_strdup(value);
 	if (!dup)
 		return (1);
@@ -94,8 +88,8 @@ int	set_value(t_env *node, char *value)
 
 int	env_set(char *key, char *value, t_env **envpcpy, t_env_mode mode)
 {
-	t_env		*node;
-	int				ret_val;
+	t_env	*node;
+	int		ret_val;
 
 	if (!key || !envpcpy)
 		return (1);

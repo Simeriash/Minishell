@@ -3,17 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 18:41:01 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/12 08:50:36 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:59:25 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/parser.h"
 #include "../../inc/execute.h"
 
-void	free_array(char **array) //util
+static void	write_msg(char *exec, char *err_msg)
+{
+	write(2, "Ghost\\>: ", ft_strlen("Ghost\\>: "));
+	write(2, exec, ft_strlen(exec));
+	write(2, ": ", 2);
+	write(2, err_msg, ft_strlen(err_msg));
+	write(2, "\n", 1);
+}
+
+void	execve_error_msg(char *exec)
+{
+	struct stat	st;
+
+	if (stat(exec, &st) == 0)
+	{
+		if (S_ISDIR(st.st_mode))
+			write_msg(exec, "Is a directory");
+		else if (!S_ISREG(st.st_mode))
+			write_msg(exec, "Not a regular file");
+		else
+			write_msg(exec, strerror(errno));
+	}
+	else
+		write_msg(exec, strerror(errno));
+	return ;
+}
+
+void	free_array(char **array)
 {
 	int	i;
 
@@ -26,88 +52,31 @@ void	free_array(char **array) //util
 	free(array);
 }
 
-// char *create_exec_path(char *path, char *cmd) //cmd util
-// {
-// 	char *tmp;
-// 	char *ret;
-
-// 	tmp = ft_strjoin(path, "/");
-// 	if (!tmp)
-// 		return (NULL);
-// 	ret = ft_strjoin(tmp, cmd);
-// 	free(tmp);
-// 	if (!ret)
-// 		return (NULL);
-// 	return (ret);
-// }
-
-void	cleanup_helper(char *fallback)
-{
-	if (fallback)
-		free(fallback);
-	return ;
-}
-
-void	redir_fd_helper(int *fd, char *path, int flags)
+void	redir_fd_helper(int *fd, int *owner, char *path, int flags)
 {
 	int	new_fd;
 
 	new_fd = open (path, flags, 0664);
 	if (new_fd < 0)
 	{
+		if (*owner == 1 && *fd > STDERR_FILENO)
+			close(*fd);
+		write(2, "Ghost\\>: ", ft_strlen("Ghost\\>: "));
+		write(2, path, ft_strlen(path));
+		write(2, ": ", 2);
+		write(2, strerror(errno), ft_strlen(strerror(errno)));
+		write(2, "\n", 1);
 		*fd = -1;
 		return ;
 	}
-	if (*fd > STDERR_FILENO)
+	if (*owner == 1 && *fd > STDERR_FILENO)
 		close(*fd);
 	*fd = new_fd;
+	*owner = 1;
 	return ;
 }
 
-/*
-	int apply_redirects(t_ast *node, int *fd_in, int *fd_out)
-{
-    t_redir *tmp;
-    int in;
-    int out;
-
-    if (!node->cmd->redir)
-        return (0);
-
-    in = STDIN_FILENO;
-    out = STDOUT_FILENO;
-
-    tmp = node->cmd->redir;
-    while (tmp)
-    {
-        if (tmp->type == IN)
-            redir_fd_helper(&in, tmp->file, O_RDONLY);
-        else if (tmp->type == OUT)
-            redir_fd_helper(&out, tmp->file,
-                O_CREAT | O_WRONLY | O_TRUNC);
-        else if (tmp->type == APPEND)
-            redir_fd_helper(&out, tmp->file,
-                O_CREAT | O_WRONLY | O_APPEND);
-
-        tmp = tmp->next;
-    }
-
-    if (in < 0 || out < 0)
-    {
-        if (in >= 0 && in != STDIN_FILENO)
-            close(in);
-        if (out >= 0 && out != STDOUT_FILENO)
-            close(out);
-        return (-1);
-    }
-
-    *fd_in = in;
-    *fd_out = out;
-    return (0);
-}
-*/
-
-void	apply_redirects(t_ast *node, int *fd_in, int *fd_out)
+void	apply_redirects(t_ast *node, t_fds *fds)
 {
 	t_redir	*tmp;
 
@@ -117,15 +86,15 @@ void	apply_redirects(t_ast *node, int *fd_in, int *fd_out)
 	while (tmp)
 	{
 		if (tmp->type == IN)
-			redir_fd_helper(fd_in, tmp->file, O_RDONLY);
+			redir_fd_helper(&fds->fd_in, &fds->redir_in, tmp->file, O_RDONLY);
 		else if (tmp->type == OUT)
-			redir_fd_helper(fd_out, tmp->file,
+			redir_fd_helper(&fds->fd_out, &fds->redir_out, tmp->file,
 				O_CREAT | O_WRONLY | O_TRUNC);
 		else if (tmp->type == APPEND)
-			redir_fd_helper(fd_out, tmp->file,
+			redir_fd_helper(&fds->fd_out, &fds->redir_out, tmp->file,
 				O_CREAT | O_WRONLY | O_APPEND);
 		else if (tmp->type == HEREDOC)
-			redir_fd_helper(fd_in, tmp->file, O_RDONLY);
+			redir_fd_helper(&fds->fd_in, &fds->redir_in, tmp->file, O_RDONLY);
 		tmp = tmp->next;
 	}
 	return ;

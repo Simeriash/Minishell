@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:46:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/12 11:27:27 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:05:22 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 # include "minishell.h"
 # include "builtins.h"
 # include "error.h"
-//# include <readline/readline.h>
-//# include <readline/history.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
@@ -41,60 +39,24 @@ typedef struct s_fds
 {
 	int	fd_in;
 	int	fd_out;
+
+	int	redir_in;
+	int	redir_out;
 }	t_fds;
-
-// typedef enum {
-//   PIPE,
-//   CMD,
-//   AND,
-//   OR
-// } e_cmdtype;
-
-// typedef enum e_redir_type
-// {
-// 	IN,
-// 	OUT,
-// 	APPEND
-// }	t_redir_type;
-
-// typedef struct s_redirs
-// {
-// 	t_redir_type redir_type;
-// 	char *redir_file;
-// 	struct s_redirs *redirs_next;
-// }	t_redirs;
-
-// typedef struct s_cmd
-// {
-// 	char **args;
-// 	t_redirs *redirs;
-
-// }	t_cmd;
-
-// typedef struct s_tree
-// {
-// 	struct s_tree *head;
-// 	e_cmdtype type;
-// 	int value;
-// 	t_cmd	*cmd;
-// 	struct s_tree	*left;
-// 	struct s_tree	*right;
-// } t_tree;
 
 int				execute_cmd(t_ast *node, t_env **envp, t_fds *fds);
 int				execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd);
 void			free_array(char **array);
 t_builtin_func	get_builtin(char **args, t_env **envpcpy);
-t_ast			*makenode(char *value);
-void			free_tree(t_ast *node);
+// t_ast			*makenode(char *value);
+// void			free_tree(t_ast *node);
 
 void			free_array(char **array);
-void			apply_redirects(t_ast *node, int *fd_in, int *fd_out);
-void			cleanup_helper(char *fallback);
+void			apply_redirects(t_ast *node, t_fds *fds);
 
 char			*create_candidate(char *cmd, char **paths, t_exec_err *err);
 char			*create_exec_path(char *path, char *cmd);
-char			**create_paths(t_exec_err *err);
+char			**create_paths(t_exec_err *err, t_env **env);
 
 char			**make_env_execve(t_env *envpc);
 
@@ -102,9 +64,20 @@ char			**make_env_execve(t_env *envpc);
 
 char			*set_fallback_path(int type, char *candidate, char *fallback);
 int				get_candidate_type(struct stat *st);
-char			**create_paths(t_exec_err *err);
 char			*create_exec_path(char *path, char *cmd);
 
-int				execute_builtin(t_env **env, t_ast *node, t_fds *fds, t_builtin_func func);
+int				execute_builtin(t_env **env, t_ast *node, t_fds *fds,
+					t_builtin_func func);
+int				save_fds(t_fds *fds, int *saved_in, int *saved_out);
+int				redirect_builtin_fds(t_fds *fds);
+int				restore_standard_fds(int saved_in, int saved_out);
+void			close_redirects(t_fds *fds);
+int				builtin_redir_setup(t_ast *node, t_fds *fds, int *saved_in,
+					int *saved_out);
+
+int				run_command(t_ast *node, t_fds *fds, char *exec, t_env **env);
+void			child_exec(t_ast *node, t_fds *fds, char *exec,	t_env **env);
+int				reap_child_process(pid_t child_process);
+void			execve_error_msg(char *exec);
 
 #endif

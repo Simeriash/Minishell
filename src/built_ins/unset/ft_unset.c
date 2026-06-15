@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:15 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/11 08:48:00 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:56:23 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
-#include "../../inc/error.h"
+#include "../../../inc/builtins.h"
+#include "../../../inc/error.h"
 
 static void	free_node(t_env *to_free)
 {

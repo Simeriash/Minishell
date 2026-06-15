@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/13 11:16:04 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/15 11:10:33 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,5 @@ int	main(int argc, char **argv, char **envp)
 	ft_putendl_fd("exit", 1);
 	rl_clear_history();
 	ft_free_envc(envc);
-	return (0);
+	return (status);
 }

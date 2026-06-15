@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 12:59:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/11 08:48:09 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:55:52 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../../inc/builtins.h"
 
 int	ft_pwd(char **args, t_env **envpcpy)
 {

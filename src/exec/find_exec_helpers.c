@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   find_exec_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 18:16:55 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/11 08:36:24 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 11:02:49 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execute.h"
-#include "parser.h"
+#include "../../inc/execute.h"
 
 char	*set_fallback_path(int type, char *candidate, char *fallback)
 {
@@ -45,12 +44,12 @@ int	get_candidate_type(struct stat *st)
 	return (2);
 }
 
-char	**create_paths(t_exec_err *err)
+char	**create_paths(t_exec_err *err, t_env **env)
 {
 	char	*path;
 	char	**ret;
 
-	path = getenv("PATH");
+	path = find_env_var("PATH", env);
 	if (!path)
 	{
 		*err = EXEC_NO_PATH;

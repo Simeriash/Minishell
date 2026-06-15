@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:27:58 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/05/27 12:10:54 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:48:00 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../../inc/builtins.h"
 
 static int	check_dash_n(char *args)
 {
@@ -65,7 +65,7 @@ int	ft_echo(char **args, t_env **envpcpy)
 	int	nl_flag;
 
 	(void)envpcpy;
-	i = 1; // to skip echo ex: echo "hello"
+	i = 1;
 	nl_flag = 1;
 	if (!args)
 		return (1);
@@ -76,6 +76,6 @@ int	ft_echo(char **args, t_env **envpcpy)
 	}
 	ret_val = print_words(i, args, nl_flag);
 	if (ret_val < 0)
-		return (ret_val); // WRITE FAIL
-	return (0); // SUCCESS
+		return (ret_val);
+	return (0);
 }

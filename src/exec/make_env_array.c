@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   make_env_array.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/31 13:31:31 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/12 10:48:05 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 11:04:29 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execute.h"
-#include "parser.h"
+#include "../../inc/execute.h"
 
 char	*env_join(char *key, char *value)
 {

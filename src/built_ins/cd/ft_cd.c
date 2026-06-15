@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 09:47:32 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:46:49 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../../inc/builtins.h"
 
 static int	update_oldpwd_pwd(char *old, char *new, t_env **envpcpy)
 {
@@ -91,7 +91,6 @@ static	int	cd_to_home(t_env **envpcpy)
 
 int	ft_cd(char **args, t_env **envpcpy)
 {
-	// char	*new;
 	int		ret_val;
 
 	if (!args[1])
@@ -99,24 +98,6 @@ int	ft_cd(char **args, t_env **envpcpy)
 		ret_val = cd_to_home(envpcpy);
 		return (ret_val);
 	}
-	// if (!args[1] || (args[1][0] == '~' && args[1][1] == '\0'))
-	// {
-	// 	ret_val = cd_to_home(envpcpy);
-	// 	return (ret_val);
-	// }
-	// if (args[1][0] == '-' && args[1][1] == '\0')
-	// {
-	// 	new = find_env_var("OLDPWD", envpcpy);
-	// 	if (!new || new[0] == '\0')
-	// 	{
-	// 		printf("bash: cd: OLDPWD not set\n");
-	// 		return (-1);
-	// 	}
-	// 	ret_val = cd_executor(new, envpcpy);
-	// 	if (ret_val == 0)
-	// 		ft_pwd(args, envpcpy);
-	// 	return (ret_val);
-	// }
 	ret_val = cd_executor(args[1], envpcpy);
 	return (ret_val);
 }

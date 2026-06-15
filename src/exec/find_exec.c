@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   find_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/31 13:20:21 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/11 09:56:24 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 11:00:24 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execute.h"
-#include "parser.h"
+#include "../../inc/execute.h"
 
 static char	*handle_candidate(char *path, char *cmd, char *f_b, t_exec_err *err)
 {
@@ -20,7 +19,8 @@ static char	*handle_candidate(char *path, char *cmd, char *f_b, t_exec_err *err)
 	ret = create_exec_path(path, cmd);
 	if (!ret)
 	{
-		cleanup_helper(f_b);
+		if (f_b)
+			free(f_b);
 		*err = EXEC_MALLOC_FAIL;
 		return (NULL);
 	}
@@ -41,7 +41,8 @@ static char	*process_candidate(char *candidate, char **fallback
 	type = get_candidate_type(&st);
 	if (type == 0)
 	{
-		cleanup_helper(*fallback);
+		if (*fallback)
+			free(*fallback);
 		return (candidate);
 	}
 	*fallback = set_fallback_path(type, candidate, *fallback);

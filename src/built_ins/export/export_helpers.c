@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export_helpers1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:34:49 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/11 08:48:23 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:49:40 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../../inc/builtins.h"
 
 int	cvi_error_check(char *input, int i)
 {
