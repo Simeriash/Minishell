@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:46:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/16 09:53:16 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/16 15:48:46 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ int				execute_cmd(t_ast *node, t_env **envp, t_fds *fds);
 int				execute_tree(t_ast *node, t_env **envp, int in_fd, int out_fd);
 void			free_array(char **array);
 t_builtin_func	get_builtin(char **args, t_env **envpcpy);
-// t_ast			*makenode(char *value);
-// void			free_tree(t_ast *node);
 
 void			free_array(char **array);
 void			apply_redirects(t_ast *node, t_fds *fds);
@@ -61,9 +59,6 @@ char			**create_paths(t_exec_err *err, t_env **env);
 char			**make_env_execve(t_env *envpc);
 
 // find_exec_helpers.c
-
-char			*set_fallback_path(int type, char *candidate, char *fallback);
-int				get_candidate_type(struct stat *st);
 char			*create_exec_path(char *path, char *cmd);
 
 int				execute_builtin(t_env **env, t_ast *node, t_fds *fds,
