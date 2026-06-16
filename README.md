@@ -2,13 +2,15 @@
 
 # **Description**
 
-> [!NOTE]
-> Section that clearly presents the project, including its goal and a brief overview.
+The goal of this project is to create a "simple" shell based on Bash.
+
+The idea is to write a program that allows communication with the computer in a human-readable language using command lines.
 
 # **Instructions**
 
-> [!NOTE]
-> Section containing any relevant information about compilation, installation, and/or execution.
+First, you need to run the command `make` in your terminal to compile the project.
+
+To run the program, you can either launch the executable using valgrind and your preferred flags, or use the command `make valgrind` to simply launch the program with valgrind and some selected flags.
 
 # **Ressources**
 
