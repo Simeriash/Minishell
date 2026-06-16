@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 09:16:00 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/15 10:52:26 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 15:41:55 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	check_valid_input(char *in)
 	i = 0;
 	if (!(in[i] == '_' || ft_isalpha(in[i])))
 	{
-		printf("bash: export: `%s': not a valid identifier\n", in);
+		ft_printf_fd(2, "Ghost: export: `%s': not a valid identifier\n", in);
 		return (1);
 	}
 	i++;

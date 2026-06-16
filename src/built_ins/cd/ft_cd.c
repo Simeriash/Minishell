@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/15 10:46:49 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 15:41:36 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static	int	cd_to_home(t_env **envpcpy)
 	new = find_env_var("HOME", envpcpy);
 	if (!new)
 	{
-		write(2, "Ghost\\>: ", ft_strlen("Ghost\\>: "));
+		write(2, "Ghost: ", ft_strlen("Ghost: "));
 		write(2, "cd", ft_strlen("cd"));
 		write(2, ": ", 2);
 		write(2, "HOME not set", ft_strlen("HOME not set"));

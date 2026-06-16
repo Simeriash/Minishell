@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_helpers1.c                                  :+:      :+:    :+:   */
+/*   export_helpers.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:34:49 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/15 10:49:40 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 15:41:49 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ int	cvi_error_check(char *input, int i)
 {
 	if (input[i] == '+')
 	{
-		printf("bash: export: `%s': not a valid identifier\n", input);
+		printf("Ghost: export: `%s': not a valid identifier\n", input);
 		return (1);
 	}
 	if (!(input[i] == '_' || ft_isalnum(input[i])))
 	{
-		printf("bash: export: `%s': not a valid identifier\n", input);
+		printf("Ghost: export: `%s': not a valid identifier\n", input);
 		return (1);
 	}
 	return (0);

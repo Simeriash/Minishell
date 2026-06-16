@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 18:41:01 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/16 08:33:33 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/16 15:42:07 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	write_msg(char *exec, char *err_msg)
 {
-	write(2, "Ghost\\>: ", ft_strlen("Ghost\\>: "));
+	write(2, "Ghost: ", ft_strlen("Ghost: "));
 	write(2, exec, ft_strlen(exec));
 	write(2, ": ", 2);
 	write(2, err_msg, ft_strlen(err_msg));
@@ -65,7 +65,7 @@ void	redir_fd_helper(int *fd, int *owner, char *path, int flags)
 	{
 		if (*owner == 1 && *fd > STDERR_FILENO)
 			close(*fd);
-		write(2, "Ghost\\>: ", ft_strlen("Ghost\\>: "));
+		write(2, "Ghost: ", ft_strlen("Ghost: "));
 		write(2, path, ft_strlen(path));
 		write(2, ": ", 2);
 		write(2, strerror(errno), ft_strlen(strerror(errno)));
