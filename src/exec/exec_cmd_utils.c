@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 18:41:01 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/15 10:59:25 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 08:33:33 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,26 @@ static void	write_msg(char *exec, char *err_msg)
 	write(2, "\n", 1);
 }
 
-void	execve_error_msg(char *exec)
+int	execve_error_msg(char *exec)
 {
 	struct stat	st;
 
 	if (stat(exec, &st) == 0)
 	{
 		if (S_ISDIR(st.st_mode))
+		{
 			write_msg(exec, "Is a directory");
+			return (127);
+		}
 		else if (!S_ISREG(st.st_mode))
 			write_msg(exec, "Not a regular file");
 		else
 			write_msg(exec, strerror(errno));
+		return (126);
 	}
 	else
 		write_msg(exec, strerror(errno));
-	return ;
+	return (127);
 }
 
 void	free_array(char **array)
