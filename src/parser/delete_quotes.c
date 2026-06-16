@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 14:58:22 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/16 16:53:48 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 19:23:29 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	empty_token(t_token *token_list)
 	prev_token = token_list;
 	while (token != NULL)
 	{
-		if (token->type == EXPAND	&& token->value[0] == '\0')
+		if (token->type == EXPAND && token->value[0] == '\0')
 		{
 			tmp = token->next;
 			free(token->value);
