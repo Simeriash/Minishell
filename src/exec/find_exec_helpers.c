@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_exec_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 18:16:55 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/15 11:02:49 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 09:45:52 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,9 @@ char	**create_paths(t_exec_err *err, t_env **env)
 	path = find_env_var("PATH", env);
 	if (!path)
 	{
-		*err = EXEC_NO_PATH;
-		return (NULL);
+		path = getcwd(NULL, 0);
+		if (!path)
+			return (NULL);
 	}
 	ret = ft_split(path, ':');
 	if (!ret)
