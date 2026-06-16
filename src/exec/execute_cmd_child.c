@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd_child.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 09:05:43 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/15 11:01:28 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 08:10:00 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	reap_child_process(pid_t child_process)
 void	child_exec(t_ast *node, t_fds *fds, char *exec,	t_env **env)
 {
 	char	**env_array;
+	int		status;
 
 	env_array = child_setup(node, fds, env, exec);
 	if (fds->fd_in >= 0 && fds->fd_out >= 0)
@@ -71,10 +72,10 @@ void	child_exec(t_ast *node, t_fds *fds, char *exec,	t_env **env)
 		}
 		execve(exec, node->cmd->args, env_array);
 	}
-	execve_error_msg(exec);
+	status = execve_error_msg(exec);
 	cleanup(exec, fds, env, node);
 	free_array(env_array);
-	exit(126);
+	exit(status);
 }
 
 int	run_command(t_ast *node, t_fds *fds, char *exec, t_env **env)
