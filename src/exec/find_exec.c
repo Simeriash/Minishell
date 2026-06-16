@@ -3,74 +3,67 @@
 /*                                                        :::      ::::::::   */
 /*   find_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/31 13:20:21 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/15 11:00:24 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 15:49:49 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/execute.h"
 
-static char	*handle_candidate(char *path, char *cmd, char *f_b, t_exec_err *err)
+char	**create_paths(t_exec_err *err, t_env **env)
 {
-	char	*ret;
+	char	*path;
+	char	**ret;
 
-	ret = create_exec_path(path, cmd);
+	path = find_env_var("PATH", env);
+	if (!path)
+		return (NULL);
+	ret = ft_split(path, ':');
 	if (!ret)
 	{
-		if (f_b)
-			free(f_b);
 		*err = EXEC_MALLOC_FAIL;
 		return (NULL);
 	}
 	return (ret);
 }
 
-static char	*process_candidate(char *candidate, char **fallback
-												, t_exec_err *err)
+char	*create_exec_path(char *path, char *cmd)
 {
-	struct stat	st;
-	int			type;
+	char	*tmp;
+	char	*ret;
 
-	if (stat(candidate, &st) != 0)
-	{
-		free (candidate);
+	tmp = ft_strjoin(path, "/");
+	if (!tmp)
 		return (NULL);
-	}
-	type = get_candidate_type(&st);
-	if (type == 0)
-	{
-		if (*fallback)
-			free(*fallback);
-		return (candidate);
-	}
-	*fallback = set_fallback_path(type, candidate, *fallback);
-	if (*fallback == NULL && *err == EXEC_MALLOC_FAIL)
+	ret = ft_strjoin(tmp, cmd);
+	free(tmp);
+	if (!ret)
 		return (NULL);
-	return (NULL);
+	return (ret);
 }
 
 char	*create_candidate(char *cmd, char **paths, t_exec_err *err)
 {
 	char		*candidate;
-	char		*fallback;
-	char		*result;
+	struct stat	st;
 	int			i;
 
+	(void)err;
 	i = 0;
-	fallback = NULL;
 	while (paths[i])
 	{
-		candidate = handle_candidate(paths[i], cmd, fallback, err);
-		if (!candidate && *err == EXEC_MALLOC_FAIL)
+		candidate = create_exec_path(paths[i], cmd);
+		if (!candidate)
 			return (NULL);
-		result = process_candidate(candidate, &fallback, err);
-		if (result)
-			return (result);
-		if (!result && *err == EXEC_MALLOC_FAIL)
-			return (NULL);
+		if (stat(candidate, &st) == 0)
+		{
+			if (S_ISREG(st.st_mode) && access(candidate, X_OK) == 0)
+				return (candidate);
+		}
+		free(candidate);
 		i++;
 	}
-	return (fallback);
+	return (NULL);
 }
