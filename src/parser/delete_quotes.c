@@ -6,11 +6,35 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 14:58:22 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/16 09:51:16 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 16:53:48 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/parser.h"
+
+static void	empty_token(t_token *token_list)
+{
+	t_token	*tmp;
+	t_token	*token;
+	t_token	*prev_token;
+
+	token = token_list->next;
+	prev_token = token_list;
+	while (token != NULL)
+	{
+		if (token->type == EXPAND	&& token->value[0] == '\0')
+		{
+			tmp = token->next;
+			free(token->value);
+			free(token);
+			prev_token->next = tmp;
+			token = tmp;
+			continue ;
+		}
+		prev_token = token;
+		token = token->next;
+	}
+}
 
 static t_ret	state_normal(t_token *token, t_state *state, int *i, int *j)
 {
@@ -104,4 +128,5 @@ void	delete_quotes(t_token *token_list)
 			next_delete(tmp, &state, &i, &j);
 		tmp = tmp->next;
 	}
+	empty_token(token_list);
 }

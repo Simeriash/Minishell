@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 09:38:57 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/13 10:13:04 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 14:48:01 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	looking_for_string(char *str, char **s, int *i, int *status)
 	if (state != NORMAL)
 	{
 		error_lexer(OPEN_QUOTE);
-		*status = 127;
+		*status = 2;
 		return (1);
 	}
 	*s = ft_substr(str, start, *i - start);

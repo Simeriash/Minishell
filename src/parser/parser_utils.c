@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 13:42:36 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/15 12:03:03 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 16:13:45 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ast_init(t_ast **ast, t_ast *init_ast)
 {
-	if ((*ast)->left)
+	if ((*ast)->left && (*ast)->type == PIPE)
 		ast_init(&(*ast)->left, init_ast);
 	if ((*ast)->cmd && !(*ast)->cmd->args && !(*ast)->cmd->redir)
 	{
@@ -24,7 +24,7 @@ void	ast_init(t_ast **ast, t_ast *init_ast)
 		return ;
 	}
 	(*ast)->ast = init_ast;
-	if ((*ast)->right)
+	if ((*ast)->right && (*ast)->type == PIPE)
 		ast_init(&(*ast)->right, init_ast);
 }
 
