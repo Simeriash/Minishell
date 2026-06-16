@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/15 16:58:39 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 19:13:26 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ typedef struct s_index
 /*====================expander====================*/
 
 int		expand(t_token *token_list, t_env *envc, int status);
+void	ft_memcpy_exp(char *str, int n);
+int		condition_to_expand(t_token *token, t_index index, t_state state);
 char	*check_new_value(char *value, t_env *envc, t_index *index, int status);
 int		change_value(char **value, char *new_value, int start, int end);
 char	*check_env(char *value, t_env *envc, int i, int *j);

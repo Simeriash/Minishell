@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/13 10:42:01 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 19:27:42 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ int status)
 	int		len;
 
 	if (token->value[index->i] == '"' || token->value[index->i] == '\'')
+	{
+		ft_memcpy_exp(token->value, index->i);
 		return (0);
+	}
 	new_value = check_new_value(token->value, envc, index, status);
 	if (!new_value
 		|| change_value(&token->value, new_value, index->i, index->j))
@@ -88,7 +91,7 @@ static int	expander(t_token *token, t_env *envc, int status)
 			(index.i)++;
 			if (token->value[index.i] == '\0')
 				return (0);
-			if (ft_isspace(token->value[index.i]))
+			if (condition_to_expand(token, index, state))
 				continue ;
 			index.j = index.i + 1;
 			if (next_expander(token, envc, &index, status))

@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 16:46:10 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/11 15:06:12 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/16 19:26:33 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,28 @@ char	*check_env(char *value, t_env *envc, int i, int *j)
 	new_value = check_key(key, envc);
 	free(key);
 	return (new_value);
+}
+
+void	ft_memcpy_exp(char *str, int n)
+{
+	int	i;
+	int	j;
+
+	i = n - 1;
+	j = n;
+	while (str[j])
+	{
+		str[i] = str[j];
+		i++;
+		j++;
+	}
+	str[i] = str[j];
+}
+
+int	condition_to_expand(t_token *token, t_index index, t_state state)
+{
+	if (ft_isspace(token->value[index.i])
+		|| (state == DOUBLE_QUOTE && token->value[index.i] == '"'))
+		return (1);
+	return (0);
 }
