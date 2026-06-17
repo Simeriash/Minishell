@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 12:30:30 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/11 14:57:30 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 08:33:58 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 int	g_sig;
 
-static int	init_heredoc(char *eof, int *limiter, int *fd, pid_t *pid)
+static int	init_heredoc(char *eof, t_var *var, pid_t *pid, int *status)
 {
-	if (delimiter(limiter, eof))
+	if (delimiter(&var->limiter, eof, status))
 		return (1);
-	*fd = open("minishell_heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (*fd < 0)
+	var->fd = open("minishell_heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (var->fd < 0)
 	{
-		error_heredoc(FD);
+		error_heredoc(FD, status);
 		return (1);
 	}
 	g_sig = 0;
@@ -29,7 +29,7 @@ static int	init_heredoc(char *eof, int *limiter, int *fd, pid_t *pid)
 	return (0);
 }
 
-static int	cmd_heredoc(char **cmd, char *eof)
+static int	cmd_heredoc(char **cmd, char *eof, int *status)
 {
 	rl_clear_history();
 	set_signal_heredoc(0);
@@ -38,8 +38,13 @@ static int	cmd_heredoc(char **cmd, char *eof)
 	if (!(*cmd))
 	{
 		if (!g_sig)
+		{
 			ft_putendl_fd("warning: here-document at line 1 delimited\
 by end-of-file (wanted `eof')", 2);
+			*status = 2;
+		}
+		else
+			*status = 130;
 		return (1);
 	}
 	if (!ft_strcmp(*cmd, eof))
@@ -48,11 +53,11 @@ by end-of-file (wanted `eof')", 2);
 }
 
 static int	heredoc_suite(char **cmd, t_token *token_list, t_env *envc, \
-t_var var)
+t_var *var)
 {
-	if (heredoc_expander(cmd, envc, var.status))
+	if (heredoc_expander(cmd, envc, var->status))
 	{
-		free_heredoc(token_list, envc, *cmd, var.fd);
+		free_heredoc(token_list, envc, *cmd, var->fd);
 		return (1);
 	}
 	return (0);
@@ -64,7 +69,7 @@ static void	printline(char *cmd, int fd)
 	free(cmd);
 }
 
-int	heredoc(char *eof, t_token *token_list, t_env *envc, int status)
+int	heredoc(char *eof, t_token *token_list, t_env *envc, int *status)
 {
 	char	*cmd;
 	pid_t	pid;
@@ -72,15 +77,15 @@ int	heredoc(char *eof, t_token *token_list, t_env *envc, int status)
 	t_var	var;
 
 	var.status = status;
-	if (init_heredoc(eof, &(var.limiter), &(var.fd), &pid))
+	if (init_heredoc(eof, &var, &pid, status))
 		return (1);
 	if (pid == 0)
 	{
 		while (1)
 		{
-			if (cmd_heredoc(&cmd, eof))
+			if (cmd_heredoc(&cmd, eof, status))
 				break ;
-			if (var.limiter && heredoc_suite(&cmd, token_list, envc, var))
+			if (var.limiter && heredoc_suite(&cmd, token_list, envc, &var))
 				exit (1);
 			printline(cmd, var.fd);
 		}

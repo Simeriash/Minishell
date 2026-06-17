@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 12:27:04 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/11 14:12:38 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 08:33:45 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,12 @@ typedef struct s_var
 {
 	int	fd;
 	int	limiter;
-	int	status;
+	int	*status;
 }	t_var;
 
 void	free_heredoc(t_token *token_list, t_env *envc, char *cmd, int fd);
-int		heredoc_expander(char **cmd, t_env *envc, int status);
-int		delimiter(int *limiter, char *eof);
+int		heredoc_expander(char **cmd, t_env *envc, int *status);
+int		delimiter(int *limiter, char *eof, int *status);
 void	set_signal_heredoc(int i);
-void	error_heredoc(t_error error);
 
 #endif

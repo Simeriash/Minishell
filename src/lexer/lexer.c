@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 09:38:57 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/16 14:48:01 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 08:55:28 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,13 @@ static int	looking_for_string(char *str, char **s, int *i, int *status)
 		state_condition(str[(*i)++], &state);
 	if (state != NORMAL)
 	{
-		error_lexer(OPEN_QUOTE);
-		*status = 2;
+		error_lexer(OPEN_QUOTE, status);
 		return (1);
 	}
 	*s = ft_substr(str, start, *i - start);
 	if (!(*s))
 	{
-		error_lexer(MALLOC);
+		error_lexer(MALLOC, status);
 		return (1);
 	}
 	return (0);
@@ -47,7 +46,7 @@ static int	create_token(char *str, t_token **last, int *i, int *status)
 		error = meta_token(str, *last, i);
 		if (error)
 		{
-			error_lexer(error);
+			error_lexer(error, status);
 			return (1);
 		}
 		*last = (*last)->next;
@@ -57,7 +56,7 @@ static int	create_token(char *str, t_token **last, int *i, int *status)
 		return (1);
 	if (add_after(*last, WORD, s))
 	{
-		error_lexer(MALLOC);
+		error_lexer(MALLOC, status);
 		return (1);
 	}
 	*last = (*last)->next;
@@ -70,7 +69,7 @@ t_token	*lexer(char *str, int *status)
 	t_token	*token_list;
 	t_token	*last;
 
-	token_list = init_token_list();
+	token_list = init_token_list(status);
 	if (!token_list)
 		return (NULL);
 	i = 0;
