@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 16:46:10 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/17 08:50:05 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 17:33:40 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,28 +37,56 @@ char	*check_key(char *key, t_env *envc)
 	return (str);
 }
 
-char	*check_env(char *value, t_env *envc, int i, int *j)
+static char	*env_init(char *value, t_env *envc, int i, int *j)
 {
 	char	*key;
-	char	*new_value;
+	char	*tmp;
 
 	while (ft_isalnum(value[*j]) || value[*j] == '_')
 		(*j)++;
 	key = ft_substr(value, i, *j - i);
 	if (!key)
 		return (NULL);
-	new_value = check_key(key, envc);
+	tmp = check_key(key, envc);
 	free(key);
+	if (!tmp)
+		return (NULL);
+	return (tmp);
+}
+
+char	*check_env(char *value, t_env *envc, int i, int *j)
+{
+	char	*new_value;
+	char	*tmp;
+	int		len;
+
+	tmp = env_init(value, envc, i, j);
+	if (!tmp)
+		return (NULL);
+	if (tmp[0] == '\0')
+		return (tmp);
+	len = ft_strlen(tmp);
+	new_value = malloc(sizeof(*new_value) * (len + 3));
+	if (!new_value)
+	{
+		free(tmp);
+		return (NULL);
+	}
+	new_value[0] = '\0';
+	ft_strlcat(new_value, "\"", 2);
+	ft_strlcat(new_value, tmp, len + 2);
+	ft_strlcat(new_value, "\"", len + 3);
+	free(tmp);
 	return (new_value);
 }
 
-void	ft_memcpy_exp(char *str, int n)
+void	ft_memcpy_exp(char *str, t_index *index)
 {
 	int	i;
 	int	j;
 
-	i = n - 1;
-	j = n;
+	i = index->i - 1;
+	j = index->i;
 	while (str[j])
 	{
 		str[i] = str[j];
@@ -66,6 +94,8 @@ void	ft_memcpy_exp(char *str, int n)
 		j++;
 	}
 	str[i] = str[j];
+	(index->i)--;
+	(index->j)--;
 }
 
 int	condition_to_expand(t_token *token, t_index index, t_state state)

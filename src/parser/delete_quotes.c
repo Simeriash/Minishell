@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 14:58:22 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/17 14:33:21 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 17:21:31 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	empty_token(t_token *token_list)
 
 static t_ret	state_normal(t_token *token, t_state *state, int *i, int *j)
 {
-	if (*state == NORMAL && *j != *i)
+	if (*state == NORMAL)
 	{
 		while (*state == NORMAL && token->value[*j] != '\0')
 		{
@@ -113,9 +113,9 @@ void	delete_quotes(t_token *token_list)
 	t_token	*tmp;
 
 	tmp = token_list->next;
-	state = NORMAL;
 	while (tmp != NULL)
 	{
+		state = NORMAL;
 		i = 0;
 		j = 0;
 		if (tmp->type == HEREDOC)
