@@ -6,13 +6,13 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 18:41:01 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/16 15:42:07 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/17 08:13:55 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/execute.h"
 
-static void	write_msg(char *exec, char *err_msg)
+void	write_msg(char *exec, char *err_msg)
 {
 	write(2, "Ghost: ", ft_strlen("Ghost: "));
 	write(2, exec, ft_strlen(exec));
