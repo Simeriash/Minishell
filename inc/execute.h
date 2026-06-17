@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 08:46:16 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/16 15:48:46 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/17 08:44:13 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int				builtin_redir_setup(t_ast *node, t_fds *fds, int *saved_in,
 int				run_command(t_ast *node, t_fds *fds, char *exec, t_env **env);
 void			child_exec(t_ast *node, t_fds *fds, char *exec,	t_env **env);
 int				reap_child_process(pid_t child_process);
+void			write_msg(char *exec, char *err_msg);
 int				execve_error_msg(char *exec);
 
 #endif

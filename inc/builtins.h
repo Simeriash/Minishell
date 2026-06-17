@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:29:23 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/03 10:21:41 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/17 09:12:25 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,10 @@ int			env_set(char *key, char *value, t_env **envpcpy, t_env_mode mode);
 //int			append_export(t_export_inputs *data, t_env **envpcpy);
 //int			set_export(t_export_inputs *data, t_env **envpcpy);
 void		print_error(char *cmd, char *bad_input, int err);
+void		write_exit_msg(int exit_value, char *word_arg);
+
+long long	create_num(unsigned long long limit, const char *str, int *ctrl);
+long long	ft_longatoi(const char *str, int *ctrl);
+
 
 #endif
