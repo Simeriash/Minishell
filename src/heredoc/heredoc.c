@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 12:30:30 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/17 08:33:58 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 10:47:08 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static int	cmd_heredoc(char **cmd, char *eof, int *status)
 	{
 		if (!g_sig)
 		{
-			ft_putendl_fd("warning: here-document at line 1 delimited\
-by end-of-file (wanted `eof')", 2);
+			ft_printf_fd(2, "warning: here-document at line 1 delimited\
+by end-of-file (wanted `%s')\n", eof);
 			*status = 2;
 		}
 		else
