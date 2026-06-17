@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 18:41:01 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/17 08:13:55 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/17 15:38:46 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	execve_error_msg(char *exec)
 		if (S_ISDIR(st.st_mode))
 		{
 			write_msg(exec, "Is a directory");
-			return (127);
+			return (126);
 		}
 		else if (!S_ISREG(st.st_mode))
 			write_msg(exec, "Not a regular file");
