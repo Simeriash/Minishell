@@ -19,7 +19,7 @@ SRCS = $(SRC_DIR)/minishell.c \
 	   $(BUILTINS_DIR)/get_builtin.c \
        $(BUILTINS_DIR)/echo/ft_echo.c \
        $(BUILTINS_DIR)/cd/ft_cd.c \
-       $(BUILTINS_DIR)/exit/ft_exit.c \
+       $(BUILTINS_DIR)/exit/ft_exit.c $(BUILTINS_DIR)/exit/ft_exit_utils.c \
 	   $(BUILTINS_DIR)/pwd/ft_pwd.c \
 	   $(BUILTINS_DIR)/env/ft_env.c \
 	   $(BUILTINS_DIR)/utils/builtin_utils.c $(BUILTINS_DIR)/utils/builtin_utils2.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 14:29:14 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/15 10:57:22 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 08:01:10 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_env	*get_env_node(char *key, t_env **envpcpy)
 
 void	print_error(char *cmd, char *bad_input, int err)
 {
-	write(2, "bash: ", 6);
+	write(2, "Ghost: ", 8);
 	if (cmd)
 	{
 		write(2, cmd, ft_strlen(cmd));
