@@ -6,14 +6,14 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:50:55 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/16 09:54:47 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/17 09:37:51 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/builtins.h"
 #include "../../../inc/error.h"
 
-static long long	create_num(unsigned long long limit, const char *str,
+long long	create_num(unsigned long long limit, const char *str,
 								int *ctrl)
 {
 	unsigned long long	num;
@@ -35,7 +35,7 @@ static long long	create_num(unsigned long long limit, const char *str,
 	return (num);
 }
 
-static long long	ft_longatoi(const char *str, int *ctrl)
+long long	ft_longatoi(const char *str, int *ctrl)
 {
 	int					i;
 	int					sign;
@@ -83,28 +83,29 @@ static int	count_args(char **args)
 
 int	ft_exit(char **args, t_env **delete)
 {
-	int		exit_value;
-	int		ctrl;
+	int	exit_value;
+	int	ctrl;
+	int	error;
 
+	(void)delete;
 	ctrl = 0;
 	exit_value = 0;
-	if (count_args(args) > 2)
-	{
-		write(2, "Ghost: exit: too many arguments", 31);
-		ft_free_envc(*delete);
-		return (1);
-	}
+	error = 0;
 	if (args[1])
 	{
 		if (check_alpha(args[1]))
-			exit_value = 2;
+			error = 2;
+		else if (count_args(args) > 2)
+			error = 1;
 		else
+		{
 			exit_value = ft_longatoi(args[1], &ctrl);
+			if (ctrl == -1)
+				error = 2;
+		}
 	}
-	if (ctrl != 0)
-		exit_value = 2;
-	ft_free_envc(*delete);
-	rl_clear_history();
-	write(1, "exit\n", 6);
+	write_exit_msg(error, args[1]);
+	if (error)
+		exit_value = error;
 	return (exit_value);
 }
