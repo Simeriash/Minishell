@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:50:55 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/17 09:37:51 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/17 11:18:24 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,13 @@ long long	create_num(unsigned long long limit, const char *str,
 
 	i = 0;
 	num = 0;
-	while (str[i])
+	while (str[i] && (str[i] >= '0' && str[i] <= '9'))
 	{
+		if (ft_isdigit(str[i]) == 0)
+		{
+			*ctrl = -2;
+			return (0);
+		}
 		if (num > (limit - (str[i] - '0')) / 10)
 		{
 			num = 0;
@@ -46,6 +51,8 @@ long long	ft_longatoi(const char *str, int *ctrl)
 	num = 0;
 	sign = 1;
 	limit = LLONG_MAX;
+	while ((str[i] <= 13 && str[i] >= 9) || str[i] == 32)
+		i++;
 	if (str[i] == '-')
 	{
 		sign = -sign;
@@ -57,29 +64,20 @@ long long	ft_longatoi(const char *str, int *ctrl)
 	return ((long long)sign * num);
 }
 
-static int	check_alpha(char *str)
-{
-	int	i;
+// static int	check_alpha(char *str)
+// {
+// 	int	i;
 
-	i = 0;
-	while (str[i])
-	{
-		if (ft_isalpha(str[i]))
-			return (1);
-		i++;
-	}
-	return (0);
-}
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		if (!(ft_isdigit(str[i])))
+// 			return (1);
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
-static int	count_args(char **args)
-{
-	int	i;
-
-	i = 0;
-	while (args[i])
-		i++;
-	return (i);
-}
 
 int	ft_exit(char **args, t_env **delete)
 {
@@ -91,9 +89,9 @@ int	ft_exit(char **args, t_env **delete)
 	ctrl = 0;
 	exit_value = 0;
 	error = 0;
-	if (args[1])
+	if (args[1] && ft_strcmp("--", args[1]) != 0)
 	{
-		if (check_alpha(args[1]))
+		if (is_number(args[1]))
 			error = 2;
 		else if (count_args(args) > 2)
 			error = 1;
