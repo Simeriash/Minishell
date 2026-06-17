@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/16 15:41:36 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/17 08:00:25 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ static int	update_oldpwd_pwd(char *old, char *new, t_env **envpcpy)
 	{
 		ret_val = env_set("OLDPWD", old, envpcpy, ENV_REPLACE);
 		if (ret_val < 0)
-			return (-1);
+			return (1);
 	}
 	if (new)
 	{
 		ret_val = env_set("PWD", new, envpcpy, ENV_REPLACE);
 		if (ret_val < 0)
-			return (-1);
+			return (1);
 	}
 	return (ret_val);
 }
@@ -39,10 +39,10 @@ static int	chdir_success(char **current, char *old, t_env **envpcpy)
 	ret_val = 0;
 	*current = getcwd(NULL, 0);
 	if (!*current)
-		return (-1);
+		return (1);
 	ret_val = update_oldpwd_pwd(old, *current, envpcpy);
 	if (ret_val < 0)
-		return (-1);
+		return (1);
 	return (ret_val);
 }
 
@@ -56,7 +56,7 @@ static int	cd_executor(char *cd_input, t_env **envpcpy)
 	current_path = NULL;
 	old_path = getcwd(NULL, 0);
 	if (!old_path)
-		return (-1);
+		return (1);
 	ret_val = chdir(cd_input);
 	if (ret_val == 0)
 		ret_val = chdir_success(&current_path, old_path, envpcpy);
@@ -64,6 +64,7 @@ static int	cd_executor(char *cd_input, t_env **envpcpy)
 	{
 		err = errno;
 		print_error("cd", cd_input, err);
+		ret_val = 1;
 	}
 	free(old_path);
 	free(current_path);
