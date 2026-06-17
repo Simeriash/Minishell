@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 09:05:43 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/16 08:10:00 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/17 15:57:55 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,17 @@ void	child_exec(t_ast *node, t_fds *fds, char *exec,	t_env **env)
 	int		status;
 
 	env_array = child_setup(node, fds, env, exec);
-	if (fds->fd_in >= 0 && fds->fd_out >= 0)
+	if (fds->fd_in != STDIN_FILENO && fds->fd_in >= 0)
 	{
-		if (fds->fd_in != STDIN_FILENO)
-		{
-			dup2(fds->fd_in, STDIN_FILENO);
-			close(fds->fd_in);
-		}
-		if (fds->fd_out != STDOUT_FILENO)
-		{
-			dup2(fds->fd_out, STDOUT_FILENO);
-			close(fds->fd_out);
-		}
-		execve(exec, node->cmd->args, env_array);
+		dup2(fds->fd_in, STDIN_FILENO);
+		close(fds->fd_in);
 	}
+	if (fds->fd_out != STDOUT_FILENO && fds->fd_out >= 0)
+	{
+		dup2(fds->fd_out, STDOUT_FILENO);
+		close(fds->fd_out);
+	}
+	execve(exec, node->cmd->args, env_array);
 	status = execve_error_msg(exec);
 	cleanup(exec, fds, env, node);
 	free_array(env_array);
