@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 14:58:22 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/16 19:23:29 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 14:33:21 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static t_ret	state_quote(t_token *token, t_state *state, int *i, int *j)
 		}
 		if (token->value[*j] == '\0' || token->value[++(*j)] == '\0')
 		{
-			token->value[*i] = token->value[*j];
+			token->value[*i] = '\0';
 			return (BREAK);
 		}
 		return (CONTINUE);
@@ -124,7 +124,7 @@ void	delete_quotes(t_token *token_list)
 			if (!tmp)
 				break ;
 		}
-		else if (tmp->type == WORD)
+		else if (tmp->type == WORD || tmp->type == EXPAND)
 			next_delete(tmp, &state, &i, &j);
 		tmp = tmp->next;
 	}

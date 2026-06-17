@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 14:06:30 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/15 17:18:53 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 14:20:25 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static t_cmd	*cmd_struct(t_arg *arg, t_redir *redir)
 
 static int	loop(t_token **token, t_arg **arg, t_redir **redir)
 {
-	if ((*token)->type == WORD)
+	if ((*token)->type == WORD || (*token)->type == EXPAND)
 	{
 		if (add_arg(arg, (*token)->value))
 		{
