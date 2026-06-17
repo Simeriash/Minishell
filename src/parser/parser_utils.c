@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 13:42:36 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/16 16:13:45 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 14:50:23 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,8 @@ int	next_pipe(t_ast *ast, int *status)
 
 int	pipe_error(t_ast *ast, int *status)
 {
-	int		i;
-
-	i = 0;
 	if (ast->left && pipe_error(ast->left, status))
-		i++;
+		return (1);
 	if (ast->type == PIPE)
 	{
 		if ((!ast->left || !ast->right)
@@ -114,8 +111,6 @@ token `|'", 2);
 	if (next_pipe(ast, status))
 		return (1);
 	if (ast->right && pipe_error(ast->right, status))
-		i++;
-	if (i)
 		return (1);
 	return (0);
 }
