@@ -6,15 +6,15 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 12:41:20 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/16 15:38:29 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/17 07:36:08 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/execute.h"
 
-static	char *copy_direct_path(char *cmd, t_exec_err *err)
+static char	*copy_direct_path(char *cmd, t_exec_err *err)
 {
-	char *ret;
+	char	*ret;
 
 	ret = ft_strdup(cmd);
 	if (!ret)
