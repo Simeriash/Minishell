@@ -6,25 +6,25 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 12:31:31 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/31 12:26:10 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 08:33:31 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/heredoc.h"
 
-static int	test_limiter(char *eof, int i, int *limiter)
+static int	test_limiter(char *eof, int i, int *limiter, int *status)
 {
 	if ((eof[0] && eof[1]) && (eof[0] == eof[1])
 		&& (eof[0] == '\'' || eof[0] == '"'))
 	{
-		error_heredoc(INVALID_LIMITER);
+		error_heredoc(INVALID_LIMITER, status);
 		return (1);
 	}
 	if ((eof[0] == '\'' || eof[0] == '"') && eof[0] == eof[i - 1])
 		*limiter = 0;
 	else if ((eof[0] == '\'' || eof[0] == '"') && eof[0] != eof[i - 1])
 	{
-		error_heredoc(INVALID_LIMITER);
+		error_heredoc(INVALID_LIMITER, status);
 		return (1);
 	}
 	return (0);
@@ -49,7 +49,7 @@ static void	change_eof(char *eof)
 		eof[i] = eof[j];
 }
 
-int	delimiter(int *limiter, char *eof)
+int	delimiter(int *limiter, char *eof, int *status)
 {
 	int		i;
 	t_state	state;
@@ -62,12 +62,12 @@ int	delimiter(int *limiter, char *eof)
 		state_condition(eof[i], &state);
 		if (ft_isspace(eof[i]))
 		{
-			error_heredoc(INVALID_LIMITER);
+			error_heredoc(INVALID_LIMITER, status);
 			return (1);
 		}
 		i++;
 	}
-	if (test_limiter(eof, i, limiter))
+	if (test_limiter(eof, i, limiter, status))
 		return (1);
 	if (*limiter == 0)
 		change_eof(eof);

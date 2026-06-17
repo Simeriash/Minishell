@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/16 19:27:42 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 08:00:09 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ static int	expander(t_token *token, t_env *envc, int status)
 	return (0);
 }
 
-int	expand(t_token *token_list, t_env *envc, int status)
+int	expand(t_token *token_list, t_env *envc, int *status)
 {
 	t_token	*tmp;
 
@@ -114,10 +114,10 @@ int	expand(t_token *token_list, t_env *envc, int status)
 	{
 		if (tmp->type == HEREDOC && tmp->next)
 			tmp = tmp->next;
-		else if ((tmp->type == WORD) && (expander(tmp, envc, status)
+		else if ((tmp->type == WORD) && (expander(tmp, envc, *status)
 				|| (tmp->type == EXPAND && more_token(&tmp))))
 		{
-			error_parser(token_list, MALLOC);
+			error_parser(token_list, MALLOC, status);
 			return (1);
 		}
 		tmp = tmp->next;

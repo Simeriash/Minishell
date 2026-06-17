@@ -6,20 +6,20 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 16:06:07 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/27 15:23:59 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 08:55:54 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/lexer.h"
 
-t_token	*init_token_list(void)
+t_token	*init_token_list(int *status)
 {
 	t_token	*token;
 
 	token = malloc(sizeof(*token));
 	if (!token)
 	{
-		error_lexer(MALLOC);
+		error_lexer(MALLOC, status);
 		return (NULL);
 	}
 	token->type = NONE;

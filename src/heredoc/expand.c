@@ -6,21 +6,21 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 08:35:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/11 14:54:23 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 08:20:59 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/heredoc.h"
 
-static int	next_expander(char **cmd, t_env *envc, t_index *index, int status)
+static int	next_expander(char **cmd, t_env *envc, t_index *index, int *status)
 {
 	char	*new_value;
 	int		len;
 
-	new_value = check_new_value(*cmd, envc, index, status);
+	new_value = check_new_value(*cmd, envc, index, *status);
 	if (!new_value || change_value(cmd, new_value, index->i, index->j))
 	{
-		error_heredoc(MALLOC);
+		error_heredoc(MALLOC, status);
 		return (1);
 	}
 	len = ft_strlen(new_value);
@@ -29,7 +29,7 @@ static int	next_expander(char **cmd, t_env *envc, t_index *index, int status)
 	return (0);
 }
 
-int	heredoc_expander(char **cmd, t_env *envc, int status)
+int	heredoc_expander(char **cmd, t_env *envc, int *status)
 {
 	t_index	index;
 

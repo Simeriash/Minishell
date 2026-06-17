@@ -6,18 +6,27 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 15:05:03 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/15 09:32:35 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/17 08:53:11 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/error.h"
 
-void	error_heredoc(t_error error)
+void	error_heredoc(t_error error, int *status)
 {
 	if (error == INVALID_LIMITER)
+	{
 		ft_putendl_fd("Ghost: syntax error near unexpected token `newline'", 2);
+		*status = 2;
+	}
 	else if (error == FD)
+	{
 		ft_putendl_fd("Error FD", 2);
+		*status = 1;
+	}
 	else if (error == MALLOC)
+	{
 		ft_putendl_fd("Error malloc", 2);
+		*status = 1;
+	}
 }
