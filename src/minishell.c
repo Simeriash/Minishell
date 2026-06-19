@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/15 17:46:00 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/19 12:40:12 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@ static void	set_signal_action(int i)
 	sigaction(SIGINT, &act, NULL);
 }
 
+int	print_token(t_token *token);
+int	print_ast(t_ast *ast);
+
 static int	cmd_minishell(char *cmd, t_env *envc, t_ast **ast, int *status)
 {
 	t_token	*token;
@@ -54,9 +57,11 @@ static int	cmd_minishell(char *cmd, t_env *envc, t_ast **ast, int *status)
 	free(cmd);
 	if (!token)
 		return (1);
-	*ast = parser(token, envc, status);
+	// print_token(token);
+	*ast = parser(&token, envc, status);
 	if (!(*ast))
 		return (1);
+	// print_ast(*ast);
 	return (0);
 }
 

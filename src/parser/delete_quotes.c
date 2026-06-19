@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 14:58:22 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/17 17:21:31 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/19 09:08:37 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void	delete_quotes(t_token *token_list)
 			if (!tmp)
 				break ;
 		}
-		else if (tmp->type == WORD || tmp->type == EXPAND)
+		else if (tmp->type == WORD /*|| tmp->type == EXPAND*/)
 			next_delete(tmp, &state, &i, &j);
 		tmp = tmp->next;
 	}

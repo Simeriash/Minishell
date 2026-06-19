@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 16:46:10 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/17 17:33:40 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/18 16:48:18 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,27 +66,27 @@ char	*check_env(char *value, t_env *envc, int i, int *j)
 	if (tmp[0] == '\0')
 		return (tmp);
 	len = ft_strlen(tmp);
-	new_value = malloc(sizeof(*new_value) * (len + 3));
+	new_value = malloc(sizeof(*new_value) * (len + 4));
 	if (!new_value)
 	{
 		free(tmp);
 		return (NULL);
 	}
 	new_value[0] = '\0';
-	ft_strlcat(new_value, "\"", 2);
-	ft_strlcat(new_value, tmp, len + 2);
+	ft_strlcat(new_value, "\"", 3);
+	ft_strlcat(new_value, tmp, len + 3);
 	ft_strlcat(new_value, "\"", len + 3);
 	free(tmp);
 	return (new_value);
 }
 
-void	ft_memcpy_exp(char *str, t_index *index)
+void	ft_memcpy_exp(char *str, t_index *index, int delta)
 {
 	int	i;
 	int	j;
 
-	i = index->i - 1;
-	j = index->i;
+	i = index->i;
+	j = index->i + delta;
 	while (str[j])
 	{
 		str[i] = str[j];
