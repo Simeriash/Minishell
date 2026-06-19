@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 10:01:29 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/19 13:43:16 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/19 15:29:52 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	more_token(t_token **token, t_index *index, t_state state)
 	int		ret;
 	int		i;
 
+	// return (0);
 	// printf("%c\n", (*token)->value[(index->i)]);
 	if ((*token)->value[(index->i) - 1] != '"')
 		return (0);

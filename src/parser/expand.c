@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/19 14:01:09 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/19 15:52:33 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,13 @@ t_ctrl *ctrl)
 {
 	char	*new_value;
 	int		len;
+	// int		tmp;
 
-	if (ctrl->state == NORMAL && ((*token)->value[index->i] == '"' || (*token)->value[index->i] == '\''))
+	if (ctrl->state == NORMAL && (/*(*token)->value[index->i] == '"' && */((*token)->value[index->i + 1] == '"' || (*token)->value[index->i + 1] == '\'')))
 	{
-		(index->i)--;
+		// (index->i)--;
 		ft_memcpy_exp((*token)->value, index, 1);
-		(index->i)++;
+		// (index->i)++;
 		return (0);
 	}
 	(*token)->type = EXPAND;
@@ -75,7 +76,8 @@ t_ctrl *ctrl)
 		return (1);
 	len = ft_strlen(new_value);
 	free(new_value);
-	index->j = index->i + len;
+	index->j = index->i + len - 1;
+	// printf("%i\n", index->i);
 	if ((*token)->value[0] == '\0')
 	{
 		index->i = 0;
@@ -102,6 +104,7 @@ static int	expander(t_token **token, t_env *envc, int status)
 	ctrl.status = status;
 	while (*token != NULL && (*token)->value[index.i] != '\0')
 	{
+		printf("%s\t%i\n", (*token)->value, index.i);
 		state_condition((*token)->value[index.i], &ctrl.state);
 		if (ctrl.state != SIMPLE_QUOTE && (*token)->value[index.i] == '$')
 		{

@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/19 12:40:12 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/19 15:24:49 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	cmd_minishell(char *cmd, t_env *envc, t_ast **ast, int *status)
 	*ast = parser(&token, envc, status);
 	if (!(*ast))
 		return (1);
-	// print_ast(*ast);
+	print_ast(*ast);
 	return (0);
 }
 
@@ -97,7 +97,7 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		if (cmd_minishell(cmd, envc, &ast, &status))
 			continue ;
-		status = execute_tree(ast, &envc, STDIN_FILENO, STDOUT_FILENO);
+		// status = execute_tree(ast, &envc, STDIN_FILENO, STDOUT_FILENO);
 		free_ast(ast);
 	}
 	ft_putendl_fd("exit", 1);
