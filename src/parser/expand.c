@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/19 17:03:23 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/19 18:16:12 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	change_value(char **value, char *new_value, int start, int end)
 	}
 	ft_strlcpy(str, *value, start);
 	ft_strlcat(str, new_value, len + 1);
-	ft_strlcat(str, &(*value)[end - 1], len + 1);
+	ft_strlcat(str, &(*value)[end], len + 1);
 	free(*value);
 	*value = str;
 	return (0);
