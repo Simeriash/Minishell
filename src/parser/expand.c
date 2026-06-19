@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/19 15:52:33 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/19 17:03:23 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	change_value(char **value, char *new_value, int start, int end)
 	}
 	ft_strlcpy(str, *value, start);
 	ft_strlcat(str, new_value, len + 1);
-	ft_strlcat(str, &(*value)[end], len + 1);
+	ft_strlcat(str, &(*value)[end - 1], len + 1);
 	free(*value);
 	*value = str;
 	return (0);
@@ -62,11 +62,16 @@ t_ctrl *ctrl)
 	int		len;
 	// int		tmp;
 
-	if (ctrl->state == NORMAL && (/*(*token)->value[index->i] == '"' && */((*token)->value[index->i + 1] == '"' || (*token)->value[index->i + 1] == '\'')))
+	if (ctrl->state == NORMAL && (*token)->type == WORD && (/*(*token)->value[index->i] == '"' && */((*token)->value[index->i + 1] == '"' || (*token)->value[index->i + 1] == '\'')))
 	{
+		printf("YOLO\n");
 		// (index->i)--;
 		ft_memcpy_exp((*token)->value, index, 1);
 		// (index->i)++;
+		return (0);
+	}
+	else if ((*token)->value[index->i] == '"')
+	{
 		return (0);
 	}
 	(*token)->type = EXPAND;
@@ -76,14 +81,14 @@ t_ctrl *ctrl)
 		return (1);
 	len = ft_strlen(new_value);
 	free(new_value);
-	index->j = index->i + len - 1;
+	index->j = index->i + len;
 	// printf("%i\n", index->i);
 	if ((*token)->value[0] == '\0')
 	{
 		index->i = 0;
 		return (0);
 	}
-	return (0);
+	// return (0);
 	if (/*ctrl->state == NORMAL && */more_token(token, index, ctrl->state))
 		return (1);
 	// if (ctrl->state == DOUBLE_QUOTE)
