@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 14:46:00 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/12 09:25:19 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/19 17:58:23 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,22 +66,39 @@ static int	init_env_node(t_env *envc, char *var, char *value)
 	return (0);
 }
 
-int	init_envc(t_env *envc)
+static int	init_env_shlvl(t_env *envc)
 {
 	t_env	*tmp;
+
+	tmp = check_key(envc, "SHLVL");
+	if (tmp)
+		(tmp->value[0])++;
+	else
+	{
+		if (init_env_node(envc, "SHLVL", "1"))
+			return (1);
+	}
+	return (0);
+}
+
+int	init_envc(t_env *envc)
+{
 	char	*new_pwd;
 
 	new_pwd = ft_getpwd();
 	if (!new_pwd || init_env_node(envc, "SHELL", "/minishell")
 		|| init_env_node(envc, "PWD", new_pwd)
-		|| init_env_node(envc, "OLDPWD", new_pwd))
+		|| init_env_node(envc, "OLDPWD", " "))
 	{
 		free(new_pwd);
 		return (1);
 	}
 	free(new_pwd);
-	tmp = check_key(envc, "SHLVL");
-	if (tmp)
-		(tmp->value[0])++;
+	if (init_env_shlvl(envc))
+		return (1);
+	if (init_env_node(envc, "PATH", "/home/julauren/bin:/home/julauren/\
+.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/sbin:/usr/local/bin:\
+/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"))
+		return (1);
 	return (0);
 }
