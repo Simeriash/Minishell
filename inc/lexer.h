@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 09:40:34 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/17 07:43:35 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/21 10:02:49 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ typedef enum e_state
 {
 	NORMAL,
 	SIMPLE_QUOTE,
-	DOUBLE_QUOTE
+	DOUBLE_QUOTE,
+	HEREDOC_MODE
 }	t_state;
 
 typedef enum e_ret

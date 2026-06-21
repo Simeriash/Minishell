@@ -15,7 +15,7 @@ NAME = minishell
 USRPATH = $(shell pwd)
 
 # Sources
-SRCS = $(SRC_DIR)/minishell.c \
+SRCS = $(SRC_DIR)/minishell.c $(SRC_DIR)/print_ast.c $(SRC_DIR)/print_token.c \
 	   $(BUILTINS_DIR)/get_builtin.c \
        $(BUILTINS_DIR)/echo/ft_echo.c \
        $(BUILTINS_DIR)/cd/ft_cd.c \
@@ -70,6 +70,6 @@ fclean: clean
 re: fclean all
 
 valgrind:
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --trace-children=yes --suppressions=$(USRPATH)/readline.supp ./minishell
+	clear && valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --trace-children=yes --suppressions=$(USRPATH)/readline.supp ./minishell
 
 .PHONY: all clean fclean re valgrind

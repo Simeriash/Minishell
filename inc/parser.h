@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 12:59:51 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/17 17:09:15 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/21 10:01:41 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,20 @@ typedef struct s_index
 	int	j;
 }	t_index;
 
+typedef struct s_ctrl
+{
+	t_state	state;
+	int		status;
+}	t_ctrl;
+
 /*====================expander====================*/
 
 int		expand(t_token *token_list, t_env *envc, int *status);
 void	ft_memcpy_exp(char *str, t_index *index);
 int		condition_to_expand(t_token *token, t_index index, t_state state);
-char	*check_new_value(char *value, t_env *envc, t_index *index, int status);
+char	*check_new_value(char *value, t_env *envc, t_index *index, t_ctrl ctrl);
 int		change_value(char **value, char *new_value, int start, int end);
-char	*check_env(char *value, t_env *envc, int i, int *j);
+char	*check_env(char *value, t_env *envc, t_index *index, t_state state);
 char	*check_key(char *key, t_env *envc);
 int		more_token(t_token **token);
 void	delete_quotes(t_token *token_list);

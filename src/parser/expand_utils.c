@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/07 16:46:10 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/17 17:33:40 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/21 10:11:08 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ static char	*env_init(char *value, t_env *envc, int i, int *j)
 	return (tmp);
 }
 
-char	*check_env(char *value, t_env *envc, int i, int *j)
+char	*check_env(char *value, t_env *envc, t_index *index, t_state state)
 {
 	char	*new_value;
 	char	*tmp;
 	int		len;
 
-	tmp = env_init(value, envc, i, j);
+	tmp = env_init(value, envc, index->i, &index->j);
 	if (!tmp)
 		return (NULL);
 	if (tmp[0] == '\0')
@@ -73,9 +73,11 @@ char	*check_env(char *value, t_env *envc, int i, int *j)
 		return (NULL);
 	}
 	new_value[0] = '\0';
-	ft_strlcat(new_value, "\"", 2);
+	if (state == NORMAL)
+		ft_strlcat(new_value, "\"", 2);
 	ft_strlcat(new_value, tmp, len + 2);
-	ft_strlcat(new_value, "\"", len + 3);
+	if (state == NORMAL)
+		ft_strlcat(new_value, "\"", len + 3);
 	free(tmp);
 	return (new_value);
 }

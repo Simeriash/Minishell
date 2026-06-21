@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 10:01:29 by julauren          #+#    #+#             */
-/*   Updated: 2026/05/08 12:13:55 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/21 11:20:57 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@ static int	second_step(t_token **token, char *old_value, int *i)
 {
 	char	*tmp;
 
-	tmp = ft_substr(old_value, 0, *i);
+	tmp = ft_substr(old_value, 0, *i + 1);
 	if (!tmp)
 		return (1);
+	ft_strlcpy(&tmp[*i], "\"", 2);
 	(*token)->value = tmp;
 	(*token)->type = WORD;
 	(*i)++;
@@ -47,6 +48,8 @@ static int	first_step(t_token **token, t_state *state, int *i)
 	while ((*token)->value[*i] != '\0' && *state == NORMAL
 		&& !ft_isspace((*token)->value[*i]))
 		state_condition((*token)->value[++(*i)], state);
+	while ((*token)->value[*i] != '\0' && !ft_isspace((*token)->value[*i]))
+		(*i)++;
 	if ((*token)->value[*i] == '\0')
 	{
 		(*token)->type = WORD;
@@ -63,22 +66,24 @@ int	more_token(t_token **token)
 	char	*old_value;
 
 	i = 0;
-	state = NORMAL;
 	while ((*token)->value[i] != '\0')
 	{
-		old_value = (*token)->value;
+		state = NORMAL;
 		if (first_step(token, &state, &i))
 			return (0);
-		if (state == NORMAL && ft_isspace((*token)->value[i]))
+		old_value = (*token)->value;
+		// if (state == NORMAL && ft_isspace((*token)->value[i]))
 		{
+			// i++;
+			printf("index : %i\n", i);
 			ret = second_step(token, old_value, &i);
 			if (ret >= 0)
 				return (ret);
 			*token = (*token)->next;
 			i = 0;
 		}
-		else
-			i++;
+		// else
+		// 	i++;
 	}
 	return (0);
 }
