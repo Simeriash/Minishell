@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/17 17:09:01 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/21 12:30:07 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ int	change_value(char **value, char *new_value, int start, int end)
 	return (0);
 }
 
-char	*check_new_value(char *value, t_env *envc, t_index *index, int status)
+char	*check_new_value(char *value, t_env *envc, t_index *index, t_ctrl ctrl)
 {
 	char	*new_value;
 
 	new_value = NULL;
 	if (value[(*index).i] == '?')
-		new_value = ft_itoa(status);
+		new_value = ft_itoa(ctrl.status);
 	else if ((value[(*index).i] == '_' && (ft_isspace(value[(*index).j])
 				|| value[(*index).j] == '\0'))
 		|| (!ft_isalpha(value[(*index).i]) && value[(*index).i] != '_'))
@@ -51,12 +51,12 @@ char	*check_new_value(char *value, t_env *envc, t_index *index, int status)
 		new_value[0] = '\0';
 	}
 	else if (ft_isalpha(value[(*index).i]) || value[(*index).i] == '_')
-		new_value = check_env(value, envc, (*index).i, &(index->j));
+		new_value = check_env(value, envc, index, ctrl.state);
 	return (new_value);
 }
 
 static	int	next_expander(t_token *token, t_env *envc, t_index *index, \
-int status)
+t_ctrl ctrl)
 {
 	char	*new_value;
 	int		len;
@@ -66,7 +66,7 @@ int status)
 		ft_memcpy_exp(token->value, index);
 		return (0);
 	}
-	new_value = check_new_value(token->value, envc, index, status);
+	new_value = check_new_value(token->value, envc, index, ctrl);
 	if (!new_value
 		|| change_value(&token->value, new_value, index->i, index->j))
 		return (1);
@@ -76,27 +76,26 @@ int status)
 	return (0);
 }
 
-static int	expander(t_token *token, t_env *envc, int status)
+static int	expander(t_token *token, t_env *envc, t_ctrl ctrl)
 {
 	t_index	index;
-	t_state	state;
 
 	index.i = 0;
-	state = NORMAL;
+	ctrl.state = NORMAL;
 	while (token->value[index.i] != '\0')
 	{
-		state_condition(token->value[index.i], &state);
-		if (state != SIMPLE_QUOTE && token->value[index.i] == '$')
+		state_condition(token->value[index.i], &ctrl.state);
+		if (ctrl.state != SIMPLE_QUOTE && token->value[index.i] == '$')
 		{
 			(index.i)++;
 			if (token->value[index.i] == '\0')
 				return (0);
-			if (condition_to_expand(token, index, state))
+			if (condition_to_expand(token, index, ctrl.state))
 				continue ;
 			index.j = index.i + 1;
-			if (next_expander(token, envc, &index, status))
+			if (next_expander(token, envc, &index, ctrl))
 				return (1);
-			if (state == NORMAL)
+			if (ctrl.state == NORMAL)
 				token->type = EXPAND;
 		}
 		else
@@ -108,13 +107,15 @@ static int	expander(t_token *token, t_env *envc, int status)
 int	expand(t_token *token_list, t_env *envc, int *status)
 {
 	t_token	*tmp;
+	t_ctrl	ctrl;
 
+	ctrl.status = *status;
 	tmp = token_list->next;
 	while (tmp != NULL)
 	{
 		if (tmp->type == HEREDOC && tmp->next)
 			tmp = tmp->next;
-		else if ((tmp->type == WORD) && (expander(tmp, envc, *status)
+		else if ((tmp->type == WORD) && (expander(tmp, envc, ctrl)
 				|| (tmp->type == EXPAND && more_token(&tmp))))
 		{
 			error_parser(token_list, MALLOC, status);
