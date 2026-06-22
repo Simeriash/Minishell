@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/17 08:26:14 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/17 11:18:36 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/22 09:15:53 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	count_args(char **args)
 
 void	write_exit_msg(int error, char *word_arg)
 {
-	// write(1, "exit\n", 5);
 	if (error == 1)
 		write(2, "Ghost: exit: too many arguments\n", 33);
 	if (error == 2)

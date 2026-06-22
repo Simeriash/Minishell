@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 15:50:55 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/17 11:18:24 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/22 09:15:46 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,6 @@ long long	ft_longatoi(const char *str, int *ctrl)
 	num = create_num(limit, str + i, ctrl);
 	return ((long long)sign * num);
 }
-
-// static int	check_alpha(char *str)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (str[i])
-// 	{
-// 		if (!(ft_isdigit(str[i])))
-// 			return (1);
-// 		i++;
-// 	}
-// 	return (0);
-// }
-
 
 int	ft_exit(char **args, t_env **delete)
 {
