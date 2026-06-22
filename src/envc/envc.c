@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 08:48:09 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/21 11:31:23 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/21 15:27:40 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ t_env	*env_copy(char **envp)
 	add_after_envc(envc, ft_strdup("b"), ft_strdup("a'b'c"));
 	add_after_envc(envc, ft_strdup("c"), ft_strdup("cho coucou"));
 	add_after_envc(envc, ft_strdup("d"), ft_strdup(" cho   coucou"));
+	add_after_envc(envc, ft_strdup("e"), ft_strdup("a'b'c'd"));
 	return (envc);
 }

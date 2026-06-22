@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/26 15:35:16 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/21 10:34:44 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/22 08:31:29 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,21 @@ int	change_value(char **value, char *new_value, int start, int end)
 char	*check_new_value(char *value, t_env *envc, t_index *index, t_ctrl ctrl)
 {
 	char	*new_value;
+	char	*tmp;
+	int		len;
 
 	new_value = NULL;
 	if (value[(*index).i] == '?')
-		new_value = ft_itoa(ctrl.status);
+	{
+		len = ft_strlen(tmp);
+		tmp = ft_itoa(ctrl.status);
+		new_value = malloc(sizeof(*new_value) * (len + 3));
+		if (!tmp || !new_value)
+			return (NULL);
+		new_value[0] = '0';
+		ft_strlcpy(&new_value[1], tmp, len);
+		ft_strlcpy(&new_value[len + 1], "\"", 2);
+	}
 	else if ((value[(*index).i] == '_' && (ft_isspace(value[(*index).j])
 				|| value[(*index).j] == '\0'))
 		|| (!ft_isalpha(value[(*index).i]) && value[(*index).i] != '_'))
@@ -72,19 +83,19 @@ t_ctrl ctrl)
 		return (1);
 	len = ft_strlen(new_value);
 	free(new_value);
-	index->i = index->i + len - 1;
+	index->j = index->i + len - 1;
+	if (ctrl.state == NORMAL && new_token(&token, index))
+		return (1);
 	return (0);
 }
 
 static int	expander(t_token *token, t_env *envc, t_ctrl ctrl)
 {
 	t_index	index;
-	// t_state	state;
-	// t_ctrl	ctrl;
 
 	index.i = 0;
 	ctrl.state = NORMAL;
-	while (token->value[index.i] != '\0')
+	while (token && token->value[index.i] != '\0')
 	{
 		state_condition(token->value[index.i], &ctrl.state);
 		if (ctrl.state != SIMPLE_QUOTE && token->value[index.i] == '$')
@@ -99,7 +110,6 @@ static int	expander(t_token *token, t_env *envc, t_ctrl ctrl)
 				return (1);
 			if (token->type != EXPAND)
 				token->type = EXPAND;
-			// (index.i)++;
 		}
 		else
 			(index.i)++;
@@ -119,7 +129,7 @@ int	expand(t_token *token_list, t_env *envc, int *status)
 		if (tmp->type == HEREDOC && tmp->next)
 			tmp = tmp->next;
 		else if ((tmp->type == WORD) && (expander(tmp, envc, ctrl)
-				|| (tmp->type == EXPAND && more_token(&tmp))))
+				/*|| (tmp->type == EXPAND && more_token(&tmp))*/))
 		{
 			error_parser(token_list, MALLOC, status);
 			return (1);

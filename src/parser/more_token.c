@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 10:01:29 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/21 11:20:57 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/21 16:09:00 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,7 @@ static int	second_step(t_token **token, char *old_value, int *i)
 	if (!tmp)
 		return (1);
 	if (add_after(*token, WORD, tmp))
-	{
-		free(tmp);
 		return (1);
-	}
 	return (-1);
 }
 

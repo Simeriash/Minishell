@@ -33,7 +33,8 @@ SRCS = $(SRC_DIR)/minishell.c $(SRC_DIR)/print_ast.c $(SRC_DIR)/print_token.c \
 	   $(SRC_DIR)/heredoc/error.c $(SRC_DIR)/heredoc/expand.c $(SRC_DIR)/heredoc/heredoc_utils.c $(SRC_DIR)/heredoc/heredoc.c $(SRC_DIR)/heredoc/signal.c \
 	   $(SRC_DIR)/lexer/error.c $(SRC_DIR)/lexer/lexer_utils.c $(SRC_DIR)/lexer/lexer.c $(SRC_DIR)/lexer/linked_list.c \
 	   $(SRC_DIR)/parser/ast.c $(SRC_DIR)/parser/cmd_utils.c $(SRC_DIR)/parser/cmd.c $(SRC_DIR)/parser/delete_quotes.c $(SRC_DIR)/parser/error.c \
-	   $(SRC_DIR)/parser/expand_utils.c $(SRC_DIR)/parser/expand.c $(SRC_DIR)/parser/more_token.c $(SRC_DIR)/parser/parser.c $(SRC_DIR)/parser/parser_utils.c
+	   $(SRC_DIR)/parser/expand_utils.c $(SRC_DIR)/parser/expand.c $(SRC_DIR)/parser/more_token.c $(SRC_DIR)/parser/parser.c $(SRC_DIR)/parser/parser_utils.c \
+	   $(SRC_DIR)/parser/split_token.c $(SRC_DIR)/parser/new_token.c
 
 
 # Object files in obj/ folder
