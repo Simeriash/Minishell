@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_builtin_helpers.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 08:52:20 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/15 11:03:15 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/22 08:29:32 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,13 @@ void	close_redirects(t_fds *fds)
 	{
 		close (fds->fd_in);
 		fds->redir_in = 0;
+		fds->fd_in = -1;
 	}
 	if (fds->redir_out == 1 && fds->fd_out > STDERR_FILENO)
 	{
 		close (fds->fd_out);
 		fds->redir_out = 0;
+		fds->fd_out = -1;
 	}
 }
 
