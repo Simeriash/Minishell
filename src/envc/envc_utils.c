@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 14:46:00 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/22 08:50:39 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/22 10:08:25 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,26 @@ static t_env	*check_key(t_env *envc, char *key)
 	return (NULL);
 }
 
-static char	*ft_getpwd(void)
+static int	init_oldpwd(t_env *envc, char *var)
 {
-	char	*buf;
-	char	*value;
+	t_env	*tmp;
+	char	*key;
 
-	buf = NULL;
-	value = getcwd(buf, 0);
-	free(buf);
-	return (value);
+	tmp = check_key(envc, var);
+	if (tmp)
+	{
+		free(tmp->value);
+		tmp->value = NULL;
+	}
+	else
+	{
+		key = ft_strdup(var);
+		if (!key)
+			return (1);
+		if (add_after_envc(envc, key, NULL))
+			return (1);
+	}
+	return (0);
 }
 
 static int	init_env_node(t_env *envc, char *var, char *value)
@@ -84,11 +95,14 @@ static int	init_env_shlvl(t_env *envc)
 int	init_envc(t_env *envc)
 {
 	char	*new_pwd;
+	char	*buf;
 
-	new_pwd = ft_getpwd();
+	buf = NULL;
+	new_pwd = getcwd(buf, 0);
+	free(buf);
 	if (!new_pwd || init_env_node(envc, "SHELL", "/minishell")
 		|| init_env_node(envc, "PWD", new_pwd)
-		|| init_env_node(envc, "OLDPWD", ""))
+		|| init_oldpwd(envc, "OLDPWD"))
 	{
 		free(new_pwd);
 		return (1);
