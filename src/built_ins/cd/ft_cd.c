@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/22 09:15:28 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/22 09:44:22 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,12 @@ static int	update_oldpwd_pwd(char *old, char *new, t_env **envpcpy)
 	}
 	if (new)
 	{
-		ret_val = env_set("PWD", new, envpcpy, ENV_REPLACE);
-		if (ret_val < 0)
-			return (1);
+		if (get_env_node("PWD", envpcpy))
+		{
+			ret_val = env_set("PWD", new, envpcpy, ENV_REPLACE);
+			if (ret_val < 0)
+				return (1);
+		}
 	}
 	return (ret_val);
 }
