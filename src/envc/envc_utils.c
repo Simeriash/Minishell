@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/17 14:46:00 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/19 17:58:23 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/22 08:50:39 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	init_envc(t_env *envc)
 	new_pwd = ft_getpwd();
 	if (!new_pwd || init_env_node(envc, "SHELL", "/minishell")
 		|| init_env_node(envc, "PWD", new_pwd)
-		|| init_env_node(envc, "OLDPWD", " "))
+		|| init_env_node(envc, "OLDPWD", ""))
 	{
 		free(new_pwd);
 		return (1);
@@ -96,7 +96,7 @@ int	init_envc(t_env *envc)
 	free(new_pwd);
 	if (init_env_shlvl(envc))
 		return (1);
-	if (init_env_node(envc, "PATH", "/home/julauren/bin:/home/julauren/\
+	if (!check_key(envc, "PATH") && init_env_node(envc, "PATH", "/home/julauren/bin:/home/julauren/\
 .nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/sbin:/usr/local/bin:\
 /usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"))
 		return (1);

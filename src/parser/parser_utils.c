@@ -6,7 +6,7 @@
 /*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 13:42:36 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/17 14:50:23 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/22 08:55:46 by julauren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@ token `newline'", 2);
 			*status = 2;
 			return (1);
 		}
-		if (access(redir->file, F_OK))
-		{
-			ft_printf_fd(2, "Ghost: %s: %s\n", redir->file, strerror(errno));
-			*status = 1;
-			return (1);
-		}
+		// if (access(redir->file, F_OK))
+		// {
+		// 	ft_printf_fd(2, "Ghost: %s: %s\n", redir->file, strerror(errno));
+		// 	*status = 1;
+		// 	return (1);
+		// }
 	}
 	return (0);
 }
