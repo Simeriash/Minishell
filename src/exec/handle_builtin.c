@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 11:17:30 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/17 09:36:19 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/22 08:29:18 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 
 static void	clean_exit(t_env **env, t_ast *node, t_fds *fds, int status)
 {
-	if (fds->fd_in != STDIN_FILENO)
+	if (fds->fd_in != STDIN_FILENO && fds->fd_in >= 0)
 		close(fds->fd_in);
-	if (fds->fd_out != STDOUT_FILENO)
+	if (fds->fd_out != STDOUT_FILENO && fds->fd_out >= 0)
 		close(fds->fd_out);
 	free_ast(node->ast);
 	ft_free_envc(*env);
