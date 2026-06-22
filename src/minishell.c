@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: julauren <julauren@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 13:09:01 by julauren          #+#    #+#             */
-/*   Updated: 2026/06/15 17:46:00 by julauren         ###   ########.fr       */
+/*   Updated: 2026/06/22 11:01:06 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		printf("\n");
+		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -65,8 +65,8 @@ static char	*ft_readline(void)
 	char	*cmd;
 
 	set_signal_action(0);
-	cmd = readline("\033[32mGhost\\>: \033[39m");
-	if (cmd)
+	cmd = readline("\001\033[32m\002Ghost\\>: \001\033[39m\002");
+	if (cmd && *cmd)
 		add_history(cmd);
 	set_signal_action(1);
 	return (cmd);
