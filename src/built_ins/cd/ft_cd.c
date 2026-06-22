@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 14:55:04 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/17 14:52:30 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/22 09:15:28 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ static int	chdir_success(char **current, char **old, t_env **envpcpy)
 	int	ret_val;
 
 	ret_val = 0;
-
 	if (!*old)
 	{
 		*old = ft_strdup("");
@@ -65,6 +64,8 @@ static int	cd_executor(char *cd_input, t_env **envpcpy)
 	char	*current_path;
 	int		err;
 
+	if (cd_input[0] == '\0')
+		return (0);
 	current_path = NULL;
 	old_path = getcwd(NULL, 0);
 	ret_val = chdir(cd_input);
@@ -114,8 +115,6 @@ int	ft_cd(char **args, t_env **envpcpy)
 		ret_val = cd_to_home(envpcpy);
 		return (ret_val);
 	}
-	if (args[1][0] == '\0')
-		return (0);
 	ret_val = cd_executor(args[1], envpcpy);
 	return (ret_val);
 }
