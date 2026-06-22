@@ -6,7 +6,7 @@
 /*   By: dlanehar <dlanehar@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/15 09:05:43 by dlanehar          #+#    #+#             */
-/*   Updated: 2026/06/17 15:57:55 by dlanehar         ###   ########.fr       */
+/*   Updated: 2026/06/22 09:10:52 by dlanehar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,15 @@ static char	**child_setup(t_ast *node, t_fds *fds, t_env **env, char *exec)
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	apply_redirects(node, fds);
+	if (fds->fd_in < 0 || fds->fd_out < 0)
+	{
+		free_ast(node->ast);
+		ft_free_envc(*env);
+		free (exec);
+		exit(1);
+	}
 	env_array = make_env_execve((*env)->next);
-	if (!env_array || !*env_array)
+	if (!env_array || !*env_array || fds->fd_in < 0 || fds->fd_out < 0)
 	{
 		free_ast(node->ast);
 		ft_free_envc(*env);
