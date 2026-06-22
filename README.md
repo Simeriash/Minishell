@@ -60,9 +60,19 @@ make
 ```
 
 To run the program, you can either launch the executable using valgrind and your preferred flags, or use this command to simply launch the program with valgrind and some selected flags.
+
 ```
+Launch with executable:
+./minishell
+
+Launch using valgrind:
+valgrind ./minishell
+
+Launch using make, with the valgrind rule:
 make valgrind
 ```
+
+The makefile includes the following rules: all clean fclean re valgrind
 
 # **Ressources**
 
