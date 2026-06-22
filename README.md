@@ -50,7 +50,6 @@ The shell has been made with these instructions in mind:
 # **Instructions**
 
 Clone the repository:
-
 ```
 git clone "repo goes here"
 ```
@@ -60,7 +59,10 @@ Build with make:
 make
 ```
 
-To run the program, you can either launch the executable using valgrind and your preferred flags, or use the command `make valgrind` to simply launch the program with valgrind and some selected flags.
+To run the program, you can either launch the executable using valgrind and your preferred flags, or use this command to simply launch the program with valgrind and some selected flags.
+```
+make valgrind
+```
 
 # **Ressources**
 
@@ -77,6 +79,3 @@ Stack overflow for stat:<br>
 https://stackoverflow.com/questions/3138600/correct-use-of-stat-on-c
 
 ChatGPT was used to help further understand concepts such as pipes and forks.
-
-> [!NOTE]
-> Section listing classic references related to the topic (documentation, articles, tutorials, etc.), as well as a description of how AI was used — specifying for which tasks and which parts of the project.
